@@ -214,3 +214,38 @@ def unescape_html(dict_list):
             m = value.replace("&lt;", "<").replace("&gt;", ">")
             datadict[key] = m
 
+
+html_escape_table = {
+        "&": "%26",
+        '"': "%22",
+        "'": "%27",
+        ">": "%3E",
+        "<": "%3C",
+}
+
+def html_escape(text):
+    """ escape chars -- http://wiki.python.org/moin/EscapingHtml
+    """
+    ret_val = text
+    try:
+        ret_val = "".join(html_escape_table.get(c,c) for c in text)
+    except:
+        pass
+
+    return ret_val 
+
+def html_escape_num(num):
+    """ escape numbers ... and make sure we handle 'Infinity' numbers (else, json will not be well-formed).
+    """
+    ret_val = num
+    try:
+        if isinstance(num, basestring) or num == float("Inf"):
+            num = str(num)
+            pass
+        ret_val = num
+    except:
+        pass
+
+    return ret_val 
+
+
