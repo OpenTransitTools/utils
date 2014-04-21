@@ -65,10 +65,21 @@ def set_date(dt=None, month=None, day=None, year=None):
         pass
     return ret_val
 
+
+def pretty_time(dt, fmt=" %I:%M%p", def_val=None):
+    ret_val = def_val
+    try:
+        ret_val = dt.strftime(fmt).lower().replace(' 0','').strip()  # "3:40pm"
+    except Exception, e:
+        log.warn(e)
+    return ret_val
+
+
 def pretty_date(dt=None, fmt='%A, %B %d, %Y'):
     if dt is None:
         dt = datetime.date.today()
-    return dt.strftime(fmt)
+    ret_val =  dt.strftime(fmt).replace(' 0',' ')  # "Monday, March 4, 2013"
+    return ret_val
 
 def make_tab_obj(name, uri=None, date=None, append=None):
     ''' for the date tab on the stop schedule page, we expect an object that has a name and a url
@@ -134,6 +145,89 @@ def get_svc_date_tabs(dt, uri, more_tab=True, translate=ret_me, fmt='%m/%d/%Y', 
     # step 4: if we are not showing the date form, give the 'more' option which will show that form
     if more_tab:
         ret_val.append(make_tab_obj(translate(MORE), uri, dt, MORE))
+
+    return ret_val
+
+
+
+def str_to_date(str_date, fmt_list=['%Y-%m-%d', '%m/%d/%Y'], def_val=None):
+    ''' utility function to parse a request object for something that looks like a date object...
+    '''
+    if def_val is None:
+        def_val = datetime.date.today()
+
+    ret_val = def_val
+    for fmt in fmt_list:
+        try:
+            d = datetime.datetime.strptime(str_date, fmt).date()
+            if d is not None:
+                ret_val = d
+                break
+        except Exception, e:
+            log.warn(e)
+    return ret_val
+
+
+def make_date_from_timestamp(num, def_val=None):
+    ret_val = def_val
+    try:
+        ret_val = datetime.datetime.fromtimestamp(num)
+    except Exception, e:
+        log.warn(e)
+    return ret_val
+
+def is_date_between(start, end, now=None):
+    ''' will compare a datetime (now) to a start and end datetime.
+        the datetime being compared defaults to 'now()'
+        if a date() submitted, then defaults will be added to turn that into a datetime() for date() at 12am
+        if a time() is submitted, then defaults will be added to turn that into a datetime() of today at time()
+    '''
+    ret_val = False
+
+    try:
+        if now is None:
+            now = datetime.datetime.now()
+        elif type(now) is datetime.date:
+            now = datetime.datetime.combine(now, datetime.datetime.min.time())
+        elif type(now) is datetime.time:
+            now = datetime.datetime.combine(datetime.date.today(), now)
+
+        if type(start) is datetime.datetime and type(end) is datetime.datetime:
+            if start < now < end:
+                ret_val = True
+        elif type(start) is datetime.datetime:
+            if start < now:
+                ret_val = True
+        elif type(end) is datetime.datetime:
+            if now < end:
+                ret_val = True
+    except Exception, e:
+        log.warn(e)
+    return ret_val
+
+
+def military_to_english_time(time, fmt="{0}:{1}{2}"):
+    ''' assumes 08:33:55 and 22:33:42 type times
+        will return 8:33am and 10:33pm
+        (not we floor the minutes)
+    '''
+    ret_val = time
+    try:
+        t = time.split(":")
+        h = int(t[0])
+        m = t[1]
+        ampm = "am"
+        if h >= 12:
+            ampm = "pm"
+        if h >= 24:
+            ampm = "am"
+        h = h % 12
+        if h == 0:
+            h = 12
+
+        ret_val = fmt.format(h, m, ampm)
+    except:
+        pass
 
     return ret_val
 
