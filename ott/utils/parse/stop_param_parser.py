@@ -1,7 +1,7 @@
 '''
 '''
 from ott.utils import object_utils
-from param_parser import ParamParser
+from .param_parser import ParamParser
 
 class StopParamParser(ParamParser):
 
