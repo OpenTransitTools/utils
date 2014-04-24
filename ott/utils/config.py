@@ -1,33 +1,39 @@
 from ConfigParser import SafeConfigParser
 import glob
-import logging
-log = logging.getLogger()
 
-INI=['view.ini', 'app.ini']
+INI=['app.ini', 'client.ini', 'services.ini', 'view.ini', 'production.ini']
 parser = None
+found_ini = None
 
-def get_parser(ini=None):
+def get_parser(ini=INI):
     ''' make the config parser
     '''
     global parser
+    global found_ini
 
     try:
         if parser is None:
             candidates = []
-            if ini is None: 
-                ini = INI
             for i in ini:
                 # add the .ini file and ./config/.ini file to our candidate file list
                 candidates.append(i)
                 candidates.append('./config/' + i)
 
             parser = SafeConfigParser()
-            found = parser.read(candidates)
-            logging.config.fileConfig(found)
+            found_ini = parser.read(candidates)
     except:
         log.info("Couldn't find an acceptable ini file from {0}...".format(candidates))
 
     return parser
+
+
+def config_logger(ini=INI):
+    try:
+        get_parser(ini)
+        import logging.config
+        logging.config.fileConfig(found_ini, disable_existing_loggers=False)
+    except Exception, e:
+        pass
 
 
 def get(id, def_val=None, section='view'):
