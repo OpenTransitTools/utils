@@ -206,16 +206,73 @@ def is_date_between(start, end, now=None):
     return ret_val
 
 
-def military_to_english_time(time, fmt="{0}:{1}{2}"):
+def split_time(time):
+    ''' given 02:33:44 as a time string, return
+    '''
+    h = None
+    m = None
+    try:
+        t = time.split(":")
+        h = int(t[0])
+        m = int(t[1])
+    except Exception, e:
+        log.warn(e)
+    return h, m
+
+
+def now_time_code(time, now=None, tolerance_minutes=30):
+    ''' return a code comparing NOW to time string in milatary format
+        return values:
+            "E" = Earlier time than NOW
+            "N" = NOW
+            "L" = Later time than NOW
+    '''
+    ret_val = "E"
+    if now is None:
+        now = datetime.datetime.now()
+
+    tolerance_hours = 1
+    if tolerance_minutes >= 60:
+        tolerance_hours = (tolerance_minutes / 60) + 1
+        tolerance_minutes = tolerance_minutes % 60
+
+    try:
+        h, m = split_time(time)
+        if h > 23:
+            h = h - 23
+
+        if   now.hour < h - tolerance_hours:
+            ret_val - "E"
+        elif now.hour > h - tolerance_hours:
+            ret_val - "L"
+        elif now.hour == h:
+            if m < now.minute:
+                ret_val = "E"
+            elif m - now.minute <= tolerance_minutes:
+                ret_val = "N"
+            else:
+                ret_val = "L"
+        elif now.hour == h - tolerance_hours:
+            r = 60 - now.minute
+            if m < r:
+                ret_val = "E"
+            elif m - r <= tolerance_minutes:
+                ret_val = "N"
+            else:
+                ret_val = "L"
+    except:
+        pass
+    return ret_val
+
+
+def military_to_english_time(time, fmt="{0}:{1:02d}{2}"):
     ''' assumes 08:33:55 and 22:33:42 type times
         will return 8:33am and 10:33pm
         (not we floor the minutes)
     '''
     ret_val = time
     try:
-        t = time.split(":")
-        h = int(t[0])
-        m = t[1]
+        h, m = split_time(time)
         ampm = "am"
         if h >= 12:
             ampm = "pm"
