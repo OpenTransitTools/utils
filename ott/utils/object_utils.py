@@ -1,7 +1,16 @@
 import datetime
 import simplejson as json
+import base64
+import hashlib
 import logging
 log = logging.getLogger(__file__)
+
+
+def to_hash(str):
+    ''' generates nice 0AI3Mk6FErSH4Q== type hashes from strings '''
+    hasher = hashlib.sha1(str)
+    ret_val = base64.urlsafe_b64encode(hasher.digest()[0:10])
+    return ret_val
 
 def get_error_message(err, def_val=None):
     ''' return error message from an OTP error object
@@ -66,7 +75,6 @@ def safe_dict_val(obj, key, def_val=None):
     except:
         pass
     return ret_val
-
 
 
 def strip_tuple(obj, def_val=None):
