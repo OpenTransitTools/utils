@@ -1,3 +1,5 @@
+import math
+from sqlalchemy import event
 
 def add_math_to_sqllite(conn, conn_record):
     ''' This method is called for each new SQLAlchemy database connection. I'm using it as a connection decorator to
@@ -6,8 +8,7 @@ def add_math_to_sqllite(conn, conn_record):
         @note: check out the call to (above): event.listen(self.engine, 'connect', Database.connection)
         @see:  http://docs.sqlalchemy.org/en/rel_0_8/core/events.html#sqlalchemy.events.PoolEvents
     '''
-    if 'sqlite' in type(conn).__module__:
-        import math
+    if 'sqlite' in type(conn).__module__:        
         print 'in method that adds math to sqllite'
         conn.create_function("sin",     1, math.sin)
         conn.create_function("cos",     1, math.cos)
@@ -18,7 +19,6 @@ def add_math_to_sqllite(conn, conn_record):
 
 
 def decorate_engine(engine):
-    from sqlalchemy import event
     event.listen(engine, 'connect', add_math_to_sqllite)
 
 

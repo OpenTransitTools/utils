@@ -1,3 +1,5 @@
+import logging.config
+
 from ConfigParser import SafeConfigParser
 import glob
 
@@ -30,7 +32,6 @@ def get_parser(ini=INI):
 def config_logger(ini=INI):
     try:
         get_parser(ini)
-        import logging.config
         logging.config.fileConfig(found_ini, disable_existing_loggers=False)
     except Exception, e:
         pass
