@@ -33,7 +33,7 @@ setup(
     ],
     author="Open Transit Tools",
     author_email="info@opentransittools.org",
-    dependency_links=('http://opentransittools.com',),
+    dependency_links=[],
     license="Mozilla-derived (http://opentransittools.com)",
     url='http://opentransittools.com',
     keywords='ott, otp, gtfs, gtfsdb, data, database, services, transit',
