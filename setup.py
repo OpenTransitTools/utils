@@ -45,7 +45,5 @@ setup(
     tests_require=requires,
     test_suite="ott.utils.tests",
     entry_points="""\
-        [console_scripts]
-        load_db = ott.utils:main
     """,
 )
