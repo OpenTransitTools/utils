@@ -1,3 +1,5 @@
+import logging
+log = logging.getLogger(__file__)
 import logging.config
 
 from ConfigParser import SafeConfigParser

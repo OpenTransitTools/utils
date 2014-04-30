@@ -1,4 +1,6 @@
 import math
+import logging
+log = logging.getLogger(__file__)
 
 def distance_km(lat1, lon1, lat2, lon2):
     ''' return distance between two points in km using haversine

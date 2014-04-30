@@ -1,5 +1,7 @@
 import math
 from sqlalchemy import event
+import logging
+log = logging.getLogger(__file__)
 
 def add_math_to_sqllite(conn, conn_record):
     ''' This method is called for each new SQLAlchemy database connection. I'm using it as a connection decorator to

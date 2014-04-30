@@ -1,3 +1,6 @@
+import logging
+log = logging.getLogger(__file__)
+
 class Modes(object):
     WALK       = 'WALK'
     BICYCLE    = 'BICYCLE'
