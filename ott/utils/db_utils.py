@@ -1,7 +1,51 @@
 import math
-from sqlalchemy import event
 import logging
 log = logging.getLogger(__file__)
+
+
+
+def db_args():
+    ''' create a generic database commandline arg parser '''
+    import argparse
+    parser = argparse.ArgumentParser(prog='gtfs data loader', formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    parser.add_argument('--database_url', '-d',  default='sqlite:///gtfs.db', help='DATABASE URL with appropriate privileges')
+    parser.add_argument('--is_geospatial', '-g', default=False, action='store_true', help='Database supports GEOSPATIAL functions') 
+    parser.add_argument('--schema','-s', default=None, help='Database SCHEMA name')
+    parser.add_argument('--gtfs','-u', default="DATAd", help='URL or local path to GTFS(RT) data')
+    return parser
+
+
+def db_conn(url):
+    '''  create a generic scoped session to a url with sqlalchemy
+         meant as a quick way to grab a session / engine
+         @return: session, engine 
+    '''
+    from sqlalchemy.orm import scoped_session
+    from sqlalchemy.orm import sessionmaker
+    session = scoped_session(sessionmaker())
+
+    # create the engine
+    from sqlalchemy import create_engine
+    engine = create_engine(url)
+    session.configure(bind=engine)
+
+    return session,engine
+
+
+def db_gtfs_rt():
+    ''' get a command line parser and db connection to query gtfsrdb data
+        NOTE: meant as a quick dirty way to grab a connection for test apps
+    '''
+    parser = db_args()
+    parser.add_argument('--route',  '-r', default="12", help='what route?')
+    parser.add_argument('--agency', '-a', default="TriMet", help='what agency?')
+    args = parser.parse_args()
+
+    from ott.data.gtfsrdb import model
+    model.add_schema(args.schema)
+    ses, eng = db_conn(args.database_url)
+    return ses,eng
+
 
 def add_math_to_sqllite(conn, conn_record):
     ''' This method is called for each new SQLAlchemy database connection. I'm using it as a connection decorator to
@@ -21,6 +65,7 @@ def add_math_to_sqllite(conn, conn_record):
 
 
 def decorate_engine(engine):
+    from sqlalchemy import event
     event.listen(engine, 'connect', add_math_to_sqllite)
 
 
