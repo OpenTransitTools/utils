@@ -3,7 +3,6 @@ import logging
 log = logging.getLogger(__file__)
 
 
-
 def db_args():
     ''' create a generic database commandline arg parser '''
     import argparse
@@ -16,8 +15,9 @@ def db_args():
 
 
 def db_conn(url):
-    '''  create a generic scoped session to a url with sqlalchemy
-         meant as a quick way to grab a session / engine
+    '''  create a generic scoped session to a database as defined by the param url
+         via sqlalchemy.  This routine meant as a quick way to grab a session / engine
+         @param url: sqlite:///gtfs.db or postgresql+psycopg2://postgres@localhost:5432/transit
          @return: session, engine 
     '''
     from sqlalchemy.orm import scoped_session
