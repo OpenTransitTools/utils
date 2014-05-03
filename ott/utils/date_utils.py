@@ -81,6 +81,32 @@ def pretty_date(dt=None, fmt='%A, %B %d, %Y'):
     ret_val =  dt.strftime(fmt).replace(' 0',' ')  # "Monday, March 4, 2013"
     return ret_val
 
+
+def secs_since_epoch(t=None):
+    if not t:
+        t = datetime.datetime.now()
+    secs = time.mktime(t.timetuple())
+    return secs 
+
+def is_past(secs, min_val=1000000000):
+    ''' test whether second is in the past compared to now in epoch seconds
+    '''
+    ret_val = False
+    now = secs_since_epoch()
+    if secs > min_val and secs < now:
+        ret_val = True
+    return ret_val
+
+def is_future(secs, min_val=1000000000):
+    ''' test whether second is in the future compared to now in epoch seconds 
+    '''
+    ret_val = False
+    now = secs_since_epoch()
+    if secs > min_val and secs > now:
+        ret_val = True
+    return ret_val
+
+
 def make_tab_obj(name, uri=None, date=None, append=None):
     ''' for the date tab on the stop schedule page, we expect an object that has a name and a url
         this method builds that structure, and most importantly, the url for those tabs
