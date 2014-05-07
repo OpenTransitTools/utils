@@ -1,11 +1,14 @@
-import socket
-socket.setdefaulttimeout(40)
+
+# FXP TODO -- commenting this out, since it might be f'n with performance
+#import socket
+#socket.setdefaulttimeout(40)
 
 import logging
 log = logging.getLogger(__file__)
 
 import simplejson as json
 import urllib
+import contextlib
 
 
 def stream_json(u, args=None, extra_path=None):
@@ -17,9 +20,9 @@ def stream_json(u, args=None, extra_path=None):
         url = "{0}/{1}".format(url, extra_path)
     if args:
         url = "{0}?{1}".format(url, args)
-    stream = urllib.urlopen(url)
-    otp = stream.read()
-    ret_val = json.loads(otp)
+    with contextlib.closing(urllib.urlopen(url)) as stream:
+        otp = stream.read()
+        ret_val = json.loads(otp)
     return ret_val
 
 def get_json(file, path='ott/controller/parser/test/'):
