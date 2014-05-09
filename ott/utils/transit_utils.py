@@ -110,21 +110,21 @@ def has_fare(itinerary):
     return ret_val
 
 
-def make_short_name(gtfsdb_route, def_name=None):
+def make_short_name(route_orm, def_name=None):
     ''' fix up the short name...
     '''
     ret_val = def_name
     try:
-        ret_val = gtfsdb_route.route_short_name
+        ret_val = route_orm.route_short_name
         if ret_val is None or len(ret_val) < 1:
-            ret_val = gtfsdb_route.route_long_name
+            ret_val = route_orm.route_long_name
     
         # strip off 'Line' from last word, ala MAX Blue Line == MAX Blue
         if ret_val and ret_val.endswith('Line'):
             ret_val = " ".join(ret_val.split()[:-1])
         # special fix for Portland Streetcar
-        if 'Portland Streetcar' in ret_val and gtfsdb_route.route_long_name and len(gtfsdb_route.route_long_name) > 0:
-            ret_val = gtfsdb_route.route_long_name.replace('Portland', '').strip()
+        if 'Portland Streetcar' in ret_val and route_orm.route_long_name and len(route_orm.route_long_name) > 0:
+            ret_val = route_orm.route_long_name.replace('Portland', '').strip()
         # fix WES
         if ret_val and ret_val.startswith('WES '):
             ret_val = "WES"
