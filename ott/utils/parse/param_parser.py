@@ -170,7 +170,7 @@ class ParamParser(object):
         ret_val = def_val
         for n in names:
             v = self.get(n)
-            if v != None:
+            if v is not None and v != 'None':
                 ret_val = v
                 break
         return ret_val
