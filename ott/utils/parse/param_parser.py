@@ -16,7 +16,7 @@ class ParamParser(object):
         self.request = request
         self.params = html_utils.params_to_dict(request)
         self.agency = self.get_first_val(['agency'], 'TriMet')
-        self.detailed = self.get_first_val(['detailed', 'full'], False)
+        self.detailed = self.get_first_val_as_bool(['detailed', 'full'], False)
         self.query_string = None
         if type(self.params) == str:
             self.query_string = self.params
@@ -196,6 +196,25 @@ class ParamParser(object):
         ret_val = def_val
         try:
             ret_val = self.get_first_val(names)
+        except:
+            pass
+        return ret_val
+
+
+    def get_first_val_as_bool(self, names, def_val=False):
+        ''' pass in a list of 'names', and return the first name that has a value in self.params
+            with the additional requirement that this value is an int value 
+        '''
+        ret_val = def_val
+        try:
+            val = self.get_first_val(names)
+            if val == '':
+                val = 'T'
+            #import pdb; pdb.set_trace()
+            if not any(f in val for f in ('false', 'False', 'None')):
+                ret_val = True
+            else:
+                ret_val = False
         except:
             pass
         return ret_val
