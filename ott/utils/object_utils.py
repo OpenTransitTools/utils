@@ -136,3 +136,16 @@ def to_str_code(s, def_val=''):
         except:
             pass
     return ret_val
+
+def dict_update(src, target, append=False):
+    ''' better than the dict.update(), in that None or '' won't overwrite values
+        @param: append variable will append new source into target (regardless of value)
+        @return: nothing ... will update / append values to 'target' parameter
+    '''
+    for k,v in src.iteritems():
+        if k in target:
+            if v:
+                target[k] = v
+        elif append:
+            target[k] = v
+

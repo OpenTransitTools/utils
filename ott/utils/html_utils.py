@@ -4,6 +4,7 @@ log = logging.getLogger(__file__)
 
 import date_utils
 import num_utils
+import geo_utils
 import transit_utils
 
 
@@ -147,7 +148,7 @@ def get_first_param_as_coord(request, name, def_val=None, to_float=False):
     ''' return lat,lon floats
     '''
     val = get_first_param(request, name, def_val)
-    lat,lon = num_utils.ll_from_str(val, def_val, to_float)
+    lat,lon = geo_utils.ll_from_str(val, def_val, to_float)
     return lat,lon
 
 def get_first_param_as_boolean(request, name, def_val=False):
