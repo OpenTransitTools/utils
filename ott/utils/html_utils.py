@@ -185,6 +185,8 @@ def get_first_param_as_date(request, name='date', fmt='%m/%d/%Y', def_val=None):
         pass
     return ret_val
 
+def get_first_param_as_str(request, name, def_val=None):
+    return get_first_param(request, name, def_val)
 
 def get_first_param(request, name, def_val=None):
     '''
