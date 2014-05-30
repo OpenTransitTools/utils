@@ -33,6 +33,18 @@ def update_object(tgt, src):
         except:
             pass
 
+def str_compare(str1, str2, insensitive=True):
+    ret_val = False
+    try:
+        if insensitive: 
+            if str1.lower() == str2.lower():
+                ret_val = True
+        else:
+            if str1 == str2:
+                ret_val = True
+    except:
+        pass
+    return ret_val
 
 def fix_url(url):
     ''' do things like escape the & in intersection names, ala "17th %26 Center"
