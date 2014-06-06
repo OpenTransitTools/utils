@@ -1,5 +1,3 @@
-import datetime
-import simplejson as json
 import base64
 import hashlib
 import logging
@@ -20,7 +18,14 @@ def get_error_message(err, def_val=None):
     try:
         ret_val = err.error.msg
     except:
-        ret_val = def_val
+        try:
+            ret_val = err['error']['msg']
+        except:
+            try:
+                if err['has_errors'] and err['status_message']:
+                    ret_val = err['status_message']
+            except:
+                ret_val = def_val
     return ret_val
 
 def update_object(tgt, src):
