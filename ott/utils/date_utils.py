@@ -2,6 +2,7 @@ import logging
 log = logging.getLogger(__file__)
 
 import datetime
+from datetime import timedelta
 import time
 from calendar import monthrange
 
@@ -87,6 +88,15 @@ def secs_since_epoch(t=None):
         t = datetime.datetime.now()
     secs = time.mktime(t.timetuple())
     return secs 
+
+def is_distant(dt, days=35):
+    ''' test whether date time is in 'distant' past compared to today
+    '''
+    ret_val = False
+    today = datetime.datetime.today()
+    if dt < today and dt > timedelta(days=days):
+        ret_val = True
+    return ret_val
 
 def is_past(secs, min_val=1000000000):
     ''' test whether second is in the past compared to now in epoch seconds
