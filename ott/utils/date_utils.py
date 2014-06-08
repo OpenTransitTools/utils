@@ -94,7 +94,7 @@ def is_distant(dt, days=35):
     '''
     ret_val = False
     today = datetime.datetime.today()
-    if dt < today and dt > timedelta(days=days):
+    if today > dt and today - dt > timedelta(days=days):
         ret_val = True
     return ret_val
 
