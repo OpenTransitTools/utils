@@ -39,11 +39,16 @@ def ll_from_str(place, def_val=None, to_float=False):
         if "::" in place:
             coord = place.split("::")[1]
         ll  = coord.split(',')
-        lat = ll[0].strip()
-        lon = ll[1].strip()
+        la  = ll[0].strip()
+        lo  = ll[1].strip()
+        laf = float(la)
+        lof = float(lo)
         if to_float:
-            lat = float(lat)
-            lon = float(lon)
+            lat = laf
+            lon = lof
+        else:
+            lat = la
+            lon = lo
     except:
         pass
     return lat,lon
