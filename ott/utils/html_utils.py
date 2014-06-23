@@ -204,6 +204,16 @@ def get_first_param(request, name, def_val=None):
         pass
     return ret_val
 
+def get_ini_param(request, name, def_val=None):
+    ''' pyramid request has a simple way to get a named .ini parameter
+    '''
+    ret_val = def_val
+    try:
+        ret_val = request.registry.settings[name]
+    except Exception, e:
+        pass
+    return ret_val
+
 def get_lang(request, def_val="en"):
     return get_first_param(request, "_LOCALE_", def_val)
 
