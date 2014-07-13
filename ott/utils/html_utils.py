@@ -4,8 +4,6 @@ log = logging.getLogger(__file__)
 
 import date_utils
 import num_utils
-import geo_utils
-import transit_utils
 
 
 def planner_form_params(request):
@@ -147,6 +145,7 @@ def get_first_param_is_a_coord(request, name, def_val=False):
 def get_first_param_as_coord(request, name, def_val=None, to_float=False):
     ''' return lat,lon floats
     '''
+    import geo_utils
     val = get_first_param(request, name, def_val)
     lat,lon = geo_utils.ll_from_str(val, def_val, to_float)
     return lat,lon

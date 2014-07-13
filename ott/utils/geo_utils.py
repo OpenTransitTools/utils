@@ -1,6 +1,8 @@
 import logging
 log = logging.getLogger(__file__)
 
+import html_utils
+
 def has_coord(place):
     ''' determine if the string has something that looks like a coord
     '''
@@ -10,6 +12,29 @@ def has_coord(place):
         coord = place.split("::")[1]
     if coord and "," in coord:
         ret_val = True
+    return ret_val
+
+
+def solr_to_named_param(doc, def_val=None):
+    ret_val = def_val
+    try:
+        name = html_utils.html_escape(doc['name'])
+        lat  = doc['lat']
+        lon  = doc['lon']
+        ret_val = "{0}::{1},{2}".format(name, lat, lon)
+    except:
+        pass
+    return ret_val
+
+def solr_to_named_plus_city(doc, def_val):
+    ret_val = def_val
+    try:
+        ret_val = solr_to_named_param(doc, def_val)
+        city = html_utils.html_escape(doc['city'])
+        if city:
+            ret_val = "{0}::{1}".format(ret_val, city)
+    except:
+        pass
     return ret_val
 
 
