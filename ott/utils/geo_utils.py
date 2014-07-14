@@ -3,6 +3,50 @@ log = logging.getLogger(__file__)
 
 import html_utils
 
+def get_coord_from_request(request, param_name='placeCoord', def_val=None):
+    ''' return lat,lon based on either a coord name, or lat/lon parametres
+    '''
+    ret_val = def_val
+    try:
+        c = html_utils.get_first_param(request, param_name)
+        if c and ',' in c:
+            ret_val = c.strip()
+        else:
+            lat = html_utils.get_first_param(request, 'lat')
+            lon = html_utils.get_first_param(request, 'lon')
+            if lat and lon:
+                ret_val = "{0},{1}".format(lat.strip(), lon.strip())
+    except:
+        pass 
+    return ret_val
+
+
+def get_named_param_from_request(request, param_name, def_val=None):
+    ''' return a fully built out NAME::lat,lon string based on params in the request
+    '''
+    ret_val = def_val
+    try:
+        # step 1: get name (which may/may not be a fully NAME::COORD string...
+        name = html_utils.get_first_param(request, param_name, def_val)
+        if name:
+            ret_val = name
+        else:
+            name = def_val
+
+        # step 2: find a nameCoord or lat,lon in the request...
+        if not has_coord(name):
+            coord = get_coord_from_request(request, param_name + 'Coord')
+    
+            # step 3: if we have a coord, then make the return with that info
+            if name and coord:
+                ret_val = "{0}::{1}".format(name.strip(), coord)
+            elif coord:
+                ret_val = coord
+    except:
+        pass 
+    return ret_val
+
+
 def has_coord(place):
     ''' determine if the string has something that looks like a coord
     '''
