@@ -15,6 +15,18 @@ def planner_form_params(request):
     dt = date_utils.get_day_info()
     tm = date_utils.get_time_info()
 
+    walk_max_def = 1260
+    bike_max_def = 4828
+    def_max_dist = walk_max_def
+    def_optimize = "QUICK"
+
+    # TODO: make this work...
+    # TODO: make 
+    if 'Bike' in 'request':
+        def_max_dist = bike_max_def
+        def_optimize = "SAFE"
+
+
     ret_val = {
         "fromPlace" : None,
         "fromCoord" : None,
@@ -29,8 +41,8 @@ def planner_form_params(request):
         "year"      : dt['year'],
         "numdays"   : dt['numdays'],
         "Arr"       : False,
-        "Walk"      : 840,
-        "optimize"  : "QUICK",
+        "Walk"      : def_max_dist,
+        "optimize"  : def_optimize,
         "mode"      : "TRANSIT,WALK"
     }
 
