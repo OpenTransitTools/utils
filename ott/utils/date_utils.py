@@ -25,7 +25,7 @@ def get_time_info(tm=None):
     if tm is None:
         tm = get_local_time()
     ret_val = {
-        'hour'    : int(time.strftime('%I', tm).strip('0')),
+        'hour'    : int(time.strftime('%I', tm).lstrip('0')),
         'minute'  : int(time.strftime('%M', tm)), 
         'is_am'   : time.strftime('%p', tm) == 'AM'
     }
@@ -172,10 +172,10 @@ def get_svc_date_tabs(dt, uri, more_tab=True, translate=ret_me, fmt='%m/%d/%Y', 
     # step 3: add the next to service day tabs to our return array
     ret_val.append(make_tab_obj(d1.strftime(smfmt), uri, d1))
     ret_val.append(make_tab_obj(d2.strftime(smfmt), uri, d2))
-    #ret_val.append({"name":d2.strftime(smfmt).lstrip('0').replace('/0','/'), "url": uri + "&date=" + d2.strftime(fmt)})
 
-    # TODO put the ret_val appen stuff in a separte method that builds up the dict...
-    #      and add a pretty_date to that dict, so that we can create a css TOOLTIP that shows what weekday / date the 2/1, 2/5, 2/6 dates represent...
+    # TODO put the ret_val append stuff in a separate method that builds up the dict...
+    #      and add a pretty_date to that dict, so that we can create a css TOOLTIP that shows what 
+    #      weekday / date the 2/1, 2/5, 2/6 dates represent...
     #, "pretty_date": pretty_date(d1, pttyfmt)})
 
     # step 4: if we are not showing the date form, give the 'more' option which will show that form
