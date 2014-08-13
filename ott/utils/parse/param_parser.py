@@ -176,6 +176,15 @@ class ParamParser(object):
                 break
         return ret_val
 
+    def get_first_val_trim(self, names, def_val=None):
+        ''' get the first value, but trim back white space and leading ZEROs (good for IDs, etc...)
+        '''
+        ret_val = def_val
+        v = self.get_first_val(names, def_val)
+        if v is not None and v != 'None':
+            ret_val = v.strip().lstrip('0')
+        return ret_val
+
 
     def get_first_val_as_numeric(self, names, def_val=None):
         ''' pass in a list of 'names', and return the first name that has a value in self.params
