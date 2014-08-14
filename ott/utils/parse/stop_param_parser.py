@@ -2,7 +2,7 @@ from ott.utils import date_utils
 from .param_parser import ParamParser
 from .route_param_parser import ROUTE_IDS, DIR_IDS
 
-STOP_IDS = ['stop_id', 'stopID',  'stopId', 'stop', 'Loc', 'locID'] 
+STOP_IDS = ['stop_id', 'stopID',  'stopId', 'stop', 'Loc', 'locID', 'loc1'] 
 
 class StopParamParser(ParamParser):
 
