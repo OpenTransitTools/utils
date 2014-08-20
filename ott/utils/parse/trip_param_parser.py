@@ -150,11 +150,19 @@ class TripParamParser(ParamParser):
             ret_val = self.frm 
         return ret_val
 
+    def set_from(self, val):
+        if val:
+            self.frm = val
+
     def get_to(self, def_val=None):
         ret_val = def_val
         if self.to:
             ret_val = self.to 
         return ret_val
+
+    def set_to(self, val):
+        if val:
+            self.to = val
 
     def _parse_from(self):
         ''' parse out the trip origin from get params ... the value could be a string, a coordinate or combo of the two
