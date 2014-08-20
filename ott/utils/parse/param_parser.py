@@ -220,7 +220,6 @@ class ParamParser(object):
             val = self.get_first_val(names)
             if val == '':
                 val = 'T'
-            #import pdb; pdb.set_trace()
             if not any(f in val for f in ('false', 'False', 'None')):
                 ret_val = True
             else:
@@ -287,6 +286,8 @@ class ParamParser(object):
         ret_val = def_val
 
         if name and coord:
+            #import pdb; pdb.set_trace()
+            name = name.split("::")[0]
             ret_val = "{0}::{1}".format(object_utils.to_str(name), coord)
         elif name:
             ret_val = name
