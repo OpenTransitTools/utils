@@ -3,6 +3,28 @@ log = logging.getLogger(__file__)
 
 import html_utils
 
+def is_coord(str):
+    ret_val = False
+    try:
+        ll = str.split(",")
+        if float(ll[0].strip()) and float(ll[1].strip()):
+            ret_val = True
+    except:
+        pass
+    return ret_val
+
+def has_coord(place):
+    ''' determine if the string has something that looks like a coord
+    '''
+    ret_val = False
+    coord = place
+    if coord and "::" in coord:
+        coord = place.split("::")[1]
+    if is_coord(coord):
+        ret_val = True
+    return ret_val
+
+
 def get_coord_from_request(request, param_name='placeCoord', def_val=None):
     ''' return lat,lon based on either a coord name, or lat/lon parametres
     '''
@@ -36,7 +58,7 @@ def get_named_param_from_request(request, param_name, def_val=None):
         # step 2: find a nameCoord or lat,lon in the request...
         if not has_coord(name):
             coord = get_coord_from_request(request, param_name + 'Coord')
-    
+
             # step 3: if we have a coord, then make the return with that info
             if name and coord:
                 ret_val = "{0}::{1}".format(name.strip(), coord)
@@ -45,19 +67,6 @@ def get_named_param_from_request(request, param_name, def_val=None):
     except:
         pass 
     return ret_val
-
-
-def has_coord(place):
-    ''' determine if the string has something that looks like a coord
-    '''
-    ret_val = False
-    coord = place
-    if coord and "::" in coord:
-        coord = place.split("::")[1]
-    if coord and "," in coord:
-        ret_val = True
-    return ret_val
-
 
 def solr_to_named_param(doc, def_val=None):
     ret_val = def_val
