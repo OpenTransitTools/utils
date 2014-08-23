@@ -4,7 +4,7 @@ log = logging.getLogger(__file__)
 
 import date_utils
 import num_utils
-
+import geo_utils
 
 def planner_form_params(request):
     '''
@@ -148,7 +148,7 @@ def get_first_param_is_a_coord(request, name, def_val=False):
     ret_val = def_val
     try:
         val = get_first_param(request, name, def_val)
-        if len(val) > 6 and ',' in val:
+        if geo_utils.is_coord(val):
             ret_val = True
     except:
         pass

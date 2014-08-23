@@ -3,6 +3,7 @@ log = logging.getLogger(__file__)
 
 import html_utils
 
+
 def is_coord(str):
     ret_val = False
     try:
@@ -13,7 +14,8 @@ def is_coord(str):
         pass
     return ret_val
 
-def has_coord(place):
+
+def contains_coord(place):
     ''' determine if the string has something that looks like a coord
     '''
     ret_val = False
@@ -23,6 +25,21 @@ def has_coord(place):
     if is_coord(coord):
         ret_val = True
     return ret_val
+
+
+def is_param_a_coord(request, type='place'):
+    ''' determine if the url has either a typeCoord url parameter, or a type::45.5,-122.5 param
+    '''
+    ret_val = False
+    coord = html_utils.get_first_param(request, type + 'Coord')
+    if is_coord(coord):
+        ret_val = True
+    else:
+        place = html_utils.get_first_param(request, type)
+        if contains_coord(place):
+            ret_val = True
+    return ret_val
+
 
 
 def get_coord_from_request(request, param_name='placeCoord', def_val=None):
@@ -56,7 +73,7 @@ def get_named_param_from_request(request, param_name, def_val=None):
             name = def_val
 
         # step 2: find a nameCoord or lat,lon in the request...
-        if not has_coord(name):
+        if not contains_coord(name):
             coord = get_coord_from_request(request, param_name + 'Coord')
 
             # step 3: if we have a coord, then make the return with that info
