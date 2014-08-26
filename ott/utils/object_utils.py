@@ -128,6 +128,15 @@ def to_str(s, def_val=''):
             pass
     return ret_val
 
+def to_url_param_val(s, def_val=''):
+    ret_val = to_str(s, def_val)
+    try:
+        ret_val = ret_val.strip()
+        ret_val = ret_val.replace(' ', '+').replace('&amp;', '%26').replace('&', '%26')
+    except:
+        pass
+    return ret_val
+
 def to_code(s, def_val=''):
     ''' multi-byte compliant version of str() unicode conversion...
     '''

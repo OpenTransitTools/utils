@@ -149,17 +149,21 @@ def ll_from_str(place, def_val=None, to_float=False):
     return lat,lon
 
 
+def make_place(name, lat, lon, city=None, place=None):
+    ret_val = {'name':name, 'city':city, 'lat':lat, 'lon':lon, 'place':place}
+    return ret_val
+
+
 def from_place_str(place):
     ''' will return a dict of descrete values from a place string...
         ala PDX::45.5,-122.5::Portland will populate this dict...
     '''
-    ret_val = {'name':None, 'city':None, 'lat':None, 'lon':None, 'place':place}
+    ret_val = None
     try:
-        ret_val['name'] = name_from_named_place(place, place)
+        name = name_from_named_place(place, place)
         lat,lon =  ll_from_str(place, to_float=True)
-        ret_val['lat'] = lat
-        ret_val['lon'] = lon
-        ret_val['city'] = city_from_named_place(place)
+        city = city_from_named_place(place)
+        ret_val = make_place(name, lat, lon, city, place)
     except:
         pass
     return ret_val
