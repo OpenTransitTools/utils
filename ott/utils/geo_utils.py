@@ -2,7 +2,8 @@ import logging
 log = logging.getLogger(__file__)
 
 import html_utils
-
+import re
+ZIP_CODE_RE = re.compile("[,\s]*\d{5}(?:[-\s]\d{4})?$")
 
 def is_coord(str):
     ret_val = False
@@ -153,19 +154,22 @@ def make_place(name, lat, lon, city=None, place=None):
     ret_val = {'name':name, 'city':city, 'lat':lat, 'lon':lon, 'place':place}
     return ret_val
 
-import re
-ZIP_CODE = re.compile("[0-9]{5}")
 def get_name_city_from_string(str):
     ''' will break up something like 834 SE X Street, Portland <97xxx> into '834 SE X Street' and 'Portland'
     '''
-    name = None, city = None
+    name = None
+    city = None
     try:
         v = str.split(',')
         name = v[0].strip()
         city = v[1].strip()
-        
+        city = ZIP_CODE_RE.sub('', city)
     except:
         pass
+    finally:
+        if name == None:
+            name = str
+            city = None
     return name,city
 
 
