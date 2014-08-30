@@ -153,6 +153,38 @@ def make_place(name, lat, lon, city=None, place=None):
     ret_val = {'name':name, 'city':city, 'lat':lat, 'lon':lon, 'place':place}
     return ret_val
 
+import re
+ZIP_CODE = re.compile("[0-9]{5}")
+def get_name_city_from_string(str):
+    ''' will break up something like 834 SE X Street, Portland <97xxx> into '834 SE X Street' and 'Portland'
+    '''
+    name = None, city = None
+    try:
+        v = str.split(',')
+        name = v[0].strip()
+        city = v[1].strip()
+        
+    except:
+        pass
+    return name,city
+
+
+def is_nearby(latA, lonA, latB, lonB, decimal_diff=0.0015):
+    ''' compares lat/lon A vs lat/lon B to sees whether their values
+        are within a certain decimal place of each other
+        NOTE: default is 0.0015 ... if the distant between latA and latB, and lonA and lonB is
+              each 0.0015 absolute differnce  
+    '''
+    ret_val = False
+    try:
+        lat_diff = abs(latA - latB)
+        lon_diff = abs(lonA - lonB)
+        if lat_diff < decimal_diff and lon_diff < decimal_diff:
+            ret_val = True
+    except:
+        pass
+    return ret_val
+
 
 def from_place_str(place):
     ''' will return a dict of descrete values from a place string...
