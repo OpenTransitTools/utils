@@ -4,12 +4,24 @@ log = logging.getLogger(__file__)
 import html_utils
 import re
 ZIP_CODE_RE = re.compile("[,\s]*\d{5}(?:[-\s]\d{4})?$")
+ADDRESS_RE  = re.compile("^[0-9]+[\s\w]+\s(north|south|east|west|n|s|e|w){1,2}(?=\s|$)", re.IGNORECASE)
 
 def is_coord(str):
     ret_val = False
     try:
         ll = str.split(",")
         if float(ll[0].strip()) and float(ll[1].strip()):
+            ret_val = True
+    except:
+        pass
+    return ret_val
+
+def is_address(str):
+    ''' does string look kinda-like an (US postal) address 
+    '''
+    ret_val = False
+    try:
+        if ADDRESS_RE.search(str):
             ret_val = True
     except:
         pass
