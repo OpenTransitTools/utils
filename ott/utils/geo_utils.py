@@ -162,10 +162,6 @@ def ll_from_str(place, def_val=None, to_float=False):
     return lat,lon
 
 
-def make_place(name, lat, lon, city=None, place=None):
-    ret_val = {'name':name, 'city':city, 'lat':lat, 'lon':lon, 'place':place}
-    return ret_val
-
 def get_name_city_from_string(str):
     ''' will break up something like 834 SE X Street, Portland <97xxx> into '834 SE X Street' and 'Portland'
     '''
@@ -199,6 +195,11 @@ def is_nearby(latA, lonA, latB, lonB, decimal_diff=0.0015):
             ret_val = True
     except:
         pass
+    return ret_val
+
+
+def make_place(name, lat, lon, city=None, place=None):
+    ret_val = {'name':name, 'city':city, 'lat':lat, 'lon':lon, 'place':place}
     return ret_val
 
 
