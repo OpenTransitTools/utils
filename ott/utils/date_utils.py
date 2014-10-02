@@ -82,6 +82,11 @@ def pretty_date(dt=None, fmt='%A, %B %d, %Y'):
     ret_val =  dt.strftime(fmt).replace(' 0',' ')  # "Monday, March 4, 2013"
     return ret_val
 
+def dow(dt=None, fmt='%A'):
+    return pretty_date(dt, fmt)
+
+def dow_abbrv(dt=None, fmt='%a'):
+    return dow(dt, fmt)
 
 def secs_since_epoch(t=None):
     if not t:
