@@ -6,6 +6,8 @@ from datetime import timedelta
 import time
 from calendar import monthrange
 
+from ott.utils import num_utils
+
 def ret_me(s):
     return s
 _ = ret_me
@@ -47,6 +49,30 @@ def get_day_info(dt=None):
         'numdays' : end,
         'day'     : dt.day
     }
+    return ret_val
+
+
+def normalize_year(input_month, input_year=None):
+    ''' This routine is used when we only have month parameters (text planner / stop schedule lookup) and the
+        year is implied...
+
+        RULES:
+          return last year if we're w/in a few months of the new year, today is in the months of Jan-March and the search month is Sept-Dec
+          return next year if we're w/in a few months of the new year, today is in the months of April-Dec and the search month is this month - 3 
+          return this year otherwise...
+    '''
+    today = datetime.date.today()
+
+    input_year  = num_utils.to_int(input_year,  today.year)
+    input_month = num_utils.to_int(input_month, today.month)
+
+    ret_val = input_year
+    if today.month < 4:       # This is JAN, FEB or MARCH
+        if input_month > 8:   # and we want to see a month SEPT, OCT, NOV, DEC
+            ret_val = input_year - 1
+    else:                                    # This is APRIL - DEC
+        if today.month > (input_month  + 3):  # and we want to see something > 3 months back....
+            ret_val = input_year + 1
     return ret_val
 
 

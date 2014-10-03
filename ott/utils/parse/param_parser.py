@@ -9,6 +9,7 @@ log = logging.getLogger(__file__)
 
 from ott.utils import html_utils
 from ott.utils import object_utils
+from ott.utils import date_utils
 
 class ParamParser(object):
 
@@ -56,10 +57,11 @@ class ParamParser(object):
 
         self.year  = self.get_first_val(['Year'])
         if self.year is None:
-            self.year = date.year
+            self.year = date_utils.normalize_year(self.month)
 
         ret_val = fmt.format(**self.__dict__)
         return ret_val
+
 
     def _normalize_date_parts(self):
         ''' make sure we have all the date parts separated from the larger date field (since we build urls with that) 
@@ -71,7 +73,6 @@ class ParamParser(object):
             if self.day   is None:  self.day   = d[2]
         except:
             pass
-
 
 
     @classmethod
@@ -194,7 +195,7 @@ class ParamParser(object):
         str = def_val
         try:
             str = self.get_first_val(names)
-            ret_val = float(str.strip())
+            ret_val = float(str)
         except:
             ret_val = str
         return ret_val
@@ -207,7 +208,7 @@ class ParamParser(object):
         str = def_val
         try:
             str = self.get_first_val(names)
-            ret_val = int(str.strip())
+            ret_val = int(str)
         except:
             ret_val = str
         return ret_val
