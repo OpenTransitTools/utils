@@ -194,7 +194,7 @@ class ParamParser(object):
         str = def_val
         try:
             str = self.get_first_val(names)
-            ret_val = float(str)
+            ret_val = float(str.strip())
         except:
             ret_val = str
         return ret_val
@@ -203,11 +203,13 @@ class ParamParser(object):
         ''' pass in a list of 'names', and return the first name that has a value in self.params
             with the additional requirement that this value is an int value 
         '''
-        ret_val = def_val
+        ret_val = None
+        str = def_val
         try:
-            ret_val = self.get_first_val(names)
+            str = self.get_first_val(names)
+            ret_val = int(str.strip())
         except:
-            pass
+            ret_val = str
         return ret_val
 
 
