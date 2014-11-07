@@ -1,4 +1,5 @@
 import os
+import sys
 import csv
 import datetime
 import time
@@ -18,19 +19,36 @@ class Csv(object):
     last_check = None
     delimiter=','
 
-    def __init__(self, uri, delimiter=','):
+    def __init__(self, uri, path=None, delimiter=','):
         log.info('Reading CSV {0}'.format(uri))
         self.delimiter=delimiter
-        self.assign_uri(uri)
+        self.assign_uri(uri, path)
 
-    def assign_uri(self, uri):
+    def assign_uri(self, uri, path=None):
         '''
         '''
         if '/' in uri or '\\' in uri:
             self.csv_uri = uri
         else:
-            here = os.path.dirname(os.path.abspath(__file__))
+            if path:
+                here = path
+            else:
+                here = self.get_curr_dir()
             self.csv_uri = os.path.join(here, uri) 
+
+    @classmethod
+    def get_curr_dir(cls, def_val=None):
+        ret_val = def_val
+        try:
+            ret_val = os.path.dirname(sys.argv[0])
+        except:
+            ret_val = cls.get_dirname()
+        return ret_val
+
+    @classmethod
+    def get_dirname(cls, file_name=__file__):
+        return os.path.dirname(os.path.abspath(file_name))
+
 
 
     def open(self):
@@ -51,6 +69,7 @@ class Csv(object):
             self.file = data
         #import pdb; pdb.set_trace()
         self.reader = csv.DictReader(data, delimiter=self.delimiter)
+        return self.reader
 
 
     def close(self):
@@ -131,6 +150,5 @@ def main(argv):
 
 
 if __name__ == '__main__':
-    import sys
     main(sys.argv)
 
