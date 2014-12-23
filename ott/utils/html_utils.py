@@ -15,7 +15,7 @@ def planner_form_params(request):
     dt = date_utils.get_day_info()
     tm = date_utils.get_time_info()
 
-    walk_max_def = 1260
+    walk_max_def = 1609
     bike_max_def = 4828
     def_max_dist = walk_max_def
     def_optimize = "QUICK"
