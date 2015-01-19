@@ -49,6 +49,15 @@ class Csv(object):
     def get_dirname(cls, file_name=__file__):
         return os.path.dirname(os.path.abspath(file_name))
 
+    @classmethod
+    def get_relative_dirname(cls, file_name=__file__, rel=None):
+        ret_val = cls.get_dirname(file_name)
+        if rel:
+            print ret_val
+            ret_val = cls.get_dirname(ret_val + rel)
+            print ret_val
+        return ret_val
+
 
 
     def open(self):
