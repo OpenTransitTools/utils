@@ -84,7 +84,6 @@ def safe_int(obj, def_val=None):
         pass
     return ret_val
 
-
 def safe_dict_val(obj, key, def_val=None):
     ret_val = def_val
     try:
@@ -93,6 +92,8 @@ def safe_dict_val(obj, key, def_val=None):
         pass
     return ret_val
 
+def dval(obj, key, def_val=None):
+    return safe_dict_val(obj, key, def_val)
 
 def strip_tuple(obj, def_val=None):
     ret_val = def_val
@@ -113,7 +114,6 @@ def strip_tuple_list(obj_list, def_val=None):
     except:
         pass
     return ret_val
-
 
 def to_str(s, def_val=''):
     ''' multi-byte compliant version of str() unicode conversion...
