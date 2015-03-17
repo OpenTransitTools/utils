@@ -11,6 +11,10 @@ COMMIT_EDITMSG
 *#
 #*
 
+.idea
+.idea/
+*.iml
+
 # C extensions
 *.so
 
