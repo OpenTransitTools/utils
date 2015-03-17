@@ -95,6 +95,9 @@ def safe_dict_val(obj, key, def_val=None):
 def dval(obj, key, def_val=None):
     return safe_dict_val(obj, key, def_val)
 
+def dval_list(obj, key, def_val=[]):
+    return safe_dict_val(obj, key, def_val)
+
 def strip_tuple(obj, def_val=None):
     ret_val = def_val
     try:
