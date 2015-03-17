@@ -60,11 +60,13 @@ def get_coord_from_dict(coord, def_val=None):
     '''
     lat = object_utils.dval('lat', def_val)
     if lat == def_val:
-        lat = object_utils.dval('l', def_val)
+        lat = object_utils.dval('latitude', def_val)
 
     lon = object_utils.dval('lon', def_val)
     if lon == def_val:
-        lon = object_utils.dval('lon', def_val)
+        lon = object_utils.dval('lng', def_val)
+    if lon == def_val:
+        lon = object_utils.dval('longitude', def_val)
 
     return lat, lon
 
