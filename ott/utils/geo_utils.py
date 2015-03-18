@@ -54,22 +54,43 @@ def is_param_a_coord(request, type='place'):
             ret_val = True
     return ret_val
 
-
 def get_coord_from_dict(coord, def_val=None):
     ''' return lat,lon based on {"lat":y, "lon":x}
     '''
-    lat = object_utils.dval('lat', def_val)
-    if lat == def_val:
-        lat = object_utils.dval('latitude', def_val)
+    lat = object_utils.dval(coord, 'lat', def_val)
+    lon = object_utils.dval(coord, 'lon', def_val)
 
-    lon = object_utils.dval('lon', def_val)
+    if lat == def_val:
+        lat = object_utils.dval(coord, 'latitude', def_val)
+
     if lon == def_val:
-        lon = object_utils.dval('lng', def_val)
+        lon = object_utils.dval(coord, 'lng', def_val)
     if lon == def_val:
-        lon = object_utils.dval('longitude', def_val)
+        lon = object_utils.dval(coord, 'longitude', def_val)
 
     return lat, lon
 
+def get_address_from_dict(address, def_val=None):
+    '''
+        "street": "355 Binney St",
+        "city": "Cambridge",
+        "region_name": "Massachusetts",
+        "postal_code": "02139",
+        "country_code": "US"
+    '''
+    street = object_utils.dval(address, 'street', def_val)
+    city   = object_utils.dval(address, 'city',   def_val)
+    state  = object_utils.dval(address, 'state',  def_val)
+    zip    = object_utils.dval(address, 'zip',    def_val)
+
+    if street == def_val:
+        street = object_utils.dval(address, 'address', def_val)
+    if state == def_val:
+        state = object_utils.dval(address, 'region_name', def_val)
+    if zip == def_val:
+        zip = object_utils.dval(address, 'postal_code', def_val)
+
+    return street, city, state, zip
 
 def get_coord_from_request(request, param_name='placeCoord', def_val=None):
     ''' return lat,lon based on either a coord name, or lat/lon parametres
