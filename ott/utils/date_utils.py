@@ -21,6 +21,27 @@ def get_local_time():
 def get_local_date():
     return datetime.date.today()
 
+def get_hours(tm=None):
+    ''' return hours from input time as int
+    '''
+    if tm is None:
+        tm = get_local_time()
+    return tm.tm_hour
+
+
+def is_today(month, day, def_val=False):
+    ''' return True if month and day are same as today, else return False
+        if either day or month are None, return def_val
+    '''
+    ret_val = def_val
+    if month and day:
+        dt = get_local_date()
+        if day == dt.day and month == dt.month:
+            ret_val = True
+        else:
+            ret_val = False
+    return ret_val
+
 def get_time_info(tm=None):
     ''' gets a dict with a few params based on input date-time object
     '''
