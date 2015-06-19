@@ -28,6 +28,17 @@ def get_hour(tm=None):
         tm = get_local_time()
     return tm.tm_hour
 
+def get_day_before(year=None, month=None, day=None, num_days=1):
+    ''' return a datetime.date for the day before specified date
+        NOTE: if no params sent, default is yesterday
+    '''
+    dt = get_local_date()
+    y = num_utils.to_int(year, dt.year)
+    m = num_utils.to_int(month, dt.month)
+    d = num_utils.to_int(day, dt.day)
+    day = datetime.date(y, m, d)
+    before = day - datetime.timedelta(days=num_days)
+    return before
 
 def is_today(month, day, def_val=False):
     ''' return True if month and day are same as today, else return False
