@@ -21,8 +21,8 @@ def get_local_time():
 def get_local_date():
     return datetime.date.today()
 
-def get_hours(tm=None):
-    ''' return hours from input time as int
+def get_hour(tm=None):
+    ''' return hour from input time as int
     '''
     if tm is None:
         tm = get_local_time()
