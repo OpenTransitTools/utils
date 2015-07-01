@@ -93,7 +93,7 @@ def normalize_year(input_month, input_year=None):
           return next year if we're w/in a few months of the new year, today is in the months of April-Dec and the search month is this month - 3 
           return this year otherwise...
     '''
-    today = datetime.date.today()
+    today = get_local_date()
 
     input_year  = num_utils.to_int(input_year,  today.year)
     input_month = num_utils.to_int(input_month, today.month)
@@ -112,7 +112,7 @@ def set_date(dt=None, month=None, day=None, year=None):
     ''' return a datetime object, setting new month & day ranges
     '''
     if dt is None:
-        dt = datetime.date.today()
+        dt = get_local_date()
 
     ret_val = dt
     try:
@@ -136,7 +136,7 @@ def pretty_time(dt, fmt=" %I:%M%p", def_val=None):
 
 def pretty_date(dt=None, fmt='%A, %B %d, %Y'):
     if dt is None:
-        dt = datetime.date.today()
+        dt = get_local_date()
     ret_val =  dt.strftime(fmt).replace(' 0',' ')  # "Monday, March 4, 2013"
     return ret_val
 
@@ -148,7 +148,7 @@ def dow_abbrv(dt=None, fmt='%a'):
 
 def secs_since_epoch(t=None):
     if not t:
-        t = datetime.datetime.now()
+        t = get_local_date()
     secs = time.mktime(t.timetuple())
     return secs 
 
@@ -156,7 +156,7 @@ def is_distant(dt, days=35):
     ''' test whether date time is in 'distant' past compared to today
     '''
     ret_val = False
-    today = datetime.datetime.today()
+    today = get_local_date()
     if today > dt and today - dt > timedelta(days=days):
         ret_val = True
     return ret_val
@@ -211,10 +211,10 @@ def get_svc_date_tabs(dt, uri, more_tab=True, translate=ret_me, fmt='%m/%d/%Y', 
     #import pdb; pdb.set_trace()
 
     # step 1: is 'today' the active tab, or is target date in future, so that's active, and we have a 'today' tab to left
-    if datetime.date.today() == dt:
+    if get_local_date() == dt:
         ret_val.append(make_tab_obj(translate(TODAY)))
     else:
-        ret_val.append(make_tab_obj(translate(TODAY), uri, datetime.date.today()))
+        ret_val.append(make_tab_obj(translate(TODAY), uri, get_local_date()))
         ret_val.append(make_tab_obj(dt.strftime(smfmt)))
 
     # step 2: figure out how many days from target is next sat, sunday and/or monday (next two service days different from today)
@@ -253,7 +253,7 @@ def str_to_date(str_date, fmt_list=['%Y-%m-%d', '%m/%d/%Y'], def_val=None):
     ''' utility function to parse a request object for something that looks like a date object...
     '''
     if def_val is None:
-        def_val = datetime.date.today()
+        def_val = get_local_date()
 
     ret_val = def_val
     for fmt in fmt_list:
@@ -266,6 +266,14 @@ def str_to_date(str_date, fmt_list=['%Y-%m-%d', '%m/%d/%Y'], def_val=None):
             log.warn(e)
     return ret_val
 
+def date_to_str(date, fmt='%Y-%m-%d'):
+    if date is None:
+        date = get_local_date()
+
+    ret_val = date
+    if isinstance(date, datetime.date):
+        ret_val = date.strftime(fmt)
+    return ret_val
 
 def make_date_from_timestamp(num, def_val=None):
     ret_val = def_val
@@ -289,7 +297,7 @@ def is_date_between(start, end, now=None):
         elif type(now) is datetime.date:
             now = datetime.datetime.combine(now, datetime.datetime.min.time())
         elif type(now) is datetime.time:
-            now = datetime.datetime.combine(datetime.date.today(), now)
+            now = datetime.datetime.combine(get_local_date(), now)
 
         if type(start) is datetime.datetime and type(end) is datetime.datetime:
             if start < now < end:

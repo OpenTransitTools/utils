@@ -2,7 +2,6 @@ import logging
 log = logging.getLogger(__file__)
 
 import simplejson as json
-import calendar
 import datetime
 
 
