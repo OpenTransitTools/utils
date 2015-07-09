@@ -65,7 +65,6 @@ def get_time_info(tm=None):
     }
     return ret_val
 
-
 def get_day_info(dt=None):
     ''' gets a dict with a few params based on input date-time object
     '''
@@ -82,7 +81,6 @@ def get_day_info(dt=None):
         'day'     : dt.day
     }
     return ret_val
-
 
 def normalize_year(input_month, input_year=None):
     ''' This routine is used when we only have month parameters (text planner / stop schedule lookup) and the
@@ -107,7 +105,6 @@ def normalize_year(input_month, input_year=None):
             ret_val = input_year + 1
     return ret_val
 
-
 def set_date(dt=None, month=None, day=None, year=None):
     ''' return a datetime object, setting new month & day ranges
     '''
@@ -124,7 +121,6 @@ def set_date(dt=None, month=None, day=None, year=None):
         pass
     return ret_val
 
-
 def pretty_time(dt, fmt=" %I:%M%p", def_val=None):
     ret_val = def_val
     try:
@@ -132,7 +128,6 @@ def pretty_time(dt, fmt=" %I:%M%p", def_val=None):
     except Exception, e:
         log.warn(e)
     return ret_val
-
 
 def pretty_date(dt=None, fmt='%A, %B %d, %Y'):
     if dt is None:
@@ -179,12 +174,10 @@ def is_future(secs, min_val=1000000000):
         ret_val = True
     return ret_val
 
-
 def make_tab_obj(name, uri=None, date=None, append=None):
     ''' for the date tab on the stop schedule page, we expect an object that has a name and a url
         this method builds that structure, and most importantly, the url for those tabs
     '''
-
     ret_val = {}
 
     # put the name of the tab first (and strip off any leading / trailing ZEROs if the name is a date)
@@ -246,8 +239,6 @@ def get_svc_date_tabs(dt, uri, more_tab=True, translate=ret_me, fmt='%m/%d/%Y', 
         ret_val.append(make_tab_obj(translate(MORE), uri, dt, MORE))
 
     return ret_val
-
-
 
 def str_to_date(str_date, fmt_list=['%Y-%m-%d', '%m/%d/%Y'], def_val=None):
     ''' utility function to parse a request object for something that looks like a date object...
@@ -312,7 +303,6 @@ def is_date_between(start, end, now=None):
         log.warn(e)
     return ret_val
 
-
 def split_time(time):
     ''' given 02:33:44 as a time string, return
     '''
@@ -325,7 +315,6 @@ def split_time(time):
     except Exception, e:
         log.warn(e)
     return h, m
-
 
 def now_time_code(time, now=None, tolerance_minutes=30):
     ''' return a code comparing NOW to time string in milatary format
@@ -370,7 +359,6 @@ def now_time_code(time, now=None, tolerance_minutes=30):
     except:
         pass
     return ret_val
-
 
 def military_to_english_time(time, fmt="{0}:{1:02d}{2}"):
     ''' assumes 08:33:55 and 22:33:42 type times
