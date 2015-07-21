@@ -152,7 +152,9 @@ def is_distant(dt, days=35):
     '''
     ret_val = False
     today = get_local_date()
-    if today > dt and today - dt > timedelta(days=days):
+    if type(dt) is datetime.datetime:
+        dt = dt.date()
+    if type(dt) is datetime.date and today > dt and today - dt > timedelta(days=days):
         ret_val = True
     return ret_val
 
