@@ -242,7 +242,7 @@ def get_svc_date_tabs(dt, uri, more_tab=True, translate=ret_me, fmt='%m/%d/%Y', 
 
     return ret_val
 
-def str_to_date(str_date, fmt_list=['%Y-%m-%d', '%m/%d/%Y'], def_val=None):
+def str_to_date(str_date, fmt_list=['%Y-%m-%d', '%m/%d/%Y', '%m-%d-%Y'], def_val=None):
     ''' utility function to parse a request object for something that looks like a date object...
     '''
     if def_val is None:
