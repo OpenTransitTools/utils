@@ -38,11 +38,12 @@ registry = SerializerRegistry()
 @registry.add
 class BaseDao(object):
     def __init__(self):
+        # TODO: should we call a method to set these variables, so that it's done in a single place, rather than return this multiple times?
+        #       self.set_date()
         self.status_code = 200
         self.status_message = None
         self.has_errors = False
         self.has_alerts = False
-        self.set_date()
 
     def set_date(self, date=None):
         #import pdb; pdb.set_trace()
