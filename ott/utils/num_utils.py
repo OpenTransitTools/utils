@@ -2,6 +2,8 @@ import math
 import logging
 log = logging.getLogger(__file__)
 
+from ott.utils import object_utils
+
 def distance_km(lat1, lon1, lat2, lon2):
     ''' return distance between two points in km using haversine
         http://en.wikipedia.org/wiki/Haversine_formula
@@ -37,6 +39,14 @@ def to_int(val, def_val):
     ret_val = def_val
     try:
         ret_val = int(val)
+    except:
+        pass
+    return ret_val
+
+def array_item_to_int(list, index, def_val=None):
+    ret_val = def_val
+    try:
+        ret_val = int(object_utils.safe_array_val(list, index))
     except:
         pass
     return ret_val

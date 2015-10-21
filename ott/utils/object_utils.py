@@ -92,6 +92,14 @@ def safe_dict_val(obj, key, def_val=None):
         pass
     return ret_val
 
+def safe_array_val(list, index, def_val=None):
+    ret_val = def_val
+    try:
+        ret_val = list[index]
+    except:
+        pass
+    return ret_val
+
 def dval(obj, key, def_val=None):
     return safe_dict_val(obj, key, def_val)
 
