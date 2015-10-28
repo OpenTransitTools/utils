@@ -24,6 +24,7 @@ def file_size(file):
     return s.st_size
 
 def exists_and_sized(file, size, expire):
+    #import pdb; pdb.set_trace()
     ret_val = True
     if os.path.exists(file) is False:
         logging.info("{} doesn't exist ".format(file))
