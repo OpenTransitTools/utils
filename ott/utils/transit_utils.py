@@ -4,6 +4,7 @@ log = logging.getLogger(__file__)
 from ott.utils import object_utils
 from ott.utils.modes import Modes
 
+
 def is_valid_route(route):
     ''' will further parse the route string, and check for route in GTFSdb
     '''
@@ -14,7 +15,6 @@ def is_valid_route(route):
         #       default to first agency if no ::
         ret_val = True
     return ret_val
-
 
 def plan_title(title, frm, sep, to, fmt="{0} - {1} {2} {3}", def_val=''):
     ''' used for getting a planner title
@@ -33,7 +33,6 @@ def plan_title(title, frm, sep, to, fmt="{0} - {1} {2} {3}", def_val=''):
         if not object_utils.has_content(ret_val):
             ret_val = def_val
     return ret_val
-
 
 def plan_description(plan, title, arr, opt, using_txt, max_walk_txt, fmt="{0}<br/>{1} {2}, {3}<br/>{4} {5} <br/>{6}<br/>{7} {8}"):
     ''' used for getting a planner description in text
@@ -61,7 +60,6 @@ def plan_description(plan, title, arr, opt, using_txt, max_walk_txt, fmt="{0}<br
 
     ret_val = fmt.format(title, arr, tm, dt, using_txt, mode, opt, max_walk_txt, walk)
     return ret_val
-
 
 def get_time(itinerary, is_arrive_by):
     if is_arrive_by:
@@ -109,7 +107,6 @@ def has_fare(itinerary):
                 break
     return ret_val
 
-
 def make_short_name(route_orm, def_name=None):
     ''' fix up the short name...
     '''
@@ -136,7 +133,6 @@ def make_short_name(route_orm, def_name=None):
 
     return ret_val
 
-
 def get_stoptime_alerts(stoptime):
     ''' return the alerts from a stoptime object...
         @see http://localhost:44444/stop_schedule?id=3
@@ -156,5 +152,3 @@ def get_stoptime_alerts(stoptime):
     except Exception, e:
         pass
     return ret_val
-
-
