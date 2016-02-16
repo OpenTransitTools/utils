@@ -45,6 +45,9 @@ class BaseDao(object):
         self.has_errors = False
         self.has_alerts = False
 
+    def __repr__(self):
+        return str(self.__dict__)
+
     def set_date(self, date=None):
         #import pdb; pdb.set_trace()
         if not hasattr(self, 'date_info'):
@@ -54,15 +57,43 @@ class BaseDao(object):
         self.date_info['month'] = date.month
         self.date_info['day'] = date.day
 
-    def __repr__(self):
-        return str(self.__dict__)
-
     def to_dict(self):
         return self.__dict__
 
+    def to_json(self, pretty=False):
+        return self.obj_to_json(self, pretty)
+
+    def from_json(self, str):
+        return json.loads(str, object_hook=registry.object_hook)
+
+    def set_alerts(self, alerts):
+        self.alerts = alerts
+        if self.alerts and len(self.alerts) > 0:
+            self.has_alerts = True
+        else:
+            self.has_alerts = False
+
     @classmethod
-    def from_dict(cls, dct):
-        return cls(**dct)
+    def geom_to_geojson(cls, session, geom):
+        geojson = None
+        try:
+            #import pdb; pdb.set_trace()
+            import geoalchemy2.functions as func
+            geojson = session.scalar(func.ST_AsGeoJSON(geom))
+        except:
+            log.warn("couldn't get geojson data from geom column")
+        return geojson
+
+    @classmethod
+    def orm_to_geojson(cls, orm):
+        ''' export orm column 'geom'
+        '''
+        geojson = None
+        try:
+            geojson = cls.geom_to_geojson(orm.session, orm.geom)
+        except:
+            log.warn("couldn't get geojson data from orm object")
+        return geojson
 
     @classmethod
     def obj_to_json(cls, obj, pretty=False):
@@ -72,11 +103,9 @@ class BaseDao(object):
             ret_val = json.dumps(obj, default=registry.default)
         return ret_val
 
-    def to_json(self, pretty=False):
-        return self.obj_to_json(self, pretty)
-
-    def from_json(self, str):
-        return json.loads(str, object_hook=registry.object_hook)
+    @classmethod
+    def from_dict(cls, dct):
+        return cls(**dct)
 
     @classmethod
     def format_template_from_dict(cls, dict, template):
@@ -86,13 +115,6 @@ class BaseDao(object):
         except:
             pass
         return ret_val
-
-    def set_alerts(self, alerts):
-        self.alerts = alerts
-        if self.alerts and len(self.alerts) > 0:
-            self.has_alerts = True
-        else:
-            self.has_alerts = False
 
 
 class DatabaseNotFound(BaseDao):
