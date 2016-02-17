@@ -18,6 +18,7 @@ class ParamParser(object):
         self.params = html_utils.params_to_dict(request)
         self.agency = self.get_first_val(['agency'], 'TriMet')
         self.detailed = self.get_first_val_as_bool(['detailed', 'full'], False)
+        self.show_geo = self.get_first_val_as_bool(['show_geo', 'geo'], False)
         self.alerts = self.get_first_val_as_bool(['alerts', 'full'], False)
         self.query_string = None
         if type(self.params) == str:
