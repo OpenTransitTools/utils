@@ -9,5 +9,5 @@ class RouteParamParser(ParamParser):
         super(RouteParamParser, self).__init__(params)
         date_str = self._parse_date()
         self.date = date_utils.str_to_date(date_str)
-        self.route_id = self.get_first_val_trim(ROUTE_IDS + ['id']) 
+        self.route_id = self.get_first_val_trim(ROUTE_IDS + ['id'])
         self.direction_id = self.get_first_val(DIR_IDS)
