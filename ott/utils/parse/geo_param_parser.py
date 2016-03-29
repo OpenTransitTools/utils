@@ -24,3 +24,7 @@ class GeoParamParser(ParamParser):
     def to_point(self):
         point = 'POINT({0} {1})'.format(self.lon, self.lat)
         return point
+
+    def to_point_srid(self, srid='4326'):
+        ret_val = 'SRID={0};{1}'.format(srid, self.to_point())
+        return ret_val
