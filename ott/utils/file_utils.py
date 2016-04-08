@@ -101,13 +101,13 @@ def diff_files(old_name, new_name):
         ret_val = True
     return ret_val
 
-def unzip_file(zip_file, target_file, file_name):
+def unzip_file(zip_file, target_file, file_name, log_exceptions=False):
     """ unzips a file from a zip file...
         @returns True if there's a problem...
     """
     ret_val = False
 
-    #import pdb; pdb.set_trace()
+
     try:
         rm(target_file)
         zip = zipfile.ZipFile(zip_file, 'r')
@@ -117,7 +117,8 @@ def unzip_file(zip_file, target_file, file_name):
         file.close()
         zip.close()
     except Exception, e:
-        logging.warn("problems extracting {} from {} into file {}".format(file_name, zip_file, target_file))
+        if log_exceptions:
+            logging.warn("problems extracting {} from {} into file {} ({})".format(file_name, zip_file, target_file, e.message))
         ret_val = True
 
     return ret_val
