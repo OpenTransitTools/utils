@@ -11,6 +11,7 @@ COMMIT_EDITMSG
 *#
 #*
 
+cache/
 .idea
 .idea/
 *.iml

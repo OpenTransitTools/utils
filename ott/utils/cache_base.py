@@ -6,6 +6,7 @@ logging.basicConfig(level=logging.INFO)
 
 from ott.utils import file_utils
 
+
 class CacheBase(object):
     cache_expire = 31
     cache_dir = None
@@ -47,7 +48,8 @@ class CacheBase(object):
     @classmethod
     def is_min_sized(cls, file, min_size=1000000):
         ret_val = False
-        if True:
+        file_size = os.path.getsize(file)
+        if file_size >= min_size:
             ret_val = True
         return ret_val
 
