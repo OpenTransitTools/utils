@@ -18,15 +18,16 @@ class CacheBase(object):
         dir = os.path.dirname(os.path.abspath(file))
         return dir
 
-    def get_cache_dir(self, cache_dir=None):
+    @property
+    def cache_dir(self):
         ''' returns dir path ... makes the directory if it doesn't exist
         '''
-        if cache_dir is None:
-            cache_dir = os.path.join(self.this_module_dir, "cache")
+        cache_dir = os.path.join(self.this_module_dir, "cache")
         file_utils.mkdir(cache_dir)
         return cache_dir
 
-    def get_tmp_dir(self):
+    @property
+    def tmp_dir(self):
         tmp_dir = os.path.join(self.this_module_dir, "tmp")
         file_utils.mkdir(tmp_dir)
         return tmp_dir
