@@ -81,7 +81,7 @@ def diff_files(old_name, new_name):
     try:
         # check #1
         ret_val = not filecmp.cmp(old_name, new_name)
-        logging.info("It's {0} that {1} is different from {2} (according to os.stat)".format(ret_val, old_name, new_name))
+        logging.info("{0} {1} different from {2} (according to os.stat)".format(old_name, "IS" if ret_val else "is NOT", new_name))
 
         # check #2
         # adapted from http://stackoverflow.com/questions/3043026/comparing-two-text-files-in-python
