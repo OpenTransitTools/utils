@@ -45,6 +45,13 @@ class CacheBase(object):
             ret_val = False
         return ret_val
 
+    def cp_cached_file(self, file_name, destination_dir):
+        ''' copy file from our cache to some other directory
+        '''
+        file = os.path.join(self.cache_dir, file_name)
+        dest = os.path.join(destination_dir, file_name)
+        shutil.copyfile(file, dest)
+
     @classmethod
     def is_min_sized(cls, file, min_size=1000000):
         ret_val = False
@@ -52,23 +59,3 @@ class CacheBase(object):
         if file_size >= min_size:
             ret_val = True
         return ret_val
-
-    @classmethod
-    def get_cached_file(cls, gtfs_zip_name, dir=None, def_name="cache"):
-        cache_dir = cls.get_cache_dir(dir, def_name)
-        file = os.path.join(cache_dir, gtfs_zip_name)
-        return file
-
-    @classmethod
-    def cp_cached_file(cls, file_name, destination_dir, dir=None, def_name="cache"):
-        file = cls.get_cached_file(file_name, dir, def_name)
-        dest = os.path.join(destination_dir, file_name)
-        shutil.copyfile(file, dest)
-
-    @classmethod
-    def get_url_filename(cls, gtfs_struct):
-        url  = gtfs_struct.get('url')
-        name = gtfs_struct.get('name', None)
-        if name is None:
-            name = file_utils.get_file_name_from_url(url)
-        return url, name
