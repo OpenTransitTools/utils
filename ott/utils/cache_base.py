@@ -9,20 +9,6 @@ from ott.utils import file_utils
 
 class CacheBase(object):
     cache_expire = 31
-    cache_dir = None
-
-    def is_fresh_in_cache(self, file):
-        ''' determine if file exists and is newer than the cache expire time
-        '''
-        ret_val = False
-        try:
-            # NOTE if the file isn't in the cache, we'll get an exception
-            age = file_utils.file_age(file)
-            if age <= self.cache_expire:
-                ret_val = True
-        except:
-            ret_val = False
-        return ret_val
 
     @property
     def this_module_dir(self):
@@ -44,6 +30,19 @@ class CacheBase(object):
         tmp_dir = os.path.join(self.this_module_dir, "tmp")
         file_utils.mkdir(tmp_dir)
         return tmp_dir
+
+    def is_fresh_in_cache(self, file):
+        ''' determine if file exists and is newer than the cache expire time
+        '''
+        ret_val = False
+        try:
+            # NOTE if the file isn't in the cache, we'll get an exception
+            age = file_utils.file_age(file)
+            if age <= self.cache_expire:
+                ret_val = True
+        except:
+            ret_val = False
+        return ret_val
 
     @classmethod
     def is_min_sized(cls, file, min_size=1000000):
