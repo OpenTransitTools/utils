@@ -54,9 +54,9 @@ def is_a_larger_than_b(file_a, file_b):
 
 def is_a_newer_than_b(file_a, file_b):
     ret_val = False
-    a_age = file_age(file_a)
-    b_age = file_age(file_b)
-    if a_age < b_age:
+    a_age = os.path.getmtime(file_a)
+    b_age = os.path.getmtime(file_b)
+    if a_age > b_age:
         ret_val = True
     return ret_val
 
