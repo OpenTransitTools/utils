@@ -37,6 +37,29 @@ def exists_and_sized(file, size, expire):
         ret_val = False
     return ret_val
 
+def is_min_sized(file, min_size=1000000):
+    ret_val = False
+    size = file_size(file)
+    if size >= min_size:
+        ret_val = True
+    return ret_val
+
+def is_a_larger_than_b(file_a, file_b):
+    ret_val = False
+    a_size = file_size(file_a)
+    b_size = file_size(file_b)
+    if a_size > b_size:
+        ret_val = True
+    return ret_val
+
+def is_a_newer_than_b(file_a, file_b):
+    ret_val = False
+    a_age = file_age(file_a)
+    b_age = file_age(file_b)
+    if a_age < b_age:
+        ret_val = True
+    return ret_val
+
 def bkup(file, rm_orig=True):
     #import pdb; pdb.set_trace()
     if os.path.exists(file):
@@ -106,7 +129,6 @@ def unzip_file(zip_file, target_file, file_name, log_exceptions=False):
         @returns True if there's a problem...
     """
     ret_val = False
-
 
     try:
         rm(target_file)

@@ -1,6 +1,5 @@
 import os
 import inspect
-import shutil
 import logging
 logging.basicConfig(level=logging.INFO)
 
@@ -50,12 +49,4 @@ class CacheBase(object):
         '''
         file = os.path.join(self.cache_dir, file_name)
         dest = os.path.join(destination_dir, file_name)
-        shutil.copyfile(file, dest)
-
-    @classmethod
-    def is_min_sized(cls, file, min_size=1000000):
-        ret_val = False
-        file_size = os.path.getsize(file)
-        if file_size >= min_size:
-            ret_val = True
-        return ret_val
+        file_utils.cp(file, dest)
