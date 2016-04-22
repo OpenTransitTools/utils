@@ -75,10 +75,10 @@ def mv(src, dst):
     os.rename(src, dst)
 
 def cp(src, dst):
-    if os.path.isfile(file):
+    if os.path.isfile(src):
         shutil.copy2(src, dst)
     else:
-        logging.error('could not copy file ' + src)
+        logging.error('could not copy file {} to {}'.format(src, dst))
 
 def rm(file):
     if os.path.exists(file):
