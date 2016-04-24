@@ -4,17 +4,18 @@ import logging
 logging.basicConfig(level=logging.INFO)
 
 from ott.utils import file_utils
+from ott.utils.config_util import ConfigUtil
 
 
 class CacheBase(object):
     cache_expire = 31
     config = None
 
-    def __init__(self, argv=None):
-        ini = None
-        if argv:
-            if 'ini' in argv: ini = argv['ini']
-
+    def __init__(self, config=None, section='cache'):
+        if not config:
+            config = ConfigUtil.factory(section=section)
+        self.config = config
+        self.cache_expire = self.config.get('cache_expire', 'cache', self.cache_expire)
 
     @property
     def this_module_dir(self):

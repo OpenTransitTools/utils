@@ -1,4 +1,5 @@
 from ConfigParser import SafeConfigParser
+import sys
 import json
 import logging
 import logging.config
@@ -75,7 +76,7 @@ class ConfigUtil(object):
             pass
 
     @classmethod
-    def factory(clfs, argv=None, section=None):
+    def factory(clfs, section=None, argv=sys.argv):
         #import pdb; pdb.set_trace()
         ini = INI
         if argv and 'ini' in argv:
