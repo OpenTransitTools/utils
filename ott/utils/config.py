@@ -68,12 +68,12 @@ def get_int(id, def_val=None, section=SECTION):
 
 def get_list(id, section=SECTION):
     ret_val = None
-
-    str_val = get(id, section=section)
+    str_val = None
     try:
+        str_val = get(id, section=section)
         ret_val = json.loads(str_val)
     except Exception, e:
-        log.info("Problems turning '{0}' into a list ({0} = {1})...\n{2}".format(id, str_val, e))
+        log.info("Problems marshaling '{0}' into a python (json) object ({0} = {1}) \n{2}".format(id, str_val, e))
         ret_val = str_val
     return ret_val
 
