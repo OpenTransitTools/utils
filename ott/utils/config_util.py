@@ -72,6 +72,8 @@ class ConfigUtil(object):
 
     @classmethod
     def factory(clfs, section=None, argv=sys.argv):
+        ''' create a Config object ... uses argv to override default list of .ini files
+        '''
         #import pdb; pdb.set_trace()
         ini = INI
         if argv and '-ini' in argv:
