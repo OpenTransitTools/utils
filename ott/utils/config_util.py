@@ -9,7 +9,7 @@ SECTION='view'
 INI=['app.ini', 'client.ini', 'services.ini', 'view.ini', 'production.ini']
 
 
-class OttConfig(object):
+class ConfigUtil(object):
     section = SECTION
     ini = INI
     found_ini = None
@@ -80,7 +80,7 @@ class OttConfig(object):
         ini = INI
         if argv and 'ini' in argv:
             ini = argv['ini']
-        cfg = OttConfig(ini, section)
+        cfg = ConfigUtil(ini, section)
         return cfg
 
 

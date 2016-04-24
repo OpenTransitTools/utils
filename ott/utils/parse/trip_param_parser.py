@@ -6,13 +6,15 @@ import logging
 log = logging.getLogger(__file__)
 
 from .param_parser import ParamParser
-from ott.utils import config
+from ott.utils.config_util import ConfigUtil
 from ott.utils import object_utils
 
 class TripParamParser(ParamParser):
 
     def __init__(self, params):
         super(TripParamParser, self).__init__(params)
+
+        config = ConfigUtil.factory()
 
         self.frm   = None
         self.to    = None
