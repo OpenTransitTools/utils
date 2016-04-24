@@ -1,13 +1,15 @@
+from ConfigParser import SafeConfigParser
+import json
 import logging
 log = logging.getLogger(__file__)
 import logging.config
 
-from ConfigParser import SafeConfigParser
-import glob
 
+SECTION='view'
 INI=['app.ini', 'client.ini', 'services.ini', 'view.ini', 'production.ini']
 parser = None
 found_ini = None
+
 
 def get_parser(ini=INI):
     ''' make the config parser
@@ -25,11 +27,10 @@ def get_parser(ini=INI):
 
             parser = SafeConfigParser()
             found_ini = parser.read(candidates)
-    except:
-        log.info("Couldn't find an acceptable ini file from {0}...".format(candidates))
+    except Exception, e:
+        log.info("Couldn't find an acceptable ini file from {0}\n{1}".format(candidates, e))
 
     return parser
-
 
 def config_logger(ini=INI):
     try:
@@ -38,8 +39,7 @@ def config_logger(ini=INI):
     except Exception, e:
         pass
 
-
-def get(id, def_val=None, section='view'):
+def get(id, def_val=None, section=SECTION):
     ''' get config value
     '''
     ret_val = def_val
@@ -48,13 +48,12 @@ def get(id, def_val=None, section='view'):
             ret_val = get_parser().get(section, id)
             if ret_val is None:
                 ret_val = def_val
-    except:
-        log.info("Couldn't find '{0}' in config under section '{1}'".format(id, section))
+    except Exception, e:
+        log.info("Couldn't find '{0}' in config under section '{1}'\n{2}".format(id, section, e))
 
     return ret_val
 
-
-def get_int(id, def_val=None, section='view'):
+def get_int(id, def_val=None, section=SECTION):
     ''' get config value as int (or go with def_val)
     '''
     ret_val = def_val
@@ -62,7 +61,31 @@ def get_int(id, def_val=None, section='view'):
         v = get(id, def_val, section)
         if v:
             ret_val = int(v)
-    except:
-        log.info("Couldn't find int value '{0}' in config under section '{1}'".format(id, section))
+    except Exception, e:
+        log.info("Couldn't find int value '{0}' in config under section '{1}'\n{2}".format(id, section, e))
 
     return ret_val
+
+def get_list(id, section=SECTION):
+    ret_val = None
+
+    str_val = get(id, section=section)
+    try:
+        ret_val = json.loads(str_val)
+    except Exception, e:
+        log.info("Problems turning '{0}' into a list ({0} = {1})...\n{2}".format(id, str_val, e))
+        ret_val = str_val
+    return ret_val
+
+
+class OttConfig(object):
+    section = SECTION
+
+    def __init__(section=SECTION):
+        self.section = section
+
+    def get(self, id, def_val=None, section=None): return get(id, def_val, section or self.section)
+    def get_int(self, id, def_val=None, section=None): return get(id, def_val, section or self.section)
+    def get_list(self, id, section=None): return get(id, section or self.section)
+
+
