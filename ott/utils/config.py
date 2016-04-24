@@ -66,7 +66,7 @@ def get_int(id, def_val=None, section=SECTION):
 
     return ret_val
 
-def get_list(id, section=SECTION):
+def get_json(id, section=SECTION):
     ret_val = None
     str_val = None
     try:
@@ -86,6 +86,6 @@ class OttConfig(object):
 
     def get(self, id, def_val=None, section=None): return get(id, def_val, section or self.section)
     def get_int(self, id, def_val=None, section=None): return get(id, def_val, section or self.section)
-    def get_list(self, id, section=None): return get(id, section or self.section)
+    def get_json(self, id, section=None): return get(id, section or self.section)
 
 
