@@ -9,13 +9,15 @@ from ott.utils.config_util import ConfigUtil
 
 class CacheBase(object):
     cache_expire = 31
-    config = None
+    def_section = 'cache'
 
-    def __init__(self, config=None, section='cache'):
-        if not config:
-            config = ConfigUtil.factory(section=section)
-        self.config = config
+    def __init__(self):
         self.cache_expire = self.config.get('cache_expire', 'cache', self.cache_expire)
+
+    @property
+    def config(self):
+        config = ConfigUtil.factory(section=self.def_section)
+        return config
 
     @property
     def this_module_dir(self):
