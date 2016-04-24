@@ -1,10 +1,10 @@
 from ConfigParser import SafeConfigParser
 import sys
-import json
 import logging
 import logging.config
 log = logging.getLogger(__file__)
 
+from ott.utils import json_utils
 
 SECTION='view'
 INI=['app.ini', 'client.ini', 'services.ini', 'view.ini', 'production.ini']
@@ -58,14 +58,8 @@ class ConfigUtil(object):
         return ret_val
 
     def get_json(self, id, section=None):
-        ret_val = None
-        str_val = None
-        try:
-            str_val = self.get(id, section=section)
-            ret_val = json.loads(str_val)
-        except Exception, e:
-            log.info("Problems marshaling '{0}' into a python (json) object ({0} = {1}) \n{2}".format(id, str_val, e))
-            ret_val = str_val
+        str_val = self.get(id, section=section)
+        ret_val = json_utils.str_to_json(str_val, str_val)
         return ret_val
 
     @classmethod
@@ -77,10 +71,11 @@ class ConfigUtil(object):
 
     @classmethod
     def factory(clfs, section=None, argv=sys.argv):
-        #import pdb; pdb.set_trace()
+        import pdb; pdb.set_trace()
         ini = INI
-        if argv and 'ini' in argv:
-            ini = argv['ini']
+        if argv and '-ini' in argv:
+            i = argv.index('-ini')
+            #ini = argv[i + 1]
         cfg = ConfigUtil(ini, section)
         return cfg
 

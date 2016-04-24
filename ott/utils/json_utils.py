@@ -42,6 +42,17 @@ def get_json(file, path='ott/controller/parser/test/'):
 
     return ret_val
 
+def str_to_json(str, def_val={}):
+    ''' utility class to load a static .json file for mock'ing a service
+    '''
+    ret_val=def_val
+    try:
+        ret_val = json.loads(str)
+    except Exception, e:
+        log.info("Couldn't convert {0} to json\n{1}".format(str, e))
+
+    return ret_val
+
 def json_repr(obj, pretty_print=False):
     ''' Represent instance of a class as JSON.
         returns a string that represents a JSON-encoded object.

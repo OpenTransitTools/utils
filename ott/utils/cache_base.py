@@ -11,7 +11,8 @@ class CacheBase(object):
     cache_expire = 31
     def_section = 'cache'
 
-    def __init__(self):
+    def __init__(self, section='cache'):
+        self.def_section = section
         self.cache_expire = self.config.get('cache_expire', 'cache', self.cache_expire)
 
     @property
