@@ -100,6 +100,20 @@ def safe_array_val(list, index, def_val=None):
         pass
     return ret_val
 
+def str_to_list(str, def_val=[]):
+    ''' try to return a list of some sort
+    '''
+    ret_val = def_val
+    try:
+        ret_val = str.split(",")
+    finally:
+        try:
+            if ret_val is None:
+                ret_val = [str]
+        except:
+            pass
+    return ret_val
+
 def dval(obj, key, def_val=None):
     return safe_dict_val(obj, key, def_val)
 

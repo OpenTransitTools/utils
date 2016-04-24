@@ -5,6 +5,7 @@ import logging.config
 log = logging.getLogger(__file__)
 
 from ott.utils import json_utils
+from ott.utils import object_utils
 
 SECTION='view'
 INI=['app.ini', 'client.ini', 'services.ini', 'view.ini', 'production.ini']
@@ -71,11 +72,11 @@ class ConfigUtil(object):
 
     @classmethod
     def factory(clfs, section=None, argv=sys.argv):
-        import pdb; pdb.set_trace()
+        #import pdb; pdb.set_trace()
         ini = INI
         if argv and '-ini' in argv:
             i = argv.index('-ini')
-            #ini = argv[i + 1]
+            ini = object_utils.str_to_list(argv[i + 1])
         cfg = ConfigUtil(ini, section)
         return cfg
 
