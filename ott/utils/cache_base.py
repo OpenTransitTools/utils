@@ -8,6 +8,13 @@ from ott.utils import file_utils
 
 class CacheBase(object):
     cache_expire = 31
+    config = None
+
+    def __init__(self, argv=None):
+        ini = None
+        if argv:
+            if 'ini' in argv: ini = argv['ini']
+
 
     @property
     def this_module_dir(self):

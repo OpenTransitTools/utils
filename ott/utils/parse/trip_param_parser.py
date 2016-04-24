@@ -12,7 +12,7 @@ from ott.utils import object_utils
 class TripParamParser(ParamParser):
 
     def __init__(self, params):
-        super(TripParamParser, self).__init__(params)
+        super(ParamParser, self).__init__(params)
 
         config = ConfigUtil.factory()
 
