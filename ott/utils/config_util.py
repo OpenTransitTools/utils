@@ -1,4 +1,5 @@
 from ConfigParser import SafeConfigParser
+import os
 import sys
 import logging
 import logging.config
@@ -9,7 +10,7 @@ from ott.utils import object_utils
 
 SECTION='view'
 INI=['app.ini', 'client.ini', 'services.ini', 'view.ini', 'production.ini']
-
+run_dir=None
 
 class ConfigUtil(object):
     section = SECTION
@@ -24,11 +25,19 @@ class ConfigUtil(object):
     def parser(self):
         ''' make the config parser
         '''
+
+        # capture the execution directory in a global, as we're likely to cd out of here at some point
+        global run_dir
+        if run_dir is None:
+            run_dir = os.getcwd()
+
         candidates = []
         for i in self.ini:
             # add the .ini file and ./config/.ini file to our candidate file list
             candidates.append(i)
-            candidates.append('./config/' + i)
+            candidates.append('./config/{}'.format(i))
+            candidates.append('{}/{}'.format(run_dir,i))
+            candidates.append('{}/config/{}'.format(run_dir,i))
 
         scp = SafeConfigParser()
         self.found_ini = scp.read(candidates)
