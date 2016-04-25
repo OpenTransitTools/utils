@@ -13,7 +13,7 @@ class CacheBase(object):
 
     def __init__(self, section='cache'):
         self.def_section = section
-        self.cache_expire = self.config.get('cache_expire', 'cache', self.cache_expire)
+        self.cache_expire = self.config.get_int('cache_expire', 'cache', self.cache_expire)
 
     @property
     def config(self):
@@ -48,8 +48,9 @@ class CacheBase(object):
         ret_val = False
         try:
             # NOTE if the file isn't in the cache, we'll get an exception
+            #import pdb; pdb.set_trace()
             age = file_utils.file_age(file)
-            if age <= self.cache_expire:
+            if age < self.cache_expire:
                 ret_val = True
         except:
             ret_val = False
