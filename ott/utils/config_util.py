@@ -34,10 +34,10 @@ class ConfigUtil(object):
         candidates = []
         for i in self.ini:
             # add the .ini file and ./config/.ini file to our candidate file list
-            candidates.append(i)
-            candidates.append('./config/{}'.format(i))
-            candidates.append('{}/{}'.format(run_dir,i))
-            candidates.append('{}/config/{}'.format(run_dir,i))
+            candidates.append(os.path.abspath(i))
+            candidates.append(os.path.abspath('./config/{}'.format(i)))
+            candidates.append(os.path.abspath('{}/{}'.format(run_dir,i)))
+            candidates.append(os.path.abspath('{}/config/{}'.format(run_dir,i)))
 
         scp = SafeConfigParser()
         self.found_ini = scp.read(candidates)
@@ -83,7 +83,7 @@ class ConfigUtil(object):
     def factory(clfs, section=None, argv=sys.argv):
         ''' create a Config object ... uses argv to override default list of .ini files
         '''
-        #import pdb; pdb.set_trace()
+        #import pdb; pdb.set_atrace()
         ini = INI
         if argv and '-ini' in argv:
             i = argv.index('-ini')
