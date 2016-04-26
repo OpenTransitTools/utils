@@ -1,3 +1,4 @@
+import sys
 import base64
 import hashlib
 import logging
@@ -200,3 +201,22 @@ def dict_update(src, target, append=False):
         elif append:
             target[k] = v
 
+def is_force_update(argv=sys.argv, force=["force", "update", "reload"]):
+    ''' scan argv for words that indicate an update is necessary
+    '''
+    ret_val = False
+
+    # test 1 : force update word is a url parameter
+    for f in force:
+        if f in argv:
+            ret_val = True
+            break;
+
+    # test 2 : force update word sub-string in  url parameter
+    if ret_val is False:
+        for a in argv:
+            for f in force:
+                if f in a:
+                    ret_val = True
+                    break
+    return ret_val
