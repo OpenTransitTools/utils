@@ -82,17 +82,10 @@ class ConfigUtil(object):
     def get_bbox(self, section=None):
         ''' get config value as float (or go with def_val)
         '''
-        top = self.get('top', section, 0.0)
-        bottom = self.get('bottom', section, 0.0)
-        left = self.get('left', section, 0.0)
-        right = self.get('right', section, 0.0)
-        try:
-            top = float(top)
-            bottom = float(bottom)
-            left = float(left)
-            right = float(right)
-        except Exception, e:
-            log.info("Couldn't convert top/bottom/left/right values to FLOATs under section '{0}'\n{1}".format(section, e))
+        top    = self.get_float('top',    section)
+        bottom = self.get_float('bottom', section)
+        left   = self.get_float('left',   section)
+        right  = self.get_float('right',  section)
         return top,bottom,left,right
 
     def get_json(self, id, section=None):
