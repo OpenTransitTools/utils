@@ -68,6 +68,33 @@ class ConfigUtil(object):
             log.info("Couldn't convert '{0}' value into an INT type under section '{1}'\n{2}".format(id, section, e))
         return ret_val
 
+    def get_float(self, id, section=None, def_val=None):
+        ''' get config value as float (or go with def_val)
+        '''
+        ret_val = self.get(id, section, def_val)
+        try:
+            if ret_val:
+                ret_val = float(ret_val)
+        except Exception, e:
+            log.info("Couldn't convert '{0}' value into a FLOAT type under section '{1}'\n{2}".format(id, section, e))
+        return ret_val
+
+    def get_bbox(self, section=None):
+        ''' get config value as float (or go with def_val)
+        '''
+        top = self.get('top', section, 0.0)
+        bottom = self.get('bottom', section, 0.0)
+        left = self.get('left', section, 0.0)
+        right = self.get('right', section, 0.0)
+        try:
+            top = float(top)
+            bottom = float(bottom)
+            left = float(left)
+            right = float(right)
+        except Exception, e:
+            log.info("Couldn't convert top/bottom/left/right values to FLOATs under section '{0}'\n{1}".format(section, e))
+        return top,bottom,left,right
+
     def get_json(self, id, section=None):
         str_val = self.get(id, section=section)
         ret_val = json_utils.str_to_json(str_val, str_val)
