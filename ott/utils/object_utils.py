@@ -214,7 +214,12 @@ def is_force_update(argv=sys.argv, force=["force", "update", "reload"]):
 
     # test 2 : force update word sub-string in  url parameter
     if ret_val is False:
+        first = True
         for a in argv:
+            # skip app path at argv[0]
+            if first:
+                first = False
+                continue
             for f in force:
                 if f in a:
                     ret_val = True
