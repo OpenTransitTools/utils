@@ -12,6 +12,7 @@ SECTION='view'
 INI=['app.ini', 'client.ini', 'services.ini', 'view.ini', 'production.ini']
 run_dir=None
 
+
 class ConfigUtil(object):
     section = SECTION
     ini = INI
