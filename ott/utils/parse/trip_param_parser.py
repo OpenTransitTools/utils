@@ -14,7 +14,7 @@ class TripParamParser(ParamParser):
     def __init__(self, params):
         super(TripParamParser, self).__init__(params)
 
-        config = ConfigUtil.factory()
+        config = ConfigUtil.factory(section="otp")
 
         self.frm   = None
         self.to    = None
@@ -29,7 +29,7 @@ class TripParamParser(ParamParser):
         self.hour  = None
         self.min   = None
         self.am_pm = None
-        self.max_hours = config.get_int('otp_max_hours', 6)
+        self.max_hours = config.get_int('otp_max_hours', def_val=6)
         self._parse_date()
         self._parse_time()
 
