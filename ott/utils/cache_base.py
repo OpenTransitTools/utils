@@ -1,7 +1,5 @@
 import os
 import inspect
-import logging
-logging.basicConfig(level=logging.INFO)
 
 from ott.utils import file_utils
 from ott.utils.config_util import ConfigUtil
@@ -48,7 +46,6 @@ class CacheBase(object):
         ret_val = False
         try:
             # NOTE if the file isn't in the cache, we'll get an exception
-            #import pdb; pdb.set_trace()
             age = file_utils.file_age(file)
             if age < self.cache_expire:
                 ret_val = True
