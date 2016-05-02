@@ -7,16 +7,18 @@ from ott.utils.config_util import ConfigUtil
 
 class CacheBase(object):
     cache_expire = 31
-    def_section = 'cache'
+    _config = None
 
     def __init__(self, section='cache'):
-        self.def_section = section
+        self._config = ConfigUtil.factory(section=section)
         self.cache_expire = self.config.get_int('cache_expire', 'cache', self.cache_expire)
 
     @property
     def config(self):
-        config = ConfigUtil.factory(section=self.def_section)
-        return config
+        #import pdb; pdb.set_trace()
+        if self._config == None:
+            self._config = ConfigUtil.factory(section='cache')
+        return self._config
 
     @property
     def this_module_dir(self):
