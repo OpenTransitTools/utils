@@ -16,7 +16,8 @@ run_dir=None
 class ConfigUtil(object):
     section = SECTION
     ini = INI
-    found_ini = None
+    _parser = None
+    _found_ini = None
 
     def __init__(self, ini=None, section=None):
         if ini:     self.ini = ini
@@ -26,7 +27,13 @@ class ConfigUtil(object):
     def parser(self):
         ''' make the config parser
         '''
+        if self._parser == None:
+            self._parser = self._make_parser()
+        return self._parser
 
+    def _make_parser(self):
+        ''' make the config parser (SafeConfigParser) ... file lookup relative to the directory you run your app from
+        '''
         # capture the execution directory in a global, as we're likely to cd out of here at some point
         global run_dir
         if run_dir is None:
@@ -42,7 +49,7 @@ class ConfigUtil(object):
             candidates.append(os.path.abspath(os.path.join(run_dir, cfg)))
 
         scp = SafeConfigParser()
-        self.found_ini = scp.read(candidates)
+        self._found_ini = scp.read(candidates)
         return scp
 
     def get(self, id, section=None, def_val=None):
