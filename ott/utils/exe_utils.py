@@ -1,8 +1,12 @@
+import os
+import subprocess
 import logging
 log = logging.getLogger(__file__)
 
 
-def run_java(cmd_line, fork=False, big_xmx="-Xmx4096m", small_xmx="-Xmx1500m", java_cmd="java"):
+def run_java(cmd_line, fork=False, big_xmx="-Xmx4096m", small_xmx="-Xmx1536m", java_cmd="java"):
+    ''' run java ... if we get an exception, try to run again with lower heap size
+    '''
     try:
         java_cmd = "{} {} {}".format(java_cmd, big_xmx, cmd_line)
         run_cmd(java_cmd, fork)
