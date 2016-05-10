@@ -28,3 +28,24 @@ def run_cmd(cmd_line, fork=False):
         subprocess.Popen(cmd_line.split())
     else:
         os.system(cmd_line)
+
+def wget(url, file_name):
+    """ wget a file from url
+        IMPORTANT NOTE: this will *not* work if the URL is a redirect, etc...
+    """
+    try:
+        # get gtfs file from url
+        req = urllib2.Request(url)
+        res = urllib2.urlopen(req)
+
+        # write it out
+        f = open(file_name, 'wb')
+        f.write(res.read())
+        f.flush()
+        f.close()
+        res.close()
+
+        log.info("wget: downloaded {} into file {}".format(url, file_name))
+    except Exception, e:
+        log.warn(e)
+
