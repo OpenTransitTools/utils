@@ -1,5 +1,6 @@
 import os
 import subprocess
+import urllib2
 import logging
 log = logging.getLogger(__file__)
 

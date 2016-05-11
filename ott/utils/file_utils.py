@@ -1,7 +1,6 @@
 import os
 import logging
 import datetime
-import urllib2
 import zipfile
 import filecmp
 import shutil
