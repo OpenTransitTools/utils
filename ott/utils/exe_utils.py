@@ -1,6 +1,7 @@
 import os
 import subprocess
 import urllib2
+import wget as wget_wget
 import logging
 log = logging.getLogger(__file__)
 
@@ -35,7 +36,7 @@ def run_cmd(cmd_line, fork=False, shell=True):
     else:
         os.system(cmd_line)
 
-def wget(url, file_name):
+def my_wget(url, file_name):
     """ wget a file from url
         IMPORTANT NOTE: this will *not* work if the URL is a redirect, etc...
     """
@@ -55,3 +56,9 @@ def wget(url, file_name):
     except Exception, e:
         log.warn(e)
 
+def wget(url, file_name):
+    """ wget a file from url
+        IMPORTANT NOTE: this will *not* work if the URL is a redirect, etc...
+    """
+    wget_wget.download(url, file_name)
+    log.info("wget: downloaded {} into file {}".format(url, file_name))

@@ -7,7 +7,8 @@ README = open(os.path.join(here, 'README.md')).read()
 CHANGES = open(os.path.join(here, 'CHANGES.txt')).read()
 
 requires = [
-    'simplejson'
+    'simplejson',
+    'wget',
 ]
 
 extras_require = dict(
