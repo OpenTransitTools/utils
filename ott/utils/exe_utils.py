@@ -34,7 +34,7 @@ def run_cmd(cmd_line, fork=False, shell=True):
     if fork:
         subprocess.Popen(cmd_line.split(), shell=shell)
     else:
-        os.system(cmd_line)
+        subprocess.call(cmd_line, shell=shell)
 
 def my_wget(url, file_name):
     """ wget a file from url
