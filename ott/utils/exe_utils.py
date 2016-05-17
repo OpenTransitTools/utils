@@ -32,7 +32,7 @@ def run_cmd(cmd_line, fork=False, shell=True):
     '''
     log.info(cmd_line)
     if fork:
-        subprocess.Popen(cmd_line.split(), shell=shell)
+        subprocess.Popen(cmd_line, shell=shell)
     else:
         subprocess.call(cmd_line, shell=shell)
 
