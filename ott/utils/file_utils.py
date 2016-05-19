@@ -90,6 +90,14 @@ def mkdir(dir):
     if not os.path.exists(dir):
         os.makedirs(dir)
 
+def copy_contents(src_dir, target_dir, overwrite=True):
+    file_paths = next(os.walk(src_dir))[2]
+    for f in file_paths:
+        src = os.path.join(src_dir, f)
+        tgt = os.path.join(target_dir, f)
+        if overwrite or not os.path.exists(tgt):
+            cp(src, tgt)
+
 def get_file_name_from_url(url):
     ret_val = url.split('/')[-1:][0]
     return ret_val
