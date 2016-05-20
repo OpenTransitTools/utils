@@ -11,10 +11,13 @@ COMMIT_EDITMSG
 *#
 #*
 
+
 cache/
 .idea
 .idea/
 *.iml
+*.tmp
+*.mp3
 
 # C extensions
 *.so
