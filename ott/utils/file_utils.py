@@ -67,6 +67,20 @@ def is_a_newer_than_b(file_a, file_b):
             ret_val = True
     return ret_val
 
+def dir_has_newer_files(file, dir):
+    ret_val = False
+    if not os.path.exists(file):
+        logging.info("{} doesn't exist ".format(file))
+        ret_val = True
+    else:
+        file_paths = next(os.walk(dir))[2]
+        for f in file_paths:
+            dir_file = os.path.join(dir, f)
+            if is_a_newer_than_b(dir_file, file):
+                ret_val = True
+                break
+    return ret_val
+
 def bkup(file, rm_orig=True):
     #import pdb; pdb.set_trace()
     if os.path.exists(file):
