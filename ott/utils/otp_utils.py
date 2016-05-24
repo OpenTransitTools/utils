@@ -1,4 +1,6 @@
 import os
+import socket
+import urllib2
 import logging
 log = logging.getLogger(__file__)
 
@@ -13,6 +15,20 @@ OTP_NAME="otp.jar"
 
 GRAPH_NAME = "Graph.obj"
 
+
+def call_planner_svc(url, accept='application/xml'):
+    ret_val = None
+    try:
+        socket.setdefaulttimeout(2000)
+        log.debug("call_otp: OTP output for " + url)
+        req = urllib2.Request(url, None, {'Accept':accept})
+        res = urllib2.urlopen(req)
+        log.debug("call_otp: OTP output for " + url)
+        ret_val = res.read()
+        res.close()
+    except:
+        log.warn('ERROR: could not get data from url (timeout?): {0}'.format(url))
+    return ret_val
 
 def run_otp_server(graph_dir, port="8080", otp_name=OTP_NAME, java_mem=None):
     ''' launch the server in a separate process
