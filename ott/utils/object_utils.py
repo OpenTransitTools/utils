@@ -39,6 +39,24 @@ def update_object(tgt, src):
         except:
             pass
 
+def get_striped_dict_val(dict, name, def_val=None, strip_all_spaces=False, warn_not_avail=True):
+    ''' grab a value from a dict, which strips spaces (and potentially all spaces)
+    '''
+    ret_val = def_val
+    try:
+        if name in dict:
+            p = dict[name]
+            if p and len(p) > 0:
+                ret_val = p.strip()
+                if strip_all_spaces:
+                    ret_val = ret_val.replace(' ', '')
+        elif warn_not_avail:
+            log.warn("'{0}' was not found as an index in record {1}".format(name, dict))
+    except:
+        log.warn("'{0}' was not found as an index in record {1}".format(name, dict))
+    return ret_val
+
+
 def str_compare(str1, str2, insensitive=True):
     ret_val = False
     try:
