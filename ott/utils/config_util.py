@@ -15,6 +15,7 @@ run_dir=None
 
 class ConfigUtil(object):
     section = SECTION
+    log_ini = 'log.ini'
     ini = INI
     _parser = None
     _found_ini = None
@@ -34,23 +35,55 @@ class ConfigUtil(object):
     def _make_parser(self):
         ''' make the config parser (SafeConfigParser) ... file lookup relative to the directory you run your app from
         '''
+        #import pdb; pdb.set_trace()
         # capture the execution directory in a global, as we're likely to cd out of here at some point
         global run_dir
         if run_dir is None:
             run_dir = os.getcwd()
 
+        self.logging_cfg()
+
         candidates = []
         for i in self.ini:
             # add the .ini file and ./config/.ini file to our candidate file list
-            cfg = os.path.join("config", i)
-            candidates.append(os.path.abspath(i))
-            candidates.append(os.path.abspath(cfg))
-            candidates.append(os.path.abspath(os.path.join(run_dir, i)))
-            candidates.append(os.path.abspath(os.path.join(run_dir, cfg)))
+            c = self.get_candidates(name=i)
+            if c:
+                candidates = candidates + c
 
         scp = SafeConfigParser()
         self._found_ini = scp.read(candidates)
         return scp
+
+    @classmethod
+    def logging_cfg(cls):
+        ''' config the logging module
+        '''
+        try:
+            log_ini = cls.find_candidate("log.ini")
+            if log_ini:
+                logging.config.fileConfig(log_ini)
+        except Exception, e:
+            log.info(e)
+
+    @classmethod
+    def get_candidates(cls, name, config="config"):
+        ret_val = []
+        cfg = os.path.join(config, name)
+        ret_val.append(os.path.abspath(name))
+        ret_val.append(os.path.abspath(cfg))
+        ret_val.append(os.path.abspath(os.path.join(run_dir, name)))
+        ret_val.append(os.path.abspath(os.path.join(run_dir, cfg)))
+        return ret_val
+
+    @classmethod
+    def find_candidate(cls, name, config="config", def_val=None):
+        ret_val = def_val
+        candidates = cls.get_candidates(name, config)
+        for c in candidates:
+            if os.path.exists(c):
+                ret_val = c
+                break
+        return ret_val
 
     def get(self, id, section=None, def_val=None):
         ''' get config value
@@ -115,10 +148,9 @@ class ConfigUtil(object):
             pass
 
     @classmethod
-    def factory(clfs, section=None, argv=sys.argv):
+    def factory(cls, section=None, argv=sys.argv):
         ''' create a Config object ... uses argv to override default list of .ini files
         '''
-        #import pdb; pdb.set_trace()
         ini = INI
         if argv and '-ini' in argv:
             i = argv.index('-ini')
