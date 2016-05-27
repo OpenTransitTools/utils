@@ -25,7 +25,7 @@ def stream_json(u, args=None, extra_path=None):
         ret_val = json.loads(otp)
     return ret_val
 
-def get_json(file, path='ott/controller/parser/test/'):
+def get_json(file, path='ott/controller/PARSER/test/'):
     ''' utility class to load a static .json file for mock'ing a service
     '''
     ret_val={}

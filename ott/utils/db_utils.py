@@ -4,7 +4,7 @@ log = logging.getLogger(__file__)
 
 
 def db_args():
-    ''' create a generic database commandline arg parser '''
+    ''' create a generic database commandline arg PARSER '''
     import argparse
     parser = argparse.ArgumentParser(prog='gtfs data loader', formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('--database_url', '-d',  default='sqlite:///gtfs.db', help='DATABASE URL with appropriate privileges')
@@ -33,7 +33,7 @@ def db_conn(url):
 
 
 def db_gtfs_rt():
-    ''' get a command line parser and db connection to query gtfsrdb data
+    ''' get a command line PARSER and db connection to query gtfsrdb data
         NOTE: meant as a quick dirty way to grab a connection for test apps
     '''
     parser = db_args()

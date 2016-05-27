@@ -10,8 +10,10 @@ from ott.utils import object_utils
 
 SECTION='view'
 INI=['app.ini', 'client.ini', 'services.ini', 'view.ini', 'production.ini']
-run_dir=None
 
+# global vars
+RUN_DIR = None
+PARSER = None
 
 class ConfigUtil(object):
     section = SECTION
@@ -26,20 +28,23 @@ class ConfigUtil(object):
 
     @property
     def parser(self):
-        ''' make the config parser
+        ''' make the config PARSER
         '''
         if self._parser == None:
-            self._parser = self._make_parser()
+            global PARSER
+            if PARSER is None:
+                PARSER = self._make_parser()
+            self._parser = PARSER
         return self._parser
 
     def _make_parser(self):
-        ''' make the config parser (SafeConfigParser) ... file lookup relative to the directory you run your app from
+        ''' make the config PARSER (SafeConfigParser) ... file lookup relative to the directory you run your app from
         '''
         #import pdb; pdb.set_trace()
         # capture the execution directory in a global, as we're likely to cd out of here at some point
-        global run_dir
-        if run_dir is None:
-            run_dir = os.getcwd()
+        global RUN_DIR
+        if RUN_DIR is None:
+            RUN_DIR = os.getcwd()
 
         self.logging_cfg()
 
@@ -71,8 +76,8 @@ class ConfigUtil(object):
         cfg = os.path.join(config, name)
         ret_val.append(os.path.abspath(name))
         ret_val.append(os.path.abspath(cfg))
-        ret_val.append(os.path.abspath(os.path.join(run_dir, name)))
-        ret_val.append(os.path.abspath(os.path.join(run_dir, cfg)))
+        ret_val.append(os.path.abspath(os.path.join(RUN_DIR, name)))
+        ret_val.append(os.path.abspath(os.path.join(RUN_DIR, cfg)))
         return ret_val
 
     @classmethod
