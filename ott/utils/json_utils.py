@@ -1,8 +1,7 @@
-
 # FXP TODO -- commenting this out, since it might be f'n with performance
 #import socket
 #socket.setdefaulttimeout(40)
-
+import os
 import logging
 log = logging.getLogger(__file__)
 
@@ -25,7 +24,7 @@ def stream_json(u, args=None, extra_path=None):
         ret_val = json.loads(otp)
     return ret_val
 
-def get_json(file, path='ott/controller/PARSER/test/'):
+def get_json(file, path='ott/utils/tests/json'):
     ''' utility class to load a static .json file for mock'ing a service
     '''
     ret_val={}
@@ -34,7 +33,7 @@ def get_json(file, path='ott/controller/PARSER/test/'):
             ret_val = json.load(f)
     except:
         try:
-            path="{0}{1}".format(path, file)
+            path=os.path.join(path, file)
             with open(path) as f:
                 ret_val = json.load(f)
         except:
