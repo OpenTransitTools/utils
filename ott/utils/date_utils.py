@@ -259,6 +259,11 @@ def str_to_date(str_date, fmt_list=['%Y-%m-%d', '%m/%d/%Y', '%m-%d-%Y'], def_val
             log.warn(e)
     return ret_val
 
+def today_str(fmt='%m-%d-%Y'):
+    date = get_local_date()
+    ret_val = date.strftime(fmt)
+    return ret_val
+
 def date_to_str(date, fmt='%Y-%m-%d'):
     if date is None:
         date = get_local_date()
