@@ -49,7 +49,7 @@ def run_graph_builder(graph_dir, graph_name=GRAPH_NAME, otp_name=OTP_NAME, java_
     cmd='-jar {} --build {} --cache {}'.format(otp_path, graph_dir, graph_dir)
     exe_utils.run_java(cmd, big_xmx=java_mem)
 
-def vizualize_graph(graph_dir, java_mem=None):
+def vizualize_graph(graph_dir, java_mem=None, otp_name=OTP_NAME):
     otp_path = os.path.join(graph_dir, otp_name)
     file_utils.cd(graph_dir)
     cmd='-jar {} --visualize --router "" --graphs {}'.format(otp_path, graph_dir)
