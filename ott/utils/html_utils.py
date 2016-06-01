@@ -1,5 +1,4 @@
 import datetime
-import socket
 import logging
 log = logging.getLogger(__file__)
 
@@ -7,9 +6,6 @@ import date_utils
 import num_utils
 import geo_utils
 
-
-def get_hostname():
-    return socket.gethostname()
 
 def planner_form_params(request):
     ''' TODO ... move to otp_utils (make sure services and view are refactored/updated)

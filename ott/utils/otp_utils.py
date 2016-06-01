@@ -4,17 +4,17 @@ import urllib2
 import logging
 log = logging.getLogger(__file__)
 
-from ott.utils import file_utils
 from ott.utils import exe_utils
+from ott.utils import file_utils
+from ott.utils import web_utils
+
 
 # constants
 DEF_NAME   = "prod"
 DEF_PORT   = "55555"
-OTP_DOWNLOAD_URL="http://maven.conveyal.com.s3.amazonaws.com/org/opentripplanner/otp/0.19.0/otp-0.19.0-shaded.jar"
-OTP_NAME="otp.jar"
-
 GRAPH_NAME = "Graph.obj"
-
+OTP_NAME   = "otp.jar"
+OTP_DOWNLOAD_URL = "http://maven.conveyal.com.s3.amazonaws.com/org/opentripplanner/otp/0.19.0/otp-0.19.0-shaded.jar"
 
 def call_planner_svc(url, accept='application/xml'):
     ret_val = None
@@ -99,6 +99,6 @@ def check_otp_jar(graph_dir, jar=OTP_NAME, expected_size=50000000, download_url=
     exists = os.path.exists(jar_path)
     if not exists or file_utils.file_size(jar_path) < expected_size or force_update:
         log.info("we don't see OTP {} in {}, so will download {} now".format(jar, graph_dir, download_url))
-        exe_utils.wget(download_url, jar_path)
+        web_utils.wget(download_url, jar_path)
     return jar_path
 
