@@ -5,6 +5,7 @@ NUM_IDS  = ['num',  'count', 'limit']
 LON_IDS  = ['x',    'lon']
 LAT_IDS  = ['y',    'lat']
 SRID_IDS = ['srid']
+PLACE    = ['place', 'point', 'loc']
 
 
 class GeoParamParser(ParamParser):
@@ -16,6 +17,7 @@ class GeoParamParser(ParamParser):
         self.name  = self.get_first_val(NAME_IDS)
         self.lat   = self.get_first_val(LAT_IDS) 
         self.lon   = self.get_first_val(LON_IDS)
+        # TODO: parse place variable into name/lat/lon/etc...
 
     def has_coords(self):
         ret_val = False
