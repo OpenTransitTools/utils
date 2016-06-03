@@ -12,6 +12,7 @@ from ott.utils import web_utils
 # constants
 DEF_NAME   = "prod"
 DEF_PORT   = "55555"
+DEF_SSL_PORT = "51111"
 GRAPH_NAME = "Graph.obj"
 OTP_NAME   = "otp.jar"
 OTP_DOWNLOAD_URL = "http://maven.conveyal.com.s3.amazonaws.com/org/opentripplanner/otp/0.19.0/otp-0.19.0-shaded.jar"
@@ -30,12 +31,13 @@ def call_planner_svc(url, accept='application/xml'):
         log.warn('ERROR: could not get data from url (timeout?): {0}'.format(url))
     return ret_val
 
-def run_otp_server(graph_dir, port="8080", otp_name=OTP_NAME, java_mem=None):
+def run_otp_server(graph_dir, port=DEF_PORT, ssl=DEF_SSL_PORT, otp_name=OTP_NAME, java_mem=None, **kwargs):
     ''' launch the server in a separate process
     '''
+    import pdb; pdb.set_trace()
     file_utils.cd(graph_dir)
     otp_path = os.path.join(graph_dir, otp_name)
-    cmd='-server -jar {} --port {} --router "" --graphs {}'.format(otp_path, port, graph_dir)
+    cmd='-server -jar {} --port {} --securePort {} --router "" --graphs {}'.format(otp_path, port, ssl, graph_dir)
     exe_utils.run_java(cmd, fork=True, big_xmx=java_mem)
 
 def run_graph_builder(graph_dir, graph_name=GRAPH_NAME, otp_name=OTP_NAME, java_mem=None):
@@ -81,7 +83,7 @@ def get_graph_details(graphs, index=0):
     '''
     ret_val = None
     if graphs is None or len(graphs) < 1:
-        ret_val = {"name":DEF_NAME, "port":DEF_PORT}
+        ret_val = {"name":DEF_NAME, "port":DEF_PORT, "ssl":DEF_SSL_PORT}
         log.warn("graphs config was NIL, using default 'prod' graph info")
     else:
         if index >= len(graphs):
