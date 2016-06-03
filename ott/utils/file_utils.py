@@ -2,6 +2,7 @@ import os
 import logging
 import datetime
 import zipfile
+import tempfile
 import filecmp
 import shutil
 
@@ -153,6 +154,14 @@ def diff_files(old_name, new_name):
         ret_val = True
     return ret_val
 
+def envvar(name, def_val=None, suffix=None):
+    """ envvar interface
+    """
+    ret_val = os.environ.get(name, def_val)
+    if suffix is not None:
+        ret_val = ret_val + suffix
+    return ret_val
+
 def unzip_file(zip_file, target_file, file_name, log_exceptions=False):
     """ unzips a file from a zip file...
         @returns True if there's a problem...
@@ -174,10 +183,30 @@ def unzip_file(zip_file, target_file, file_name, log_exceptions=False):
 
     return ret_val
 
-def envvar(name, def_val=None, suffix=None):
-    """ envvar interface
-    """
-    ret_val = os.environ.get(name, def_val)
-    if suffix is not None:
-        ret_val = ret_val + suffix
-    return ret_val
+def remove_files_from_zip(filename, zippath):
+    ''' remove a file(s) from a zip
+    '''
+    # step 1: remove tmp zip file file
+    tmpzip = zippath + '.tmp'
+    rm(tmpzip)
+
+    # step 2: copy files from source zip file to tmp zip file
+    zin = zipfile.ZipFile (zippath, 'r')
+    zout = zipfile.ZipFile (tmpzip, 'w')
+    for item in zin.infolist():
+        buffer = zin.read(item.filename)
+        if filename not in item.filename[-4:]:
+            zout.writestr(item, buffer)
+    zout.close()
+    zin.close()
+
+    # step 3: move tmp file to zip file
+    rm(zippath)
+    mv(tmpzip, zippath)
+
+def add_file_to_zip(filename, zippath):
+    ''' remove a file(s) from a zip
+    '''
+    zip = zipfile.ZipFile(zippath, mode='a', compression=zipfile.ZIP_DEFLATED)
+    zip.write(filename)
+    zip.close()

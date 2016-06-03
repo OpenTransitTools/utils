@@ -58,8 +58,6 @@ class Csv(object):
             print ret_val
         return ret_val
 
-
-
     def open(self):
         '''
         '''
@@ -80,14 +78,12 @@ class Csv(object):
         self.reader = csv.DictReader(data, delimiter=self.delimiter)
         return self.reader
 
-
     def close(self):
         '''
         '''
         if self.file:
             self.file.close()
             self.file = None
-
 
     def read(self):
         ret_val = []
@@ -96,7 +92,6 @@ class Csv(object):
             ret_val.append(row)
         self.close()
         return ret_val
-
 
     def timed_refresh_check(self, n_minutes):
         ''' will check for new rules every N minutes (via the 'update_rules()' method), and
@@ -118,7 +113,6 @@ class Csv(object):
 
         return ret_val
 
-
     def new_data_check(self):
         ''' open/download CSV of rules, and compare it existing rules 
             @return: True indicating that new data was reloaded...
@@ -138,7 +132,6 @@ class Csv(object):
             ret_val = True
 
         return ret_val
-
 
     def update_data(self, new_data):
         ''' I'm probably overridden in sub classes
