@@ -34,7 +34,7 @@ def call_planner_svc(url, accept='application/xml'):
 def run_otp_server(graph_dir, port=DEF_PORT, ssl=DEF_SSL_PORT, otp_name=OTP_NAME, java_mem=None, **kwargs):
     ''' launch the server in a separate process
     '''
-    import pdb; pdb.set_trace()
+    #import pdb; pdb.set_trace()
     file_utils.cd(graph_dir)
     otp_path = os.path.join(graph_dir, otp_name)
     cmd='-server -jar {} --port {} --securePort {} --router "" --graphs {}'.format(otp_path, port, ssl, graph_dir)
