@@ -2,7 +2,6 @@ import os
 import logging
 import datetime
 import zipfile
-import tempfile
 import filecmp
 import shutil
 
@@ -162,47 +161,50 @@ def envvar(name, def_val=None, suffix=None):
         ret_val = ret_val + suffix
     return ret_val
 
-def unzip_file(zip_file, target_file, file_name, log_exceptions=False):
+def unzip_file(zip_path, file_name, target_file_path=None, log_exceptions=False):
     """ unzips a file from a zip file...
         @returns True if there's a problem...
     """
     ret_val = False
 
     try:
-        rm(target_file)
-        zip = zipfile.ZipFile(zip_file, 'r')
-        file = open(target_file, 'wb')
+        if target_file_path is None:
+            target_file_path = os.path.dirname(zip_path)
+            target_file_path = os.path.join(target_file_path, file_name)
+        rm(target_file_path)
+        zip = zipfile.ZipFile(zip_path, 'r')
+        file = open(target_file_path, 'wb')
         file.write(zip.read(file_name))
         file.flush()
         file.close()
         zip.close()
     except Exception, e:
         if log_exceptions:
-            logging.warn("problems extracting {} from {} into file {} ({})".format(file_name, zip_file, target_file, e.message))
+            logging.warn("problems extracting {} from {} into file {} ({})".format(file_name, zip_path, target_file_path, e.message))
         ret_val = True
 
     return ret_val
 
-def remove_files_from_zip(filename, zippath):
+def remove_file_from_zip(zip_path, file_name):
     ''' remove a file(s) from a zip
     '''
     # step 1: remove tmp zip file file
-    tmpzip = zippath + '.tmp'
+    tmpzip = zip_path + '.tmp'
     rm(tmpzip)
 
     # step 2: copy files from source zip file to tmp zip file
-    zin = zipfile.ZipFile (zippath, 'r')
+    zin = zipfile.ZipFile (zip_path, 'r')
     zout = zipfile.ZipFile (tmpzip, 'w')
     for item in zin.infolist():
         buffer = zin.read(item.filename)
-        if filename not in item.filename[-4:]:
+        if file_name not in item.filename[-4:]:
             zout.writestr(item, buffer)
     zout.close()
     zin.close()
 
     # step 3: move tmp file to zip file
-    rm(zippath)
-    mv(tmpzip, zippath)
+    rm(zip_path)
+    mv(tmpzip, zip_path)
 
 def add_file_to_zip(filename, zippath):
     ''' remove a file(s) from a zip
