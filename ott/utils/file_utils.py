@@ -40,9 +40,12 @@ def exists_and_sized(file, size, expire):
 
 def is_min_sized(file, min_size=1000000):
     ret_val = False
-    size = file_size(file)
-    if size >= min_size:
-        ret_val = True
+    try:
+        size = file_size(file)
+        if size >= min_size:
+            ret_val = True
+    except Exception, e:
+        log.warn("{}".format(e))
     return ret_val
 
 def is_a_larger_than_b(file_a, file_b):
