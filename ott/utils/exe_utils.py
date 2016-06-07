@@ -41,17 +41,16 @@ def run_cmd(cmd_line, fork=False, shell=True, pid_file=True):
     write_pid_file(pid_file, process.pid)
     return process.pid
 
-
 def kill_old_pid(pid_file):
     ''' read pid file and then kill process
     '''
     try:
         pf = open(pid_file, 'r')
         pid = pf.read().strip()
-        pid = int(pid)
         if pid and len(pid) > 1:
+            pid = int(pid)
             kill(pid)
-            time.sleep(3)
+            time.sleep(5)
     except Exception, e:
         log.debug(e)
 
@@ -64,11 +63,10 @@ def write_pid_file(pid_file, pid):
         pf.flush()
         pf.close()
 
-
 def kill(pid):
     ''' kill a process
     '''
-    import pdb; pdb.set_trace()
+    #import pdb; pdb.set_trace()
     try:
         os.kill(pid, signal.SIGKILL)
     except Exception, e:
