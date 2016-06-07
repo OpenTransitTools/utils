@@ -31,13 +31,13 @@ def call_planner_svc(url, accept='application/xml'):
         log.warn('ERROR: could not get data from url (timeout?): {0}'.format(url))
     return ret_val
 
-def run_otp_server(graph_dir, port=DEF_PORT, ssl=DEF_SSL_PORT, otp_name=OTP_NAME, java_mem=None, **kwargs):
+def run_otp_server(dir=None, port=DEF_PORT, ssl=DEF_SSL_PORT, otp_name=OTP_NAME, java_mem=None, **kwargs):
     ''' launch the server in a separate process
     '''
     #import pdb; pdb.set_trace()
-    file_utils.cd(graph_dir)
-    otp_path = os.path.join(graph_dir, otp_name)
-    cmd='-server -jar {} --port {} --securePort {} --router "" --graphs {}'.format(otp_path, port, ssl, graph_dir)
+    file_utils.cd(dir)
+    otp_path = os.path.join(dir, otp_name)
+    cmd='-server -jar {} --port {} --securePort {} --router "" --graphs {}'.format(otp_path, port, ssl, dir)
     exe_utils.run_java(cmd, fork=True, big_xmx=java_mem)
 
 def run_graph_builder(graph_dir, graph_name=GRAPH_NAME, otp_name=OTP_NAME, java_mem=None):

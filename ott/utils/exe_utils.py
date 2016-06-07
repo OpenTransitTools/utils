@@ -1,25 +1,26 @@
 import os
+import signal
 import subprocess
+import time
 import logging
 log = logging.getLogger(__file__)
 
 
-def run_java(cmd_line, fork=False, big_xmx="-Xmx4096m", small_xmx="-Xmx1536m", java_cmd="java", shell=True, pid_file=True):
+def run_java(cmd_line, fork=False, big_xmx="-Xmx4096m", small_xmx="-Xmx1536m", java_cmd="java", shell=True, pid_file="pid.txt"):
     ''' run java ... if we get an exception, try to run again with lower heap size
     '''
-    #import pdb; pdb.set_trace()
     try:
         if big_xmx is None:
             big_xmx = "-Xmx4096m"
         java_cmd = "{} {} {}".format(java_cmd, big_xmx, cmd_line)
         run_cmd(java_cmd, fork, shell, pid_file)
     except Exception, e:
+        # try again with smaller java heap memory request
         # NOTE: 'fork' won't get you to see an exception here (because you fork the exception into another process)
         log.info(e)
-        # try again with smaller java heap memory request
         java_cmd = "{} {} {}".format(java_cmd, small_xmx, cmd_line)
         run_cmd(java_cmd, fork, shell, pid_file)
-        pass
+
 
 def run_cmd(cmd_line, fork=False, shell=True, pid_file=True):
     ''' run_cmd("sleep 200") will block for 200 seconds
@@ -30,20 +31,51 @@ def run_cmd(cmd_line, fork=False, shell=True, pid_file=True):
           subprocess.Popen(['nohup', 'sleep', '100'], stdout=devnull, stderr=devnull)
     '''
     log.info(cmd_line)
+    kill_old_pid(pid_file)
     if fork:
         process = subprocess.Popen(cmd_line, shell=shell)
     else:
         process = subprocess.call(cmd_line, shell=shell)
 
     # Write PID file
-    write_pid_file(pid_file)
-
+    write_pid_file(pid_file, process.pid)
     return process.pid
 
-def write_pid_file(pid_file):
+
+def kill_old_pid(pid_file):
+    ''' read pid file and then kill process
+    '''
+    try:
+        pf = open(pid_file, 'r')
+        pid = pf.read().strip()
+        pid = int(pid)
+        if pid and len(pid) > 1:
+            kill(pid)
+            time.sleep(3)
+    except Exception, e:
+        log.debug(e)
+
+def write_pid_file(pid_file, pid):
     ''' write a pid file
     '''
-    if pid_file:
+    if pid_file and pid:
         pf = open(pid_file, 'w')
-        pf.write(str(process.pid))
+        pf.write(str(pid))
+        pf.flush()
         pf.close()
+
+
+def kill(pid):
+    ''' kill a process
+    '''
+    import pdb; pdb.set_trace()
+    try:
+        os.kill(pid, signal.SIGKILL)
+    except Exception, e:
+        log.debug(e)
+        try:
+            win_kill = "taskkill /pid {} /f".format(pid)
+            log.debug("WINDOWS? will try to kill via: {}".format(win_kill))
+            os.system(win_kill)
+        except Exception, e:
+            log.debug(e)
