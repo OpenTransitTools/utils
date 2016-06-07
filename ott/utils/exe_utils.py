@@ -6,7 +6,7 @@ import logging
 log = logging.getLogger(__file__)
 
 
-def run_java(cmd_line, fork=False, big_xmx="-Xmx4096m", small_xmx="-Xmx1536m", java_cmd="java", shell=True, pid_file="pid.txt"):
+def run_java(cmd_line, fork=False, big_xmx="-Xmx4096m", small_xmx="-Xmx1536m", java_cmd="java", shell=False, pid_file="pid.txt"):
     ''' run java ... if we get an exception, try to run again with lower heap size
     '''
     try:
@@ -22,7 +22,7 @@ def run_java(cmd_line, fork=False, big_xmx="-Xmx4096m", small_xmx="-Xmx1536m", j
         run_cmd(java_cmd, fork, shell, pid_file)
 
 
-def run_cmd(cmd_line, fork=False, shell=True, pid_file=True):
+def run_cmd(cmd_line, fork=False, shell=False, pid_file="pid.txt"):
     ''' run_cmd("sleep 200") will block for 200 seconds
         run_cmd("sleep 200", True) will background
 
@@ -48,7 +48,6 @@ def kill_old_pid(pid_file):
         pf = open(pid_file, 'r')
         pid = pf.read().strip()
         if pid and len(pid) > 1:
-            pid = int(pid)
             kill(pid)
             time.sleep(5)
     except Exception, e:
@@ -68,7 +67,7 @@ def kill(pid):
     '''
     #import pdb; pdb.set_trace()
     try:
-        os.kill(pid, signal.SIGKILL)
+        os.kill(int(pid), signal.SIGKILL)
     except Exception, e:
         log.debug(e)
         try:
