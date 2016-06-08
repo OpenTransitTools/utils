@@ -38,8 +38,11 @@ def run_cmd(cmd_line, fork=False, shell=False, pid_file="pid.txt"):
         process = subprocess.call(cmd_line, shell=shell)
 
     # Write PID file
-    write_pid_file(pid_file, process.pid)
-    return process.pid
+    pid = None
+    if process and process.pid:
+        pid = process.pid
+        write_pid_file(pid_file, pid)
+    return pid
 
 def kill_old_pid(pid_file):
     ''' read pid file and then kill process
