@@ -59,11 +59,10 @@ def kill_old_pid(pid_file):
 def write_pid_file(pid_file, pid):
     ''' write a pid file
     '''
-    if pid_file and pid:
-        pf = open(pid_file, 'w')
-        pf.write(str(pid))
-        pf.flush()
-        pf.close()
+    pf = open(pid_file, 'w')
+    pf.write(str(pid))
+    pf.flush()
+    pf.close()
 
 def kill(pid):
     ''' kill a process
