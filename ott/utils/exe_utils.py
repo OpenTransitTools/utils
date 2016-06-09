@@ -6,9 +6,9 @@ import logging
 log = logging.getLogger(__file__)
 
 
-def run_java(cmd_line, fork=False, big_xmx="-Xmx4096m", small_xmx="-Xmx1536m", java_cmd="java", shell=True, pid_file="pid.txt"):
+def run_java(cmd_line, fork=False, big_xmx="-Xmx4096m", small_xmx="-Xmx1536m", java_cmd="java", shell=None, pid_file="pid.txt"):
     ''' run java ... if we get an exception, try to run again with lower heap size
-        NOTE: shell is True, since we need a specific version of java ... this might make the whole pid file not be able to kill things
+        NOTE: shell is None NONE None, since we want to test if java can run first w/out an environment
     '''
     if shell is None:
         shell = does_java_need_a_shell(java_cmd, fork)
