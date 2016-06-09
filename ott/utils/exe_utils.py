@@ -25,16 +25,16 @@ def run_java(cmd_line, fork=False, big_xmx="-Xmx4096m", small_xmx="-Xmx1536m", j
         run_cmd(cmd_line, fork, shell, pid_file)
 
 
-def does_java_need_a_shell(java_cmd):
+def does_java_need_a_shell(java_cmd, fork):
     ''' does java cmd need a shell to run properly? ...
         if we get thrown an exception, assume that we do need a shell to execute java
     '''
     ret_val = False
     try:
         if fork:
-            process = subprocess.Popen(cmd_line, shell=False)
+            process = subprocess.Popen(java_cmd, shell=False)
         else:
-            process = subprocess.call(cmd_line, shell=False)
+            process = subprocess.call(java_cmd, shell=False)
     except:
         ret_val = True
     return ret_val
