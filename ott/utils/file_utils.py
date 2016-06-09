@@ -24,6 +24,13 @@ def file_size(file):
     s = os.stat(file)
     return s.st_size
 
+def touch(file):
+    try:
+        os.utime(file, None)
+    except:
+        # doesn't exist ... unlike touch, don't create the file tho...
+        pass
+
 def exists_and_sized(file, size, expire):
     #import pdb; pdb.set_trace()
     ret_val = True
@@ -99,10 +106,12 @@ def bkup(file, rm_orig=True):
 
 def mv(src, dst):
     os.rename(src, dst)
+    touch(dst)
 
 def cp(src, dst):
     if os.path.isfile(src):
         shutil.copy2(src, dst)
+        touch(dst)
     else:
         log.error('could not copy file {} to {}'.format(src, dst))
 

@@ -10,12 +10,12 @@ def run_java(cmd_line, fork=False, big_xmx="-Xmx4096m", small_xmx="-Xmx1536m", j
     ''' run java ... if we get an exception, try to run again with lower heap size
         NOTE: shell is None here by default, so we can detect whether java needs a shell to operate (ala maps servers)
     '''
-    if shell is None:
-        shell = does_java_need_a_shell(java_cmd)
     try:
         if big_xmx is None:
             big_xmx = "-Xmx4096m"
         cmd_line = "{} {} {}".format(java_cmd, big_xmx, cmd_line)
+        if shell is None:
+            shell = does_java_need_a_shell(cmd_line)
         run_cmd(cmd_line, fork, shell, pid_file)
     except Exception, e:
         # try again with smaller java heap memory request
