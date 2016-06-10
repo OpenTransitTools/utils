@@ -56,8 +56,11 @@ def run_cmd(cmd_line, fork=False, shell=False, pid_file="pid.txt"):
 
     # Write PID file
     pid = None
-    if process and process.pid:
-        pid = process.pid
+    if process:
+        if isinstance(process, (int, long, str)):
+            pid = process
+        elif 'pid' in process:
+            pid = process.pid
         write_pid_file(pid_file, pid)
     return pid
 
