@@ -136,7 +136,7 @@ def diff_vlog(svr, dir, vlog_name=VLOG_NAME):
 
     # step 1: grab otp.v from build server
     url = "{}/{}".format(svr, vlog_name)
-    vlog_path = os.path.join(dir, vlog_path)
+    vlog_path = os.path.join(dir, vlog_name)
     tmp_vlog_path = vlog_path + ".tmp"
     ok = web_utils.wget(url, tmp_vlog_path, 10)
 
