@@ -125,7 +125,7 @@ def update_vlog(dir, feed_msg=None, vlog_name=VLOG_NAME):
     f.flush()
     f.close()
 
-def diff_vlog(svr, vlog_name=VLOG_NAME):
+def diff_vlog(svr, dir, vlog_name=VLOG_NAME):
     """ return True if the files are different and need to be redeployed ...
 
         - grab vlog from remote server that builds new OTP graphs
@@ -135,13 +135,15 @@ def diff_vlog(svr, vlog_name=VLOG_NAME):
     ret_val = False
 
     # step 1: grab otp.v from build server
-    url = svr + vlog_name
-    ok = web_utils.wget(url, TMP_VERSION_LOG, 10)
+    url = "{}/{}".format(svr, vlog_name)
+    vlog_path = os.path.join(dir, vlog_path)
+    tmp_vlog_path = vlog_path + ".tmp"
+    ok = web_utils.wget(url, tmp_vlog_path, 10)
 
     if not ok:
         # step 2: remote server doesn't have otp.v exposed ... send an error email...
         msg = "No vlog available at {0}".format(url)
-        email(msg, msg)
+        web_utils.email(msg, msg)
         ret_val = False
     else:
         # step 3: make sure the otp.v we just downloaded has content ... if note, send an error email
