@@ -1,6 +1,8 @@
 import os
 import socket
 import urllib2
+import filecmp
+import datetime
 import logging
 log = logging.getLogger(__file__)
 
@@ -15,7 +17,9 @@ DEF_PORT   = "55555"
 DEF_SSL_PORT = "51111"
 GRAPH_NAME = "Graph.obj"
 OTP_NAME   = "otp.jar"
+VLOG_NAME  = "otp.v"
 OTP_DOWNLOAD_URL = "http://maven.conveyal.com.s3.amazonaws.com/org/opentripplanner/otp/0.19.0/otp-0.19.0-shaded.jar"
+
 
 def call_planner_svc(url, accept='application/xml'):
     ret_val = None
@@ -103,4 +107,60 @@ def check_otp_jar(graph_dir, jar=OTP_NAME, expected_size=50000000, download_url=
         log.info("we don't see OTP {} in {}, so will download {} now".format(jar, graph_dir, download_url))
         web_utils.wget(download_url, jar_path)
     return jar_path
+
+def update_vlog(dir, feed_msg=None, vlog_name=VLOG_NAME):
+    """ print out gtfs feed(s) version numbers and dates to the otp.v log file
+    """
+    #
+    msg = "\nUpdated graph on {} with GTFS feed(s):\n".format(datetime.datetime.now().strftime("%B %d, %Y @ %I:%M %p"))
+
+    # add any specific feeds messages
+    if feed_msg and len(feed_msg) > 1:
+        msg = "{}{}\n".format(msg, feed_msg)
+
+    # write message to vlog file
+    vlog = os.path.join(dir, vlog_name)
+    f = open(vlog, 'a')
+    f.write(msg)
+    f.flush()
+    f.close()
+
+def diff_vlog(svr, vlog_name=VLOG_NAME):
+    """ return True if the files are different and need to be redeployed ...
+
+        - grab vlog from remote server that builds new OTP graphs
+        - compare it to our local vlog
+        - send email if we can't find remote vlog...
+    """
+    ret_val = False
+
+    # step 1: grab otp.v from build server
+    url = svr + vlog_name
+    ok = web_utils.wget(url, TMP_VERSION_LOG, 10)
+
+    if not ok:
+        # step 2: remote server doesn't have otp.v exposed ... send an error email...
+        msg = "No vlog available at {0}".format(url)
+        email(msg, msg)
+        ret_val = False
+    else:
+        # step 3: make sure the otp.v we just downloaded has content ... if note, send an error email
+        if not exists_and_sized(TMP_VERSION_LOG, 20):
+            msg = "vlog file {0} (grabbed from {1}) isn't right ".format(TMP_VERSION_LOG, url)
+            email(msg, msg)
+            ret_val = False
+        else:
+            # step 4a: we currently don't have a vlog, so assume we don't have an existing OTP ... let's deploy new download...
+            if not exists_and_sized(VERSION_LOG, 20):
+                ret_val = True
+                logging.info("{0} doesn't exist ... try to grab new OTP from {1} and deploy".format(VERSION_LOG, SVR))
+            else:
+                # step 4b: check if the vlog files are different...if so, we'll assume the remote is newer and start a new deploy...
+                if filecmp.cmp(TMP_VERSION_LOG, VERSION_LOG):
+                    logging.info("{0} == {1} ... we're done, going to keep the current graph running".format(VERSION_LOG, TMP_VERSION_LOG))
+                else:
+                    ret_val = True
+                    logging.info("{0} != {1} ... will try to grab new OTP from {2} and deploy".format(VERSION_LOG, TMP_VERSION_LOG, SVR))
+
+    return ret_val
 
