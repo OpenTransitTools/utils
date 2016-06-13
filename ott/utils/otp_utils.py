@@ -18,7 +18,7 @@ DEF_SSL_PORT = "51111"
 GRAPH_NAME = "Graph.obj"
 OTP_NAME   = "otp.jar"
 VLOG_NAME  = "otp.v"
-OTP_DOWNLOAD_URL = "http://maven.conveyal.com.s3.amazonaws.com/org/opentripplanner/otp/0.19.0/otp-0.19.0-shaded.jar"
+OTP_DOWNLOAD_URL = "http://maven.conveyal.com.s3.amazonaws.com/org/opentripplanner/otp/0.20.0/otp-0.20.0-shaded.jar"
 
 
 def call_planner_svc(url, accept='application/xml'):
