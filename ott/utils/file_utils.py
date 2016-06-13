@@ -7,6 +7,9 @@ import shutil
 import logging
 log = logging.getLogger(__file__)
 
+import string_utils
+
+
 def file_time(file):
     ''' datetime for the modified file time '''
     mtime = os.path.getmtime(file)
@@ -79,7 +82,10 @@ def is_a_newer_than_b(file_a, file_b):
             ret_val = True
     return ret_val
 
-def dir_has_newer_files(file, dir):
+def dir_has_newer_files(file, dir, include_filter=None, exclude_filter=None):
+    ''' determine if any files in the directory have a newer update date than target file
+    '''
+    #import pdb; pdb.set_trace()
     ret_val = False
     if not os.path.exists(file):
         log.info("{} doesn't exist ".format(file))
@@ -87,6 +93,11 @@ def dir_has_newer_files(file, dir):
     else:
         file_paths = next(os.walk(dir))[2]
         for f in file_paths:
+            import pdb; pdb.set_trace()
+            if include_filter and not string_utils.is_in_string(f, include_filter):
+                continue
+            if exclude_filter and string_utils.is_in_string(f, exclude_filter):
+                continue
             dir_file = os.path.join(dir, f)
             if is_a_newer_than_b(dir_file, file):
                 ret_val = True
@@ -94,7 +105,6 @@ def dir_has_newer_files(file, dir):
     return ret_val
 
 def bkup(file, rm_orig=True):
-    #import pdb; pdb.set_trace()
     if os.path.exists(file):
         mtime = file_time(file)
         tmp_file = "{}.{:%Y%m%d}".format(file, mtime)

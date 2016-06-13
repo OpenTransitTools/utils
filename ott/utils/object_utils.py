@@ -77,7 +77,6 @@ def fix_url(url):
     ret_val = ret_val.replace(" & ", " %26 ")
     return ret_val
 
-
 def has_content(obj):
     ret_val = False
     if obj:
@@ -85,7 +84,6 @@ def has_content(obj):
         if isinstance(obj, basestring) and len(obj) <= 0:
             ret_val = False
     return ret_val
-
 
 def safe_str(obj, def_val=''):
     ret_val = def_val
