@@ -93,7 +93,6 @@ def dir_has_newer_files(file, dir, include_filter=None, exclude_filter=None):
     else:
         file_paths = next(os.walk(dir))[2]
         for f in file_paths:
-            import pdb; pdb.set_trace()
             if include_filter and not string_utils.is_in_string(f, include_filter):
                 continue
             if exclude_filter and string_utils.is_in_string(f, exclude_filter):
