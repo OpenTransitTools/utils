@@ -5,6 +5,8 @@ import time
 import logging
 log = logging.getLogger(__file__)
 
+import object_utils
+
 
 def run_java(cmd_line, fork=False, big_xmx="-Xmx4096m", small_xmx="-Xmx1536m", java_cmd="java", shell=None, pid_file="pid.txt"):
     ''' run java ... if we get an exception, try to run again with lower heap size
@@ -55,12 +57,8 @@ def run_cmd(cmd_line, fork=False, shell=False, pid_file="pid.txt"):
         process = subprocess.call(cmd_line, shell=shell)
 
     # Write PID file
-    pid = None
+    pid = object_utils.safe_get(process, 'pid')
     if process:
-        if isinstance(process, (int, long, str)):
-            pid = process
-        elif 'pid' in process:
-            pid = process.pid
         write_pid_file(pid_file, pid)
     return pid
 

@@ -117,6 +117,20 @@ def safe_array_val(list, index, def_val=None):
         pass
     return ret_val
 
+def safe_get(obj, key, def_val=None):
+    ''' return value  from either a class or a dict
+    '''
+    ret_val = def_val
+    try:
+        ret_val = getattr(obj, key)
+    except:
+        try:
+            ret_val = obj[key]
+        except:
+            if isinstance(obj, (int, long, str)):
+                ret_val = obj
+    return ret_val
+
 def str_to_list(str, def_val=[]):
     ''' try to return a list of some sort
     '''
