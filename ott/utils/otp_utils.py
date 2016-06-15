@@ -42,7 +42,8 @@ def run_otp_server(dir=None, port=DEF_PORT, ssl=DEF_SSL_PORT, otp_name=OTP_NAME,
     file_utils.cd(dir)
     otp_path = os.path.join(dir, otp_name)
     cmd='-server -jar {} --port {} --securePort {} --router "" --graphs {}'.format(otp_path, port, ssl, dir)
-    exe_utils.run_java(cmd, fork=True, big_xmx=java_mem)
+    ret_val = exe_utils.run_java(cmd, fork=True, big_xmx=java_mem, pid_file="pid.txt")
+    return ret_val
 
 def run_graph_builder(graph_dir, graph_name=GRAPH_NAME, otp_name=OTP_NAME, java_mem=None):
     ''' run OTP graph builder
@@ -53,13 +54,15 @@ def run_graph_builder(graph_dir, graph_name=GRAPH_NAME, otp_name=OTP_NAME, java_
     file_utils.rm(graph_path)
     file_utils.cd(graph_dir)
     cmd='-jar {} --build {} --cache {}'.format(otp_path, graph_dir, graph_dir)
-    exe_utils.run_java(cmd, big_xmx=java_mem)
+    ret_val = exe_utils.run_java(cmd, big_xmx=java_mem)
+    return ret_val
 
 def vizualize_graph(graph_dir, java_mem=None, otp_name=OTP_NAME):
     otp_path = os.path.join(graph_dir, otp_name)
     file_utils.cd(graph_dir)
     cmd='-jar {} --visualize --router "" --graphs {}'.format(otp_path, graph_dir)
-    exe_utils.run_java(cmd, fork=True, big_xmx=java_mem)
+    ret_val = exe_utils.run_java(cmd, big_xmx=java_mem)
+    return ret_val
 
 def config_graph_dir(graph_config, base_dir, force_update=False):
     ''' utility to make the graph dir, copy OTP config files into the graph directory, etc...
@@ -78,7 +81,6 @@ def config_graph_dir(graph_config, base_dir, force_update=False):
 
     # step 3: check OTP jar exists in config dir
     check_otp_jar(graph_dir, force_update=force_update)
-
     return graph_dir
 
 def get_graph_details(graphs, index=0):
@@ -163,6 +165,5 @@ def diff_vlog(svr, dir, vlog_name=VLOG_NAME):
                 else:
                     ret_val = True
                     logging.info("{0} != {1} ... will try to grab new OTP from {2} and deploy".format(VERSION_LOG, TMP_VERSION_LOG, SVR))
-
     return ret_val
 

@@ -118,7 +118,8 @@ def safe_array_val(list, index, def_val=None):
     return ret_val
 
 def safe_get(obj, key, def_val=None):
-    ''' return value  from either a class or a dict
+    ''' try to return the key'd value from either a class or a dict
+        (or return the raw value if we were handed a native type)
     '''
     ret_val = def_val
     try:

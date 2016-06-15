@@ -8,23 +8,26 @@ log = logging.getLogger(__file__)
 import object_utils
 
 
-def run_java(cmd_line, fork=False, big_xmx="-Xmx4096m", small_xmx="-Xmx1536m", java_cmd="java", shell=None, pid_file="pid.txt"):
+def run_java(cmd_line, fork=False, big_xmx="-Xmx4096m", small_xmx="-Xmx1536m", java_cmd="java", shell=None, pid_file=None):
     ''' run java ... if we get an exception, try to run again with lower heap size
+        @pid_file: send this variable with the name of a file (e.g., "pid.txt") in to get the process pid written out
         NOTE: shell is None NONE None, since we want to test if java can run first w/out an environment
     '''
+    ret_val = None
     if shell is None:
         shell = does_java_need_a_shell(java_cmd, fork)
     try:
         if big_xmx is None:
             big_xmx = "-Xmx4096m"
         cmd_line = "{} {} {}".format(java_cmd, big_xmx, cmd_line)
-        run_cmd(cmd_line, fork, shell, pid_file)
+        ret_val = run_cmd(cmd_line, fork, shell, pid_file)
     except Exception, e:
         # try again with smaller java heap memory request
         # NOTE: 'fork' won't get you to see an exception here (because you fork the exception into another process)
         log.info(e)
         cmd_line = "{} {} {}".format(java_cmd, small_xmx, cmd_line)
-        run_cmd(cmd_line, fork, shell, pid_file)
+        ret_val = run_cmd(cmd_line, fork, shell, pid_file)
+    return ret_val
 
 def does_java_need_a_shell(java_cmd, fork):
     ''' does java cmd need a shell to run properly? ...
@@ -41,9 +44,11 @@ def does_java_need_a_shell(java_cmd, fork):
         ret_val = True
     return ret_val
 
-def run_cmd(cmd_line, fork=False, shell=False, pid_file="pid.txt"):
+def run_cmd(cmd_line, fork=False, shell=False, pid_file=None):
     ''' run_cmd("sleep 200") will block for 200 seconds
-        run_cmd("sleep 200", True) will background
+        run_cmd("sleep 200", True) will background the process
+
+        @pid_file: send this variable with the name of a file (e.g., "pid.txt") in to get the process pid written out
 
         NOTE: some other options for piping output...
           devnull = open(os.devnull, 'wb')
@@ -58,8 +63,7 @@ def run_cmd(cmd_line, fork=False, shell=False, pid_file="pid.txt"):
 
     # Write PID file
     pid = object_utils.safe_get(process, 'pid')
-    if process:
-        write_pid_file(pid_file, pid)
+    write_pid_file(pid_file, pid)
     return pid
 
 def kill_old_pid(pid_file):
@@ -77,10 +81,13 @@ def kill_old_pid(pid_file):
 def write_pid_file(pid_file, pid):
     ''' write a pid file
     '''
-    pf = open(pid_file, 'w')
-    pf.write(str(pid))
-    pf.flush()
-    pf.close()
+    try:
+        pf = open(pid_file, 'w')
+        pf.write(str(pid))
+        pf.flush()
+        pf.close()
+    except Exception, e:
+        log.debug("Couldn't write to the pid file -- {}".format(e))
 
 def kill(pid):
     ''' kill a process
