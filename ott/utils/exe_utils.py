@@ -8,7 +8,7 @@ log = logging.getLogger(__file__)
 import object_utils
 
 
-def run_java(cmd_line, fork=False, big_xmx="-Xmx4096m", small_xmx="-Xmx1536m", java_cmd="java", shell=None, pid_file=None):
+def run_java(cmd_line, fork=False, big_xmx="-Xmx4096m", small_xmx="-Xmx1536m", java_cmd="java", shell=None, pid_file=None, log_file=None):
     ''' run java ... if we get an exception, try to run again with lower heap size
         @pid_file: send this variable with the name of a file (e.g., "pid.txt") in to get the process pid written out
         NOTE: shell is None NONE None, since we want to test if java can run first w/out an environment
@@ -20,16 +20,16 @@ def run_java(cmd_line, fork=False, big_xmx="-Xmx4096m", small_xmx="-Xmx1536m", j
         if big_xmx is None:
             big_xmx = "-Xmx4096m"
         cmd_line = "{} {} {}".format(java_cmd, big_xmx, cmd_line)
-        ret_val = run_cmd(cmd_line, fork, shell, pid_file)
+        ret_val = run_cmd(cmd_line, fork, shell, pid_file, log_file)
     except Exception, e:
         # try again with smaller java heap memory request
         # NOTE: 'fork' won't get you to see an exception here (because you fork the exception into another process)
         log.info(e)
         cmd_line = "{} {} {}".format(java_cmd, small_xmx, cmd_line)
-        ret_val = run_cmd(cmd_line, fork, shell, pid_file)
+        ret_val = run_cmd(cmd_line, fork, shell, pid_file, log_file)
     return ret_val
 
-def does_java_need_a_shell(java_cmd, fork):
+def does_java_need_a_shell(java_cmd, fork, log_file):
     ''' does java cmd need a shell to run properly? ...
         if we get thrown an exception, assume that we do need a shell to execute java
     '''
