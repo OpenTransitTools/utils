@@ -29,7 +29,7 @@ def run_java(cmd_line, fork=False, big_xmx="-Xmx4096m", small_xmx="-Xmx1536m", j
         ret_val = run_cmd(cmd_line, fork, shell, pid_file, log_file)
     return ret_val
 
-def does_java_need_a_shell(java_cmd, fork, log_file):
+def does_java_need_a_shell(java_cmd, fork):
     ''' does java cmd need a shell to run properly? ...
         if we get thrown an exception, assume that we do need a shell to execute java
     '''
@@ -44,7 +44,7 @@ def does_java_need_a_shell(java_cmd, fork, log_file):
         ret_val = True
     return ret_val
 
-def run_cmd(cmd_line, fork=False, shell=False, pid_file=None):
+def run_cmd(cmd_line, fork=False, shell=False, pid_file=None, log_file=None):
     ''' run_cmd("sleep 200") will block for 200 seconds
         run_cmd("sleep 200", True) will background the process
 
@@ -56,6 +56,13 @@ def run_cmd(cmd_line, fork=False, shell=False, pid_file=None):
     '''
     log.info(cmd_line)
     kill_old_pid(pid_file)
+
+    # append log file cmd to pipe output to that file (should work on both linux and dos)
+    if log_file:
+        log.debug("changing cmd line {} by appending log file {}".format(cmd_line, log_file))
+        cmd_line = "{} > {} 2>&1".format(cmd_line, log_file)
+        log.debug("new cmd line: {}".format(cmd_line))
+
     if fork:
         process = subprocess.Popen(cmd_line, shell=shell)
     else:
