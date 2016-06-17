@@ -6,12 +6,14 @@ from ott.utils.config_util import ConfigUtil
 
 
 class CacheBase(object):
+    cache_dir_name = "cache"
     cache_expire = 31
     _config = None
 
-    def __init__(self, section='cache'):
+    def __init__(self, section="cache", cache_dir_name="cache"):
         self._config = ConfigUtil.factory(section=section)
         self.cache_expire = self.config.get_int('cache_expire', 'cache', self.cache_expire)
+        self.cache_dir_name = cache_dir_name
 
     @property
     def config(self):
@@ -32,7 +34,7 @@ class CacheBase(object):
     def cache_dir(self):
         ''' returns dir path ... makes the directory if it doesn't exist
         '''
-        cache_dir = os.path.join(self.this_module_dir, "cache")
+        cache_dir = os.path.join(self.this_module_dir, self.cache_dir_name)
         file_utils.mkdir(cache_dir)
         return cache_dir
 

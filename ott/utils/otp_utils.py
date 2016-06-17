@@ -83,6 +83,16 @@ def config_graph_dir(graph_config, base_dir, force_update=False):
     check_otp_jar(graph_dir, force_update=force_update)
     return graph_dir
 
+def get_graphs(cache):
+    ''' routine that both returns the list of graphs, but also (the main
+        purpose) add the 'dir' for each graph folder based on graph name
+    '''
+    graphs = cache.config.get_json('graphs')
+    for g in graphs:
+        dir = os.path.join(cache.this_module_dir, g['name'])
+        g['dir'] = dir
+    return graphs
+
 def get_graph_details(graphs, index=0):
     ''' utility function to find a graph config (e.g., graph folder name, web port, etc...) from self.graphs
         @see [otp] section in config/app.ini
