@@ -93,6 +93,20 @@ def get_graphs(cache):
         g['dir'] = dir
     return graphs
 
+def find_graph(graphs, find_name):
+    ''' will build and test each of the graphs we have in self.graphs
+    '''
+    #import pdb; pdb.set_trace()
+    ret_val = None
+    if graphs is None or len(graphs) < 1:
+        ret_val = get_graph_details(None)
+    else:
+        for g in graphs:
+            if find_name in g['name']:
+                ret_val = g
+                break
+    return ret_val
+
 def get_graph_details(graphs, index=0):
     ''' utility function to find a graph config (e.g., graph folder name, web port, etc...) from self.graphs
         @see [otp] section in config/app.ini
