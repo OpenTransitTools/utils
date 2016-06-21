@@ -67,9 +67,9 @@ class CacheBase(object):
         dest = os.path.join(destination_dir, file_name)
         file_utils.cp(file, dest)
 
-    def simple_file_update(self, file_name, url, force_update=False):
-        ''' download feed from url, and check it against the cache
-            if newer, then replace cached feed .zip file with new version
+    def simple_cache_item_update(self, file_name, url, force_update=False):
+        ''' check a cache file to see whether it needs updating...if so,
+            then replace cached file with new version via wget on a  url
         '''
         file_path = os.path.join(self.cache_dir, file_name)
 
@@ -83,3 +83,5 @@ class CacheBase(object):
             log.info("wget {} to cache {}".format(url, file_path))
             file_utils.bkup(file_path)
             web_utils.wget(url, file_path)
+
+        return update
