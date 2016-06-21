@@ -1,7 +1,10 @@
 import os
 import inspect
+import logging
+log = logging.getLogger(__file__)
 
 from ott.utils import file_utils
+from ott.utils import web_utils
 from ott.utils.config_util import ConfigUtil
 
 
@@ -63,3 +66,20 @@ class CacheBase(object):
         file = os.path.join(self.cache_dir, file_name)
         dest = os.path.join(destination_dir, file_name)
         file_utils.cp(file, dest)
+
+    def simple_file_update(self, file_name, url, force_update=False):
+        ''' download feed from url, and check it against the cache
+            if newer, then replace cached feed .zip file with new version
+        '''
+        file_path = os.path.join(self.cache_dir, file_name)
+
+        # step 1: check the cache whether we should update or not
+        update = force_update
+        if not force_update and not self.is_fresh_in_cache(file_path):
+            update = True
+
+        # step 2: backup then wget new feed
+        if update:
+            log.info("wget {} to cache {}".format(url, file_path))
+            file_utils.bkup(file_path)
+            web_utils.wget(url, file_path)
