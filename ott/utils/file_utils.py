@@ -12,7 +12,11 @@ import string_utils
 
 def file_time(file):
     ''' datetime for the modified file time '''
-    mtime = os.path.getmtime(file)
+    try:
+        mtime = os.path.getmtime(file)
+    except:
+        # attempt to get time from a symlink (ln -s file)
+        mtime = os.lstat(file).st_mtime
     dt = datetime.datetime.fromtimestamp(mtime)
     return dt
 
@@ -32,7 +36,16 @@ def file_age_seconds(file):
     return ret_val
 
 def file_size(file):
-    s = os.stat(file)
+    ''' return size of file path
+        note: symlinks are kinda broken here python
+              os.path.realpath(path) doesn't work on mac to get real file path
+    '''
+    import pdb; pdb.set_trace()
+    try:
+        s = os.stat(file)
+    except:
+        s = os.stat(os.readlink(file))
+        #s = os.lstat(file)
     return s.st_size
 
 def touch(file):
