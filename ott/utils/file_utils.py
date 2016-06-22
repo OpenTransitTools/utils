@@ -112,14 +112,20 @@ def dir_has_newer_files(file, dir, include_filter=None, exclude_filter=None):
     return ret_val
 
 def bkup(file, rm_orig=True):
-    if os.path.exists(file):
-        mtime = file_time(file)
-        tmp_file = "{}.{:%Y%m%d}".format(file, mtime)
-        rm(tmp_file)
-        if rm_orig:
-            os.rename(file, tmp_file)
-        else:
-            cp(file, tmp_file)
+    ret_val = False
+    try:
+        if os.path.exists(file):
+            mtime = file_time(file)
+            tmp_file = "{}.{:%Y%m%d}".format(file, mtime)
+            rm(tmp_file)
+            if rm_orig:
+                os.rename(file, tmp_file)
+            else:
+                cp(file, tmp_file)
+            ret_val = True
+    except:
+        pass
+    return ret_val
 
 def mv(src, dst):
     os.rename(src, dst)
