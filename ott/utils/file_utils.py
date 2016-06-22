@@ -23,6 +23,14 @@ def file_age(file):
     diff = now - mtime
     return diff.days
 
+def file_age_seconds(file):
+    ''' age in days '''
+    mtime = file_time(file)
+    now = datetime.datetime.now()
+    diff = now - mtime
+    ret_val = diff.seconds + diff.days * 86400
+    return ret_val
+
 def file_size(file):
     s = os.stat(file)
     return s.st_size
