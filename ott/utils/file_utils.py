@@ -10,13 +10,21 @@ log = logging.getLogger(__file__)
 import string_utils
 
 
-def file_time(file):
+def get_mtime(file):
     ''' datetime for the modified file time '''
     try:
         mtime = os.path.getmtime(file)
     except:
-        # attempt to get time from a symlink (ln -s file)
-        mtime = os.lstat(file).st_mtime
+        try:
+            # attempt to get time from a symlink (ln -s file)
+            mtime = os.path.getmtime(os.readlink(file))
+        except:
+            # one last sym link try...
+            mtime = os.lstat(file).st_mtime
+    return mtime
+
+def file_time(file):
+    mtime = get_mtime(file)
     dt = datetime.datetime.fromtimestamp(mtime)
     return dt
 
@@ -40,12 +48,10 @@ def file_size(file):
         note: symlinks are kinda broken here python
               os.path.realpath(path) doesn't work on mac to get real file path
     '''
-    import pdb; pdb.set_trace()
     try:
         s = os.stat(file)
     except:
         s = os.stat(os.readlink(file))
-        #s = os.lstat(file)
     return s.st_size
 
 def touch(file):
@@ -97,8 +103,8 @@ def is_a_newer_than_b(file_a, file_b):
         ret_val = True
         log.info("{} doesn't exist ".format(file_b))
     else:
-        a_age = os.path.getmtime(file_a)
-        b_age = os.path.getmtime(file_b)
+        a_age = get_mtime(file_a)
+        b_age = get_mtime(file_a)
         if a_age > b_age:
             ret_val = True
     return ret_val
