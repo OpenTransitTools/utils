@@ -124,12 +124,18 @@ def bkup(file, rm_orig=True):
                 cp(file, tmp_file)
             ret_val = True
     except:
-        pass
+        log.error('could not backup file {}'.format(file))
     return ret_val
 
 def mv(src, dst):
-    os.rename(src, dst)
-    touch(dst)
+    ret_val = False
+    try:
+        os.rename(src, dst)
+        touch(dst)
+        ret_val = True
+    except:
+        log.error('could not mv file {} to {}'.format(src, dst))
+    return ret_val
 
 def cp(src, dst):
     if os.path.isfile(src):

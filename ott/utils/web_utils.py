@@ -6,6 +6,7 @@ import smtplib
 import logging
 log = logging.getLogger(__file__)
 
+import file_utils
 
 def email(frm, to, msg, subject="loader email"):
     log.info("email: TODO...implement me")
@@ -13,7 +14,7 @@ def email(frm, to, msg, subject="loader email"):
 def get_hostname():
     return socket.gethostname()
 
-def my_wget(url, file_name):
+def my_wget(url, file_path, delete_first=True):
     """ wget a file from url
         IMPORTANT NOTE: this will *not* work if the URL is a redirect, etc...
     """
@@ -23,26 +24,31 @@ def my_wget(url, file_name):
         req = urllib2.Request(url)
         res = urllib2.urlopen(req)
 
+        if delete_first:
+            file_utils.rm(file_path)
+
         # write it out
-        f = open(file_name, 'wb')
+        f = open(file_path, 'wb')
         f.write(res.read())
         f.flush()
         f.close()
         res.close()
 
-        log.info("wget: downloaded {} into file {}".format(url, file_name))
+        log.info("wget: downloaded {} into file {}".format(url, file_path))
     except Exception, e:
         log.warn(e)
         is_success = False
     return is_success
 
-def wget(url, file_name):
+def wget(url, file_path, delete_first=True):
     """ wget a file from url
         IMPORTANT NOTE: this will *not* work if the URL is a redirect, etc...
     """
     is_success = True
-    wget_wget.download(url, file_name)
-    log.info("wget: downloaded {} into file {}".format(url, file_name))
+    if delete_first:
+        file_utils.rm(file_path)
+    wget_wget.download(url, file_path)
+    log.info("wget: downloaded {} into file {}".format(url, file_path))
     return is_success
 
 def email(msg,
