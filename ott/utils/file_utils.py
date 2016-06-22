@@ -62,7 +62,6 @@ def touch(file):
         pass
 
 def exists_and_sized(file, size, expire):
-    #import pdb; pdb.set_trace()
     ret_val = True
     if os.path.exists(file) is False:
         log.info("{} doesn't exist ".format(file))
