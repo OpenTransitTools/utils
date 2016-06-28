@@ -134,7 +134,7 @@ def check_otp_jar(graph_dir, jar=OTP_NAME, expected_size=50000000, download_url=
         web_utils.wget(download_url, jar_path)
     return jar_path
 
-def update_vlog(dir, feed_msg=None, vlog_name=VLOG_NAME):
+def append_vlog_file(dir, feed_msg=None, vlog_name=VLOG_NAME):
     """ print out gtfs feed(s) version numbers and dates to the otp.v log file
     """
     #
@@ -151,7 +151,7 @@ def update_vlog(dir, feed_msg=None, vlog_name=VLOG_NAME):
     f.flush()
     f.close()
 
-def diff_vlog(svr, dir, vlog_name=VLOG_NAME):
+def diff_vlog_files(svr, dir, vlog_name=VLOG_NAME):
     """ return True if the files are different and need to be redeployed ...
 
         - grab vlog from remote server that builds new OTP graphs
@@ -173,21 +173,21 @@ def diff_vlog(svr, dir, vlog_name=VLOG_NAME):
         ret_val = False
     else:
         # step 3: make sure the otp.v we just downloaded has content ... if note, send an error email
-        if not exists_and_sized(TMP_VERSION_LOG, 20):
-            msg = "vlog file {0} (grabbed from {1}) isn't right ".format(TMP_VERSION_LOG, url)
+        if not exists_and_sized(tmp_vlog_path, 20):
+            msg = "vlog file {0} (grabbed from {1}) isn't right ".format(tmp_vlog_path, url)
             email(msg, msg)
             ret_val = False
         else:
             # step 4a: we currently don't have a vlog, so assume we don't have an existing OTP ... let's deploy new download...
-            if not exists_and_sized(VERSION_LOG, 20):
+            if not exists_and_sized(vlog_path, 20):
                 ret_val = True
-                logging.info("{0} doesn't exist ... try to grab new OTP from {1} and deploy".format(VERSION_LOG, SVR))
+                logging.info("{0} doesn't exist ... try to grab new OTP from {1} and deploy".format(vlog_path, svr))
             else:
                 # step 4b: check if the vlog files are different...if so, we'll assume the remote is newer and start a new deploy...
-                if filecmp.cmp(TMP_VERSION_LOG, VERSION_LOG):
-                    logging.info("{0} == {1} ... we're done, going to keep the current graph running".format(VERSION_LOG, TMP_VERSION_LOG))
+                if filecmp.cmp(tmp_vlog_path, vlog_path):
+                    logging.info("{0} == {1} ... we're done, going to keep the current graph running".format(tmp_vlog_path, vlog_path))
                 else:
                     ret_val = True
-                    logging.info("{0} != {1} ... will try to grab new OTP from {2} and deploy".format(VERSION_LOG, TMP_VERSION_LOG, SVR))
+                    logging.info("{0} != {1} ... will try to grab new OTP from {2} and deploy".format(tmp_vlog_path, vlog_path, svr))
     return ret_val
 
