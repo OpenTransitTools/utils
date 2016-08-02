@@ -64,7 +64,7 @@ def vizualize_graph(graph_dir, java_mem=None, otp_name=OTP_NAME):
     ret_val = exe_utils.run_java(cmd, big_xmx=java_mem)
     return ret_val
 
-def config_graph_dir(graph_config, base_dir, force_update=False):
+def config_graph_dir(graph_config, base_dir):
     ''' utility to make the graph dir, copy OTP config files into the graph directory, etc...
     '''
     name = graph_config.get('name', DEF_NAME)
@@ -77,10 +77,10 @@ def config_graph_dir(graph_config, base_dir, force_update=False):
 
     # step 2: copy OTP config files
     config_dir = os.path.join(base_dir, "config")
-    file_utils.copy_contents(config_dir, graph_dir, overwrite=force_update)
+    file_utils.copy_contents(config_dir, graph_dir)
 
     # step 3: check OTP jar exists in config dir
-    check_otp_jar(graph_dir, force_update=force_update)
+    check_otp_jar(graph_dir)
     return graph_dir
 
 def get_graphs(cache):
@@ -122,14 +122,14 @@ def get_graph_details(graphs, index=0):
         ret_val = graphs[index]
     return ret_val
 
-def check_otp_jar(graph_dir, jar=OTP_NAME, expected_size=50000000, download_url=OTP_DOWNLOAD_URL, force_update=False):
+def check_otp_jar(graph_dir, jar=OTP_NAME, expected_size=50000000, download_url=OTP_DOWNLOAD_URL):
     """ utility to make sure otp.jar exists in the particular graph dir...
         if not, download it
         :return full-path to otp.jar
     """
     jar_path = os.path.join(graph_dir, jar)
     exists = os.path.exists(jar_path)
-    if not exists or file_utils.file_size(jar_path) < expected_size or force_update:
+    if not exists or file_utils.file_size(jar_path) < expected_size:
         log.info("we don't see OTP {} in {}, so will download {} now".format(jar, graph_dir, download_url))
         web_utils.wget(download_url, jar_path)
     return jar_path
