@@ -64,7 +64,7 @@ def vizualize_graph(graph_dir, java_mem=None, otp_name=OTP_NAME):
     ret_val = exe_utils.run_java(cmd, big_xmx=java_mem)
     return ret_val
 
-def config_graph_dir(graph_config, base_dir):
+def config_graph_dir(graph_config, base_dir, overwrite=False):
     ''' utility to make the graph dir, copy OTP config files into the graph directory, etc...
     '''
     name = graph_config.get('name', DEF_NAME)
@@ -77,7 +77,7 @@ def config_graph_dir(graph_config, base_dir):
 
     # step 2: copy OTP config files
     config_dir = os.path.join(base_dir, "config")
-    file_utils.copy_contents(config_dir, graph_dir)
+    file_utils.copy_contents(config_dir, graph_dir, overwrite)
 
     # step 3: check OTP jar exists in config dir
     check_otp_jar(graph_dir)
