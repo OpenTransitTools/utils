@@ -2,9 +2,8 @@ import datetime
 import logging
 log = logging.getLogger(__file__)
 
-import date_utils
-import num_utils
-import geo_utils
+from ott.utils import date_utils
+from ott.utils import num_utils
 
 
 def planner_form_params(request):
@@ -146,6 +145,7 @@ def get_first_param_as_float(request, name, def_val=None):
 def get_first_param_is_a_coord(request, name, def_val=False):
     ''' looks for a string, which has a comma (assuming lat,lon) and is at least 7 chars in length ala 0.0,0.0
     '''
+    from ott.utils import geo_utils
     ret_val = def_val
     try:
         val = get_first_param(request, name, def_val)
@@ -158,7 +158,7 @@ def get_first_param_is_a_coord(request, name, def_val=False):
 def get_first_param_as_coord(request, name, def_val=None, to_float=False):
     ''' return lat,lon floats
     '''
-    import geo_utils
+    from ott.utils import geo_utils
     val = get_first_param(request, name, def_val)
     lat,lon = geo_utils.ll_from_str(val, def_val, to_float)
     return lat,lon
