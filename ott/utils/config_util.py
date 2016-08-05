@@ -59,37 +59,6 @@ class ConfigUtil(object):
         self._found_ini = scp.read(candidates)
         return scp
 
-    @classmethod
-    def logging_cfg(cls):
-        ''' config the logging module
-        '''
-        try:
-            log_ini = cls.find_candidate("log.ini")
-            if log_ini:
-                logging.config.fileConfig(log_ini)
-        except Exception, e:
-            log.info(e)
-
-    @classmethod
-    def get_candidates(cls, name, config="config"):
-        ret_val = []
-        cfg = os.path.join(config, name)
-        ret_val.append(os.path.abspath(name))
-        ret_val.append(os.path.abspath(cfg))
-        ret_val.append(os.path.abspath(os.path.join(RUN_DIR, name)))
-        ret_val.append(os.path.abspath(os.path.join(RUN_DIR, cfg)))
-        return ret_val
-
-    @classmethod
-    def find_candidate(cls, name, config="config", def_val=None):
-        ret_val = def_val
-        candidates = cls.get_candidates(name, config)
-        for c in candidates:
-            if os.path.exists(c):
-                ret_val = c
-                break
-        return ret_val
-
     def get(self, id, section=None, def_val=None):
         ''' get config value
         '''
@@ -151,6 +120,37 @@ class ConfigUtil(object):
             logging.config.fileConfig(ini, disable_existing_loggers=False)
         except Exception, e:
             pass
+
+    @classmethod
+    def logging_cfg(cls):
+        ''' config the logging module
+        '''
+        try:
+            log_ini = cls.find_candidate("log.ini")
+            if log_ini:
+                logging.config.fileConfig(log_ini)
+        except Exception, e:
+            log.info(e)
+
+    @classmethod
+    def get_candidates(cls, name, config="config"):
+        ret_val = []
+        cfg = os.path.join(config, name)
+        ret_val.append(os.path.abspath(name))
+        ret_val.append(os.path.abspath(cfg))
+        ret_val.append(os.path.abspath(os.path.join(RUN_DIR, name)))
+        ret_val.append(os.path.abspath(os.path.join(RUN_DIR, cfg)))
+        return ret_val
+
+    @classmethod
+    def find_candidate(cls, name, config="config", def_val=None):
+        ret_val = def_val
+        candidates = cls.get_candidates(name, config)
+        for c in candidates:
+            if os.path.exists(c):
+                ret_val = c
+                break
+        return ret_val
 
     @classmethod
     def factory(cls, section=None, argv=sys.argv):

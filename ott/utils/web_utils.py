@@ -26,7 +26,7 @@ def basic_web_server(port="50080"):
 
 def background_web_server(dir=None, port="50080"):
     file_utils.cd(dir)
-    ret_val = exe_utils.run_python("-m SimpleHTTPServer " + port, fork=True, pid_file="py_server.pid"
+    ret_val = exe_utils.run_python("-m SimpleHTTPServer " + port, fork=True, pid_file="py_server.pid")
     return ret_val
 
 def my_wget(url, file_path, delete_first=True):
