@@ -33,20 +33,6 @@ def distance_mi(lat1, lon1, lat2, lon2):
     km = distance_km(lat1, lon1, lat2, lon2)
     return km * 0.621371192
 
-def lon_lat_to_ospn(lon, lat):
-    ''' @TODO a bit of trig
-    '''
-    x = lon
-    y = lat
-    return x, y
-
-def ospn_to_lon_lat(x, y):
-    ''' @TODO a bit more trig
-    '''
-    lon = x
-    lat = y
-    return lon, lat
-
 def to_int(val, def_val):
     ret_val = def_val
     try:
