@@ -8,6 +8,15 @@ log = logging.getLogger(__file__)
 import object_utils
 
 
+def run_python(cmd_line, fork=False, py_cmd="python", shell=None, pid_file=None, log_file=None):
+    ''' run a python command
+    '''
+    cmd_line = "{} {}".format(py_cmd, cmd_line)
+    if shell is None:
+        shell = does_cmd_need_a_shell(py_cmd, "--version", fork)
+    ret_val = run_cmd(cmd_line, fork, shell, pid_file, log_file)
+    return ret_val
+
 def run_java(cmd_line, fork=False, big_xmx="-Xmx4096m", small_xmx="-Xmx1536m", java_cmd="java", shell=None, pid_file=None, log_file=None):
     ''' run java ... if we get an exception, try to run again with lower heap size
         @pid_file: send this variable with the name of a file (e.g., "pid.txt") in to get the process pid written out
@@ -15,7 +24,7 @@ def run_java(cmd_line, fork=False, big_xmx="-Xmx4096m", small_xmx="-Xmx1536m", j
     '''
     ret_val = None
     if shell is None:
-        shell = does_java_need_a_shell(java_cmd, fork)
+        shell = does_cmd_need_a_shell(java_cmd, "-version", fork)
     try:
         if big_xmx is None:
             big_xmx = "-Xmx4096m"
@@ -29,17 +38,17 @@ def run_java(cmd_line, fork=False, big_xmx="-Xmx4096m", small_xmx="-Xmx1536m", j
         ret_val = run_cmd(cmd_line, fork, shell, pid_file, log_file)
     return ret_val
 
-def does_java_need_a_shell(java_cmd, fork):
-    ''' does java cmd need a shell to run properly? ...
+def does_cmd_need_a_shell(cmd, cmd_line="", fork=False):
+    ''' does the cmd need a shell to run properly? ...
         if we get thrown an exception, assume that we do need a shell to execute java
     '''
     ret_val = False
-    java_cmd = "{} -version".format(java_cmd)
+    cmd = "{} {}".format(cmd, cmd_line)
     try:
         if fork:
-            process = subprocess.Popen(java_cmd, shell=False)
+            process = subprocess.Popen(cmd, shell=False)
         else:
-            process = subprocess.call(java_cmd, shell=False)
+            process = subprocess.call(cmd, shell=False)
     except:
         ret_val = True
     return ret_val

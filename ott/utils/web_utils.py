@@ -3,16 +3,31 @@ import socket
 import urllib2
 import wget as wget_wget
 import smtplib
+import SimpleHTTPServer
+import SocketServer
+
 import logging
 log = logging.getLogger(__file__)
 
 import file_utils
+import exe_utils
 
 def email(frm, to, msg, subject="loader email"):
     log.info("email: TODO...implement me")
 
 def get_hostname():
     return socket.gethostname()
+
+def basic_web_server(port="50080"):
+    Handler = SimpleHTTPServer.SimpleHTTPRequestHandler
+    httpd = SocketServer.TCPServer(("", port), Handler)
+    print "serving at port", port
+    httpd.serve_forever()
+
+def background_web_server(dir=None, port="50080"):
+    file_utils.cd(dir)
+    ret_val = exe_utils.run_python("-m SimpleHTTPServer " + port, fork=True, pid_file="py_server.pid"
+    return ret_val
 
 def my_wget(url, file_path, delete_first=True):
     """ wget a file from url

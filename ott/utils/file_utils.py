@@ -156,21 +156,22 @@ def mv(src, dst):
     return ret_val
 
 def cp(src, dst):
-    if os.path.isfile(src):
+    if src and dst and os.path.isfile(src):
         shutil.copy2(src, dst)
         touch(dst)
     else:
         log.error('could not copy file {} to {}'.format(src, dst))
 
 def rm(file):
-    if os.path.exists(file):
+    if file and os.path.exists(file):
         os.remove(file)
 
 def cd(dir):
-    os.chdir(dir)
+    if dir:
+        os.chdir(dir)
 
 def mkdir(dir):
-    if not os.path.exists(dir):
+    if dir and not os.path.exists(dir):
         os.makedirs(dir)
 
 def copy_contents(src_dir, target_dir, overwrite=True):
