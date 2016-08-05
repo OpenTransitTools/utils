@@ -15,6 +15,7 @@ INI=['app.ini', 'client.ini', 'services.ini', 'view.ini', 'production.ini']
 RUN_DIR = None
 PARSER = None
 
+
 class ConfigUtil(object):
     section = SECTION
     log_ini = 'log.ini'
