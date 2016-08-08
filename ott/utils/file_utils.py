@@ -170,6 +170,18 @@ def cd(dir):
     if dir:
         os.chdir(dir)
 
+def ls(dir, include_filter=None):
+    ''' return a list of files in a directory, with an optional name filter
+    '''
+    #import pdb; pdb.set_trace()
+    ret_val = []
+    file_paths = next(os.walk(dir))[2]
+    for f in file_paths:
+        if include_filter and not string_utils.is_in_string(f, include_filter):
+            continue
+        ret_val.append(f)
+    return ret_val
+
 def mkdir(dir):
     if dir and not os.path.exists(dir):
         os.makedirs(dir)

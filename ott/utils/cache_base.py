@@ -21,7 +21,7 @@ class CacheBase(object):
     @property
     def config(self):
         #import pdb; pdb.set_trace()
-        if self._config == None:
+        if self._config is None:
             self._config = ConfigUtil.factory(section='cache')
         return self._config
 
