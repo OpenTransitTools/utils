@@ -106,10 +106,8 @@ class ConfigUtil(object):
         '''
         ret_val = self.get(id, section, def_val)
         try:
-
             if ret_val:
                 ret_val = [v.strip('[] \n\r\t') for v in ret_val.split(',')]
-
         except Exception, e:
             log.info("Couldn't convert '{0}' value into a LIST type under section '{1}'\n{2}".format(id, section, e))
         return ret_val
