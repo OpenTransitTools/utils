@@ -101,6 +101,19 @@ class ConfigUtil(object):
             log.info("Couldn't convert '{0}' value into a FLOAT type under section '{1}'\n{2}".format(id, section, e))
         return ret_val
 
+    def get_list(self, id, section=None, def_val=None):
+        ''' get config value as list (comma separated)
+        '''
+        ret_val = self.get(id, section, def_val)
+        try:
+
+            if ret_val:
+                ret_val = [v.strip('[] \n\r\t') for v in ret_val.split(',')]
+
+        except Exception, e:
+            log.info("Couldn't convert '{0}' value into a LIST type under section '{1}'\n{2}".format(id, section, e))
+        return ret_val
+
     def get_bbox(self, section=None):
         ''' get config value as float (or go with def_val)
         '''
