@@ -12,8 +12,6 @@ log = logging.getLogger(__file__)
 import file_utils
 import exe_utils
 
-def email(frm, to, msg, subject="loader email"):
-    log.info("email: TODO...implement me")
 
 def get_hostname():
     return socket.gethostname()
@@ -66,12 +64,28 @@ def wget(url, file_path, delete_first=True):
     log.info("wget: downloaded {} into file {}".format(url, file_path))
     return is_success
 
-def email(msg,
-          mail_server="localhost",
-          recipients=[],
-          subject="Stand by for a message from OTT...",
-          mailfrom="Mr. OTT",
-          sender='info@opentransittools.com'):
+def simple_email(msg, to, from_email="mail@opentriptools.com", from_name=None, subject="loader email", mail_server="localhost"):
+    ''' simple send email
+    '''
+    is_success = False
+
+    # step 1: sort out the recipeients of this email and other params
+    recipients = []
+    for r in to.split(","):
+        if "@" not in r:
+            log.warn("email: {} doesn't look like an email address, so skipping".format(r))
+            continue
+        recipients.append(r)
+
+    if not from_name:
+        from_name = from_email
+
+    # step 2: send email
+    if recipients:
+        is_success = email(msg, subject, recipients, from_name, from_email, mail_server)
+    return is_success
+
+def email(msg, subject, recipients, from_name, from_email, mail_server):
     """ send an email to someone...
     """
     is_success = True
@@ -79,11 +93,12 @@ def email(msg,
 To:  {}
 Subject: {}
 
-""".format(sender, recipients, subject)
+""".format(from_email, recipients, subject)
+    frm = "From: {} {} {}".format(from_name, message, msg)
     try:
         smtp_obj = smtplib.SMTP(mail_server)
-        smtp_obj.sendmail(sender, recipients, "From: " + mailfrom + message + msg)
-        logging.info('MAIL: From: ' + mailfrom + message + msg)
+        smtp_obj.sendmail(from_email, recipients, frm)
+        logging.debug('MAIL: ' + frm)
     except Exception, e:
         log.warn("ERROR: could not send email: {}".format(e))
         is_success = False

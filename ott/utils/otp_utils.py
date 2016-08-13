@@ -64,6 +64,12 @@ def vizualize_graph(graph_dir, java_mem=None, otp_name=OTP_NAME):
     ret_val = exe_utils.run_java(cmd, big_xmx=java_mem)
     return ret_val
 
+def send_build_test_email(to, build_status=True, test_status=True, server_status=True):
+    ''' utility to make the graph dir, copy OTP config files into the graph directory, etc...
+    '''
+    #name = graph_config.get('name', DEF_NAME)
+    web_utils.simple_email("msg", to)
+
 def config_graph_dir(graph_config, base_dir, overwrite=False):
     ''' utility to make the graph dir, copy OTP config files into the graph directory, etc...
     '''
