@@ -145,6 +145,18 @@ def bkup(file, rm_orig=True):
         log.error('could not backup file {}'.format(file))
     return ret_val
 
+def cd(dir):
+    if dir:
+        os.chdir(dir)
+
+def envvar(name, def_val=None, suffix=None):
+    """ envvar interface
+    """
+    ret_val = os.environ.get(name, def_val)
+    if suffix is not None:
+        ret_val = ret_val + suffix
+    return ret_val
+
 def mv(src, dst):
     ret_val = False
     try:
@@ -166,14 +178,9 @@ def rm(file):
     if file and os.path.exists(file):
         os.remove(file)
 
-def cd(dir):
-    if dir:
-        os.chdir(dir)
-
 def ls(dir, include_filter=None):
     ''' return a list of files in a directory, with an optional name filter
     '''
-    #import pdb; pdb.set_trace()
     ret_val = []
     file_paths = next(os.walk(dir))[2]
     for f in file_paths:
@@ -201,7 +208,6 @@ def get_file_name_from_url(url):
 def diff_files(old_name, new_name):
     """ return True if the files are DIFFERENT ... False == files are THE SAME...
     """
-    #import pdb; pdb.set_trace()
     ret_val = True
 
     try:
@@ -209,30 +215,36 @@ def diff_files(old_name, new_name):
         ret_val = not filecmp.cmp(old_name, new_name)
         log.info("{0} {1} different from {2} (according to os.stat)".format(old_name, "IS" if ret_val else "is NOT", new_name))
 
-        # check #2
+        # check #2 : compare two files line by line
         # adapted from http://stackoverflow.com/questions/3043026/comparing-two-text-files-in-python
+        #import pdb; pdb.set_trace()
         of = open(old_name, "r")
-        nf = open(new_name, "r")
         olist = of.readlines()
+        of.close()
+
+        nf = open(new_name, "r")
         nlist = nf.readlines()
-        k=1
-        for i,j in zip(olist, nlist): #note: zip is used to iterate variables in 2 lists in single loop
-            if i != j:
-                log.info("At line #{0}, there's a difference between the files:\n\t{1}\t\t--vs--\n\t{2}\n".format(k, i, j))
+        nf.close()
+
+        if olist and nlist and len(olist) > 0 and len(nlist) > 0:
+            if len(olist) == len(nlist):
+                k=1
+                for i,j in zip(olist, nlist): #note: zip is used to iterate variables in 2 lists in single loop
+                    if i != j:
+                        log.info("At line #{}, there's a difference between the files:\n\t{}\t\t--vs--\n\t{}\n".format(k, i, j))
+                        ret_val = True
+                        break
+                    k=k+1
+            else:
+                log.info("Files {} ({} lines) and {} ({} lines) have different number of lines".format(old_name, len(olist), new_name, len(nlist)))
                 ret_val = True
-                break
-            k=k+1
+        else:
+            log.debug("Files {} and {} are both empty".format(old_name, new_name))
+
+        #import pdb; pdb.set_trace()
     except Exception, e:
         log.warn("problems comparing {} and {}".format(old_name, new_name))
         ret_val = True
-    return ret_val
-
-def envvar(name, def_val=None, suffix=None):
-    """ envvar interface
-    """
-    ret_val = os.environ.get(name, def_val)
-    if suffix is not None:
-        ret_val = ret_val + suffix
     return ret_val
 
 def unzip_file(zip_path, file_name, target_file_path=None):

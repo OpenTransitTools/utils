@@ -1,5 +1,6 @@
 import os
 import socket
+import urllib
 import urllib2
 import wget as wget_wget
 import smtplib
@@ -62,6 +63,33 @@ def wget(url, file_path, delete_first=True):
         file_utils.rm(file_path)
     wget_wget.download(url, file_path)
     log.info("wget: downloaded {} into file {}".format(url, file_path))
+    return is_success
+
+def post(url, data):
+    is_success = False
+    try:
+        request = urllib2.Request(url)
+        request.add_data(urllib.urlencode(query_args))
+        #request.add_header('User-agent', 'PyMOTW (http://www.doughellmann.com/PyMOTW/)')
+        urllib2.urlopen(request).read()
+        is_success = True
+    except Exception, e:
+        log.info(e)
+        is_success = False
+    return is_success
+
+def post_file(url, file_path):
+    """ http post a file to a url
+    """
+    is_success = False
+    try:
+        f = open(file_path)
+        data = f.read()
+        post(url, data)
+        f.close()
+    except Exception, e:
+        log.info(e)
+        is_success = False
     return is_success
 
 def simple_email(msg, to, from_email="mail@opentriptools.com", from_name=None, subject="loader email", mail_server="localhost"):
