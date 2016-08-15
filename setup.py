@@ -25,7 +25,7 @@ if sys.version_info[:2] < (2, 7):
 setup(
     name='ott.utils',
     version='0.1.0',
-    description='Open Transit Tools - OTT Database',
+    description='Open Transit Tools - OTT Utils',
     long_description=README + '\n\n' + CHANGES,
     classifiers=[
         "Programming Language :: Python",
