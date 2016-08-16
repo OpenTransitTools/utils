@@ -17,11 +17,20 @@ class TestSolr(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def test_del_type(self):
+    def test_delete_data(self):
         '''
         '''
         #import pdb; pdb.set_trace()
         status = web_utils.post_data(SOLR_URL, "<delete><query>type_name:BIKETOWN</query></delete>")
-        self.assertTrue(status == '200')
+        self.assertTrue(status == 200)
         web_utils.post_file(SOLR_URL, "<commit/>")
-        self.assertTrue(status == '200')
+        self.assertTrue(status == 200)
+
+    def test_add_data(self):
+        '''
+        '''
+        #import pdb; pdb.set_trace()
+        status = web_utils.post_data(SOLR_URL, "<delete><query>type_name:BIKETOWN</query></delete>")
+        self.assertTrue(status == 200)
+        web_utils.post_file(SOLR_URL, "<commit/>")
+        self.assertTrue(status == 200)

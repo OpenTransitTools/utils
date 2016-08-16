@@ -72,7 +72,7 @@ def post(hostname, port, path, data):
     #import pdb; pdb.set_trace()
     statuscode = -111
     try:
-        webservice = httplib.HTTP(hostname + ":" + port)
+        webservice = httplib.HTTP("{}:{}".format(hostname, port))
         webservice.putrequest("POST", path)
         webservice.putheader("Host", hostname)
         webservice.putheader("Content-type", "text/xml")
