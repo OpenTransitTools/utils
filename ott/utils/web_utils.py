@@ -96,17 +96,16 @@ def post_data(url, data):
 def post_file(url, file_path):
     """ http post a file to a url
     """
-    is_success = False
     try:
-        f = open(file_path)
+        f = open(file_path, "r")
         data = f.read()
         u = urlparse.urlparse(url)
-        post(u.hostname, u.port, u.path, data)
+        statuscode = post(u.hostname, u.port, u.path, data)
         f.close()
     except Exception, e:
+        statuscode = -111
         log.info(e)
-        is_success = False
-    return is_success
+    return statuscode
 
 def simple_email(msg, to, from_email="mail@opentriptools.com", from_name=None, subject="loader email", mail_server="localhost"):
     ''' simple send email
