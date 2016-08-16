@@ -1,7 +1,8 @@
 import os
 import socket
-import urllib
+import urlparse
 import urllib2
+import httplib
 import wget as wget_wget
 import smtplib
 import SimpleHTTPServer
@@ -65,18 +66,32 @@ def wget(url, file_path, delete_first=True):
     log.info("wget: downloaded {} into file {}".format(url, file_path))
     return is_success
 
-def post(url, data):
-    is_success = False
+def post(hostname, port, path, data):
+    '''
+    '''
+    #import pdb; pdb.set_trace()
+    statuscode = -111
     try:
-        request = urllib2.Request(url)
-        request.add_data(urllib.urlencode(query_args))
-        #request.add_header('User-agent', 'PyMOTW (http://www.doughellmann.com/PyMOTW/)')
-        urllib2.urlopen(request).read()
-        is_success = True
+        webservice = httplib.HTTP(hostname + ":" + port)
+        webservice.putrequest("POST", path)
+        webservice.putheader("Host", hostname)
+        webservice.putheader("Content-type", "text/xml")
+        webservice.putheader("Content-length", "%d" % len(data))
+        webservice.endheaders()
+        webservice.send(data)
+        statuscode, statusmessage, header = webservice.getreply()
+        log.info("{} :: {} :: {}".format(statuscode, statusmessage, header ))
+        #result = webservice.getfile().read()
+        #log.info("{}".format(result))
     except Exception, e:
         log.info(e)
-        is_success = False
-    return is_success
+    return statuscode
+
+def post_data(url, data):
+    '''
+    '''
+    u = urlparse.urlparse(url)
+    return post(u.hostname, u.port, u.path, data)
 
 def post_file(url, file_path):
     """ http post a file to a url
@@ -85,7 +100,8 @@ def post_file(url, file_path):
     try:
         f = open(file_path)
         data = f.read()
-        post(url, data)
+        u = urlparse.urlparse(url)
+        post(u.hostname, u.port, u.path, data)
         f.close()
     except Exception, e:
         log.info(e)
