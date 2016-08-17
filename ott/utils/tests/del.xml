@@ -1,2 +1,2 @@
 <?xml version='1.0' encoding='utf8'?>
-<delete><query>type_name:BIKETOWN</query></delete>
+<delete><query>type_name:TEST_CONTENT</query></delete>
