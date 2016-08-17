@@ -157,11 +157,14 @@ def envvar(name, def_val=None, suffix=None):
         ret_val = ret_val + suffix
     return ret_val
 
-def mv(src, dst):
+def mv(src, dst, delete_dst_first=True, update_ftime=True):
     ret_val = False
     try:
+        if delete_dst_first:
+            rm(dst)
         os.rename(src, dst)
-        touch(dst)
+        if update_ftime:
+            touch(dst)
         ret_val = True
     except:
         log.error('could not mv file {} to {}'.format(src, dst))
