@@ -121,7 +121,7 @@ def simple_email(msg, to, from_email="mail@opentriptools.com", subject="loader e
 
     # step 2: send email
     if recipients:
-        is_success = email(msg, subject, recipients, from_name, from_email, mail_server)
+        is_success = email(msg, subject, recipients, from_email, mail_server)
     return is_success
 
 def email(msg, subject, recipients, from_email, mail_server):
