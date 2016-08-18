@@ -127,7 +127,8 @@ def simple_email(msg, to, from_email="mail@opentriptools.com", subject="loader e
 def email(msg, subject, recipients, from_email, mail_server):
     """ send an email to someone...
     """
-    is_success = True
+    #import pdb; pdb.set_trace()
+    is_success = False
     message = """From: {}
 To:  {}
 Subject: {}
@@ -135,11 +136,11 @@ Subject: {}
 {}
 
 """.format(from_email, ','.join(recipients), subject, msg)
-    import pdb; pdb.set_trace()
     try:
         smtp_obj = smtplib.SMTP(mail_server)
-        smtp_obj.sendmail(from_email, ','.join(recipients), message)
+        smtp_obj.sendmail(from_email, recipients, message)
         logging.debug('MAIL: ' + message)
+        is_success = True
     except Exception, e:
         log.warn("ERROR: could not send email: {}".format(e))
         is_success = False
