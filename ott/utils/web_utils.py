@@ -69,7 +69,6 @@ def wget(url, file_path, delete_first=True):
 def post(hostname, port, path, data):
     '''
     '''
-    #import pdb; pdb.set_trace()
     statuscode = -111
     try:
         webservice = httplib.HTTP("{}:{}".format(hostname, port))
@@ -107,7 +106,7 @@ def post_file(url, file_path):
         log.info(e)
     return statuscode
 
-def simple_email(msg, to, from_email="mail@opentriptools.com", from_name=None, subject="loader email", mail_server="localhost"):
+def simple_email(msg, to, from_email="mail@opentriptools.com", subject="loader email", mail_server="localhost"):
     ''' simple send email
     '''
     is_success = False
@@ -120,28 +119,28 @@ def simple_email(msg, to, from_email="mail@opentriptools.com", from_name=None, s
             continue
         recipients.append(r)
 
-    if not from_name:
-        from_name = from_email
-
     # step 2: send email
     if recipients:
-        is_success = email(msg, subject, recipients, from_name, from_email, mail_server)
+        is_success = email(msg, subject, recipients, from_email, mail_server)
     return is_success
 
-def email(msg, subject, recipients, from_name, from_email, mail_server):
+def email(msg, subject, recipients, from_email, mail_server):
     """ send an email to someone...
     """
-    is_success = True
-    message = """ {}
+    #import pdb; pdb.set_trace()
+    is_success = False
+    message = """From: {}
 To:  {}
 Subject: {}
 
-""".format(from_email, recipients, subject)
-    frm = "From: {} {} {}".format(from_name, message, msg)
+{}
+
+""".format(from_email, ','.join(recipients), subject, msg)
     try:
         smtp_obj = smtplib.SMTP(mail_server)
-        smtp_obj.sendmail(from_email, recipients, frm)
-        logging.debug('MAIL: ' + frm)
+        smtp_obj.sendmail(from_email, recipients, message)
+        logging.debug('MAIL: ' + message)
+        is_success = True
     except Exception, e:
         log.warn("ERROR: could not send email: {}".format(e))
         is_success = False

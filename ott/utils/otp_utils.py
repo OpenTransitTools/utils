@@ -14,7 +14,7 @@ from ott.utils import web_utils
 # constants
 DEF_NAME   = "prod"
 DEF_PORT   = "55555"
-DEF_SSL_PORT = "51111"
+DEF_SSL_PORT = "55551"
 GRAPH_NAME = "Graph.obj"
 OTP_NAME   = "otp.jar"
 VLOG_NAME  = "otp.v"
