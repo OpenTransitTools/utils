@@ -136,13 +136,15 @@ def sqlite_query_nearest_stops(conn, lon, lat, count, schema, table):
 
 
 def postgres_check_db(db_name, db_user, db_table=None):
+    '''
+    '''
     ret_val = True
     con = None
     try:
         from psycopg2 import connect
 
         # step 1: check the database connection
-        con = connect(dbname=db_user, database=db_name)
+        con = connect(user=db_user, dbname=db_name)
 
         # step 2: (optionally) check a value from a given database
         if db_table:
@@ -168,7 +170,7 @@ def postgres_add_postgis(db_name, db_user):
         from psycopg2 import connect
         from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 
-        con = connect(user=db_user, database=db_name)
+        con = connect(user=db_user, dbname=db_name)
         cur = con.cursor()
         cur.execute('CREATE EXTENSION postgis')
         cur.close()
@@ -193,7 +195,7 @@ def postgres_create_db(db_name, db_user):
         from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 
         # step 1: connect to global postgres database and then create new db
-        con = connect(user=db_user, database='postgres')
+        con = connect(user=db_user, dbname='postgres')
         cur = con.cursor()
         cur.execute('CREATE DATABASE {}'.format(db_name))
         cur.close()
@@ -225,7 +227,7 @@ def postgres_check_create_db(db_name, db_user, is_geospatial=False):
     ret_val = True
     try:
         exists = postgres_check_db(db_name, db_user)
-        if exists:
+        if not exists:
             ret_val = postgres_create_db(db_name, db_user)
             if ret_val and is_geospatial:
                 ret_val = postgres_add_postgis(db_user, db_user)
