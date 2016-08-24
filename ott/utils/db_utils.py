@@ -1,30 +1,52 @@
+import os
 import math
 import logging
 log = logging.getLogger(__file__)
 
 
 
-def check_create_db(db_url, db_user, is_geospatial=False):
+def check_create_db(db_url, is_geospatial=False):
     ''' generic check a database ... and create it if it doesn't exist
         @TODO: add other database supports beyond postgres
     '''
+    import pdb; pdb.set_trace()
     ret_val = True
     if 'postgres' in db_url:
-        db_name = postgres_db_name_from_url(db_url)
+        db_name = database_name_from_url(db_url)
+        db_user = username_from_url(db_url, def_val=os.getenv('USERNAME'))
         ret_val = postgres_check_create_db(db_name, db_user, is_geospatial)
 
     return ret_val
 
 
-def db_args():
-    ''' create a generic database commandline arg PARSER '''
-    import argparse
-    parser = argparse.ArgumentParser(prog='gtfs data loader', formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument('--database_url', '-d',  default='sqlite:///gtfs.db', help='DATABASE URL with appropriate privileges')
-    parser.add_argument('--is_geospatial', '-g', default=False, action='store_true', help='Database supports GEOSPATIAL functions') 
-    parser.add_argument('--schema','-s', default=None, help='Database SCHEMA name')
-    parser.add_argument('--gtfs','-u', default="DATAd", help='URL or local path to GTFS(RT) data')
-    return parser
+def make_url(db_url, def_val=None):
+    '''' wrapper around sqlalchemy's make_url
+    '''
+    ret_val = def_val
+    try:
+        from sqlalchemy.engine.url import make_url
+        url = make_url(db_url)
+        log.debug("{} {} {} {} {}".format(url.username, url.password, url.host, url.port, url.database))
+        ret_val = url
+    except Exception, e:
+        log.error("DB URL {} PARSE ERROR : {}".format(db_url, e))
+    return ret_val
+
+
+def database_name_from_url(db_url, def_val=None):
+    ret_val = def_val
+    u = make_url(db_url)
+    if u and u.database:
+        ret_val = u.database
+    return ret_val
+
+
+def username_from_url(db_url, def_val=None):
+    ret_val = def_val
+    u = make_url(db_url)
+    if u and u.username:
+        ret_val = u.username
+    return ret_val
 
 
 def db_conn(url):
@@ -45,6 +67,17 @@ def db_conn(url):
     return session,engine
 
 
+def db_args():
+    ''' create a generic database commandline arg PARSER '''
+    import argparse
+    parser = argparse.ArgumentParser(prog='gtfs data loader', formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    parser.add_argument('--database_url', '-d',  default='sqlite:///gtfs.db', help='DATABASE URL with appropriate privileges')
+    parser.add_argument('--is_geospatial', '-g', default=False, action='store_true', help='Database supports GEOSPATIAL functions')
+    parser.add_argument('--schema','-s', default=None, help='Database SCHEMA name')
+    parser.add_argument('--gtfs','-u', default="DATAd", help='URL or local path to GTFS(RT) data')
+    return parser
+
+
 def db_gtfs_rt():
     ''' get a command line PARSER and db connection to query gtfsrdb data
         NOTE: meant as a quick dirty way to grab a connection for test apps
@@ -60,13 +93,7 @@ def db_gtfs_rt():
     return ses,eng
 
 
-def decorate_engine(engine):
-    from sqlalchemy import event
-    event.listen(engine, 'connect', add_math_to_sqllite)
-
-
 def closest_stops_tuple_to_dict(tup):
-    #import pdb; pdb.set_trace()
     ret_val = {
         'stop_id'    : tup[1],
         'stop_name'  : tup[0],
@@ -92,6 +119,13 @@ def add_math_to_sqllite(conn, conn_record):
         conn.create_function("sqrt",    1, math.sqrt)
         conn.create_function("pow",     2, math.pow)
         conn.create_function("radians", 1, math.radians)
+
+
+def decorate_engine(engine, method=add_math_to_sqllite):
+    ''' for
+    '''
+    from sqlalchemy import event
+    event.listen(engine, 'connect', method)
 
 
 def sqlite_nearest_query(schema=None, table='stops'):
@@ -212,20 +246,9 @@ def postgres_create_db(db_name, db_user):
     return ret_val
 
 
-def postgres_db_name_from_url(db_url, def_val=None):
-    ret_val = def_val
-    try:
-        # assume db name is the last section of the db url, ala postgresql+psycopg2://127.0.0.1:5432/ott
-        ret_val = db_url.rsplit('/', 1)[1]
-    except Exception, e:
-        log.error("DB URL {} PARSE ERROR : {}".format(db_url, e))
-    return ret_val
-
-
 def postgres_check_create_db(db_name, db_user, is_geospatial=False):
     '''
     '''
-    #import pdb; pdb.set_trace()
     ret_val = True
     try:
         exists = postgres_check_db(db_name, db_user)
