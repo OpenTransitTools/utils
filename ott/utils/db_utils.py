@@ -171,6 +171,7 @@ def postgres_add_postgis(db_name, db_user):
         from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 
         con = connect(user=db_user, dbname=db_name)
+        con.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
         cur = con.cursor()
         cur.execute('CREATE EXTENSION postgis')
         cur.close()
@@ -224,14 +225,14 @@ def postgres_db_name_from_url(db_url, def_val=None):
 def postgres_check_create_db(db_name, db_user, is_geospatial=False):
     '''
     '''
-    import pdb; pdb.set_trace()
+    #import pdb; pdb.set_trace()
     ret_val = True
     try:
         exists = postgres_check_db(db_name, db_user)
         if not exists:
             ret_val = postgres_create_db(db_name, db_user)
             if ret_val and is_geospatial:
-                ret_val = postgres_add_postgis(db_user, db_user)
+                ret_val = postgres_add_postgis(db_name, db_user)
     except Exception, e:
         log.error("POSTGRES CREATE DATABASE ERROR : {}".format(e))
         ret_val = False
