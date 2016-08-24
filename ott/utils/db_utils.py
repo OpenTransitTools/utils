@@ -196,6 +196,7 @@ def postgres_create_db(db_name, db_user):
 
         # step 1: connect to global postgres database and then create new db
         con = connect(user=db_user, dbname='postgres')
+        con.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
         cur = con.cursor()
         cur.execute('CREATE DATABASE {}'.format(db_name))
         cur.close()
