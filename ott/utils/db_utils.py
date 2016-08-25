@@ -9,7 +9,7 @@ def check_create_db(db_url, is_geospatial=False):
     ''' generic check a database ... and create it if it doesn't exist
         @TODO: add other database supports beyond postgres
     '''
-    import pdb; pdb.set_trace()
+    #import pdb; pdb.set_trace()
     ret_val = True
     if 'postgres' in db_url:
         db_name = database_name_from_url(db_url)

@@ -181,6 +181,17 @@ def rm(file):
     if file and os.path.exists(file):
         os.remove(file)
 
+def purge(dir, pattern):
+    ''' remove multiple files
+        borrowed from http://stackoverflow.com/questions/1548704/delete-multiple-files-matching-a-pattern
+    '''
+    try:
+        for f in os.listdir(dir):
+            if re.search(pattern, f):
+                os.remove(os.path.join(dir, f))
+    except Exception, e:
+        log.info(e)
+
 def ls(dir, include_filter=None):
     ''' return a list of files in a directory, with an optional name filter
     '''
