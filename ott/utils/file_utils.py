@@ -103,7 +103,7 @@ def is_a_newer_than_b(file_a, file_b):
         log.info("{} doesn't exist ".format(file_b))
     else:
         a_age = get_mtime(file_a)
-        b_age = get_mtime(file_a)
+        b_age = get_mtime(file_b)
         if a_age > b_age:
             ret_val = True
     return ret_val
