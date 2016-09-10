@@ -132,6 +132,17 @@ def safe_get(obj, key, def_val=None):
                 ret_val = obj
     return ret_val
 
+def safe_get_any(obj, keys, def_val=None):
+    ''' :return object element value matching the first key to have an associated value
+    '''
+    ret_val = def_val
+    for k in keys:
+        v = safe_get(obj, k)
+        if v and len(v) > 0:
+            ret_val = v
+            break
+    return ret_val
+
 def str_to_list(str, def_val=[]):
     ''' try to return a list of some sort
     '''
