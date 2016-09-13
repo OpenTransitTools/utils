@@ -66,6 +66,18 @@ def wget(url, file_path, delete_first=True):
     log.info("wget: downloaded {} into file {}".format(url, file_path))
     return is_success
 
+def get(url):
+    ''' safe http get of url, with return of
+    '''
+    success = True
+    response = None
+    try:
+        response = urllib2.urlopen(url)
+    except Exception, e:
+        log.info(e)
+        success = False
+    return success, response
+
 def post(hostname, port, path, data):
     '''
     '''
