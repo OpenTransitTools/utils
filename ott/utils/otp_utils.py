@@ -6,6 +6,7 @@ import datetime
 import logging
 log = logging.getLogger(__file__)
 
+from ott.utils.config_util import ConfigUtil
 from ott.utils import exe_utils
 from ott.utils import file_utils
 from ott.utils import web_utils
@@ -21,7 +22,27 @@ VLOG_NAME  = "otp.v"
 OTP_DOWNLOAD_URL = "http://maven.conveyal.com.s3.amazonaws.com/org/opentripplanner/otp/0.20.0/otp-0.20.0-shaded.jar"
 
 
+def get_test_urls_from_config(section='otp', port=DEF_PORT, host=None):
+    ''' return the OTP map and ws urls from
+    '''
+    config = ConfigUtil(section=section)
+
+    if not host:
+        host = config.get('host', def_val=web_utils.get_hostname())
+
+    ws_path = config.get('ws_url_path', def_val="/otp/routers/default/plan")
+    ws_url = "http://{}:{}{}".format(host, port, ws_path)
+
+    map_path = config.get('map_url_path', def_val="")
+    map_url = "http://{}:{}{}".format(host, port, map_path)
+
+    return ws_url, map_url
+
+
+
 def call_planner_svc(url, accept='application/xml'):
+    ''' make a call to the OTP web service
+    '''
     ret_val = None
     try:
         socket.setdefaulttimeout(2000)
