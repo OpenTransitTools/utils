@@ -110,13 +110,29 @@ def config_graph_dir(graph_config, base_dir, overwrite=False):
     check_otp_jar(graph_dir)
     return graph_dir
 
+def get_initial_arg_parser():
+    ''' make the initial cli argparse for OTP graph building and other fun things
+    '''
+    import argparse
+    parser = argparse.ArgumentParser(prog='otp-build', formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    parser.add_argument('name', default="all", help="Name of OTP graph folder in the 'cache' build (e.g., 'all', 'prod', 'test' or 'call')")
+    return parser
+
 def get_graphs(cache):
     ''' routine that both returns the list of graphs, but also (the main
         purpose) add the 'dir' for each graph folder based on graph name
     '''
-    graphs = cache.config.get_json('graphs')
+    return get_graphs_from_config(cache.config, cache.this_module_dir)
+
+def get_graphs_from_config(config=None, graph_root_dir='.'):
+    ''' return the OTP graph info from config --  from
+    '''
+    if config is None:
+        config = ConfigUtil(section='otp')
+
+    graphs = config.get_json('graphs')
     for g in graphs:
-        dir = os.path.join(cache.this_module_dir, g['name'])
+        dir = os.path.join(graph_root_dir, g['name'])
         g['dir'] = dir
     return graphs
 
