@@ -47,6 +47,12 @@ class CacheBase(object):
         file_utils.mkdir(tmp_dir)
         return tmp_dir
 
+    def sub_dir(self, dir_name):
+        '''make path to random named dir
+        '''
+        ret_val = os.path.join(self.this_module_dir, dir_name)
+        return ret_val
+
     def is_fresh_in_cache(self, file):
         ''' determine if file exists and is newer than the cache expire time
         '''
