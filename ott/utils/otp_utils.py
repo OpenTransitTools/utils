@@ -22,13 +22,16 @@ VLOG_NAME  = "otp.v"
 OTP_DOWNLOAD_URL = "http://maven.conveyal.com.s3.amazonaws.com/org/opentripplanner/otp/0.20.0/otp-0.20.0-shaded.jar"
 
 
-def get_test_urls_from_config(section='otp', port=DEF_PORT, host=None):
+def get_test_urls_from_config(section='otp', port=None, host=None):
     ''' return the OTP map and ws urls from
     '''
+    #import pdb; pdb.set_trace()
     config = ConfigUtil(section=section)
 
     if not host:
         host = config.get('host', def_val=web_utils.get_hostname())
+    if not port:
+        port = DEF_PORT
 
     ws_path = config.get('ws_url_path', def_val="/otp/routers/default/plan")
     ws_url = "http://{}:{}{}".format(host, port, ws_path)
@@ -37,8 +40,6 @@ def get_test_urls_from_config(section='otp', port=DEF_PORT, host=None):
     map_url = "http://{}:{}{}".format(host, port, map_path)
 
     return ws_url, map_url
-
-
 
 def call_planner_svc(url, accept='application/xml'):
     ''' make a call to the OTP web service
@@ -59,7 +60,6 @@ def call_planner_svc(url, accept='application/xml'):
 def run_otp_server(dir=None, port=DEF_PORT, ssl=DEF_SSL_PORT, otp_name=OTP_NAME, java_mem=None, **kwargs):
     ''' launch the server in a separate process
     '''
-    #import pdb; pdb.set_trace()
     file_utils.cd(dir)
     otp_path = os.path.join(dir, otp_name)
     cmd='-server -jar {} --port {} --securePort {} --router "" --graphs {}'.format(otp_path, port, ssl, dir)
