@@ -22,22 +22,22 @@ VLOG_NAME  = "otp.v"
 OTP_DOWNLOAD_URL = "http://maven.conveyal.com.s3.amazonaws.com/org/opentripplanner/otp/0.20.0/otp-0.20.0-shaded.jar"
 
 
-def get_test_urls_from_config(section='otp', port=None, host=None):
+def get_test_urls_from_config(section='otp', port=None, hostname=None):
     ''' return the OTP map and ws urls from
     '''
     #import pdb; pdb.set_trace()
     config = ConfigUtil(section=section)
 
-    if not host:
-        host = config.get('host', def_val=web_utils.get_hostname())
+    if not hostname:
+        hostname = config.get('host', def_val=web_utils.get_hostname())
     if not port:
         port = DEF_PORT
 
     ws_path = config.get('ws_url_path', def_val="/otp/routers/default/plan")
-    ws_url = "http://{}:{}{}".format(host, port, ws_path)
+    ws_url = "http://{}:{}{}".format(hostname, port, ws_path)
 
     map_path = config.get('map_url_path', def_val="")
-    map_url = "http://{}:{}{}".format(host, port, map_path)
+    map_url = "http://{}:{}{}".format(hostname, port, map_path)
 
     return ws_url, map_url
 
