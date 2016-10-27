@@ -256,14 +256,14 @@ class TripParamParser(ParamParser):
             self.mode = 'WALK'
         elif 'TRANS' in self.mode and 'BIC' in self.mode:
             self.mode = 'TRANSIT,BICYCLE'
-        elif 'TRAIN' in self.mode and 'BIC' in self.mode:
-            self.mode = 'TRAINISH,BICYCLE'
+        elif ('TRAIN' in self.mode or 'RAIL' in self.mode) and 'BIC' in self.mode:
+            self.mode = 'RAIL,TRAM,SUBWAY,FUNICULAR,GONDOLA,BICYCLE'
         elif self.mode == 'BIKE' or self.mode =='BICYCLE':
             self.mode = 'BICYCLE'
-        elif self.mode in ('B', 'BUS', 'BUSISH', 'BUSISH,WALK'):
-            self.mode = 'BUSISH,WALK'
+        elif self.mode in ('B', 'BUS', 'BUSISH', 'BUSISH,WALK', 'BUS,WALK'):
+            self.mode = 'BUS,WALK'
         elif self.mode in ('T', 'TRAIN', 'TRAINISH', 'TRAINISH,WALK'):
-            self.mode = 'TRAINISH,WALK'
+            self.mode = 'RAIL,TRAM,SUBWAY,FUNICULAR,GONDOLA,WALK'
         else:
             self.mode = 'TRANSIT,WALK'
 
