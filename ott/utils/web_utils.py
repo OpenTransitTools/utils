@@ -66,18 +66,6 @@ def wget(url, file_path, delete_first=True):
     log.info("wget: downloaded {} into file {}".format(url, file_path))
     return is_success
 
-def get(url):
-    ''' safe http get of url, with return of
-    '''
-    success = True
-    response = None
-    try:
-        response = urllib2.urlopen(url)
-    except Exception, e:
-        log.info(e)
-        success = False
-    return success, response
-
 def post(hostname, port, path, data):
     '''
     '''
@@ -117,6 +105,61 @@ def post_file(url, file_path):
         statuscode = -111
         log.info(e)
     return statuscode
+
+def get(url):
+    ''' safe http get of url, with return of
+    '''
+    success = True
+    response = None
+    try:
+        response = urllib2.urlopen(url)
+    except Exception, e:
+        log.info(e)
+        success = False
+    return success, response
+
+def get_response(url, show_info=False):
+    ''' safe / simple get response
+    '''
+    ret_val = None
+    response = None
+    try:
+        success, response = get(url)
+        if show_info:
+            ret_val = "INFO:\n{}\n\nRESPONSE:\n{}".format(response.info(), response.read())
+        else:
+            ret_val = "{}\n".format(response.read())
+    except Exception, e:
+        log.info(e)
+    finally:
+        if response:
+            response.close()
+    return ret_val
+
+def write_url_response_file(file_path, url, response):
+    ''' write url atop a file, and the response body below...
+        will looks something like:
+            http://maps7:80/prod?submit&module=planner&fromPlace=ME::45.468019,-122.655552&toPlace=OHSU::45.499049,-122.684283&maxWalkDistance=840&optimize=QUICK&time=10:00AM&date=11-02-2016
+
+            INFO:
+            Date: Wed, 02 Nov 2016 21:01:35 GMT
+            Access-Control-Allow-Origin: *
+
+            RESPONSE:
+            {"requestParameters":{"date":"11-02-2016","submit":"","optimize":"QUICK","fromPlace":"ME::45.468019,-12...
+    '''
+    f = None
+    try:
+        f = open(file_path, 'w')
+        f.write(url)
+        f.write("\n\n")
+        f.write(response)
+        f.write("\n")
+    except Exception, e:
+        log.warn(e)
+    finally:
+        if f is not None:
+            f.close()
 
 def simple_email(msg, to, from_email="mail@opentriptools.com", subject="loader email", mail_server="localhost"):
     ''' simple send email
