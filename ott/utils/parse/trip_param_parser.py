@@ -208,14 +208,13 @@ class TripParamParser(ParamParser):
         ''' parse out the max walk (bike) distance ... default to 1 mile (~1609 meters)
         '''
         self.walk = self.get_first_val(['maxWalkDistance', 'maxWalk', 'walk', 'Walk'], "1609")
-
         try:
             dist = float(self.walk)
             self.walk_meters = dist
 
             # self.walk value of less than 11 implies this is a fraction of a mile
             # (note OTP values are in meters, thus 1609 = number of meters in a mile)
-            if dist and dist <= 10.0:
+            if dist <= 10.0:
                 self.walk_meters = 1609 * dist
         except:
             pass
