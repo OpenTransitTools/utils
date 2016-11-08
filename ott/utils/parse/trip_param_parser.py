@@ -205,9 +205,9 @@ class TripParamParser(ParamParser):
 
 
     def _parse_walk(self):
-        ''' parse out the max walk (bike) distance ... default to 3/4 mile (~1260 meters)
+        ''' parse out the max walk (bike) distance ... default to 1 mile (~1609 meters)
         '''
-        self.walk = self.get_first_val(['walk', 'Walk'], "1260")
+        self.walk = self.get_first_val(['maxWalkDistance', 'maxWalk', 'walk', 'Walk'], "1609")
 
         try:
             dist = float(self.walk)
