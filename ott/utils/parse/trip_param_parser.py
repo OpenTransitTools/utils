@@ -257,13 +257,18 @@ class TripParamParser(ParamParser):
             self.mode = 'TRANSIT,BICYCLE'
         elif ('TRAIN' in self.mode or 'RAIL' in self.mode) and 'BIC' in self.mode:
             self.mode = 'RAIL,TRAM,SUBWAY,FUNICULAR,GONDOLA,BICYCLE'
+        elif 'BUS' in self.mode and 'BIC' in self.mode:
+            self.mode = 'BUS,BICYCLE'
         elif self.mode == 'BIKE' or self.mode =='BICYCLE':
             self.mode = 'BICYCLE'
         elif self.mode in ('B', 'BUS', 'BUSISH', 'BUSISH,WALK', 'BUS,WALK'):
             self.mode = 'BUS,WALK'
-        elif self.mode in ('T', 'TRAIN', 'TRAINISH', 'TRAINISH,WALK'):
+        elif self.mode in ('T', 'TRAIN', 'TRAINISH', 'TRAINISH,WALK') or 'RAIL' in self.mode:
             self.mode = 'RAIL,TRAM,SUBWAY,FUNICULAR,GONDOLA,WALK'
+        elif 'CAR' in self.mode:
+            pass # hope this works...
         else:
+            log.info("don't recoginize this mode -- so changing self.mode from '{}' to the default 'TRANSIT,WALK'".format(self.mode))
             self.mode = 'TRANSIT,WALK'
 
     def _parse_optimize(self):
