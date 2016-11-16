@@ -117,7 +117,7 @@ def get_initial_arg_parser():
     '''
     import argparse
     parser = argparse.ArgumentParser(prog='otp-build', formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument('name', default="all", help="Name of OTP graph folder in the 'cache' build (e.g., 'all', 'prod', 'test' or 'call')")
+    parser.add_argument('name', default="all", nargs='?', help="Name of OTP graph folder in the 'cache' build (e.g., 'all', 'prod', 'test' or 'call')")
     parser.add_argument('--test_suite', '-ts', help="regex name of test suites to run (e.g., 'rail', 'bus|rail', etc...)")
     return parser
 
