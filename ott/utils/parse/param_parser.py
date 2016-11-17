@@ -11,6 +11,7 @@ from ott.utils import html_utils
 from ott.utils import object_utils
 from ott.utils import date_utils
 
+
 class ParamParser(object):
 
     def __init__(self, request):
@@ -25,7 +26,6 @@ class ParamParser(object):
             self.query_string = self.params
             self.params = self.query_str_to_params(self.params)
 
-
     def _parse_date(self):
         ''' parse out a date from either the 'date' param, or separate month/day/year params
             &month={month}&day={day}&year={year}
@@ -35,7 +35,6 @@ class ParamParser(object):
             self.date = self._make_date_from_parts()
         self._normalize_date_parts()
         return self.date
-
 
     def _make_date_from_parts(self, fmt="{year}-{month}-{day}"):
         ''' convert date 
@@ -63,7 +62,6 @@ class ParamParser(object):
         ret_val = fmt.format(**self.__dict__)
         return ret_val
 
-
     def _normalize_date_parts(self):
         ''' make sure we have all the date parts separated from the larger date field (since we build urls with that) 
         '''
@@ -75,7 +73,6 @@ class ParamParser(object):
         except:
             pass
 
-
     @classmethod
     def make_date_object(cls, date_str, fmt="%Y-%m-%d"):
         ''' will convert a date string into a date object ... or if that fails, return today's date
@@ -86,7 +83,6 @@ class ParamParser(object):
         except:
             ret_val = datetime.date.today()
         return ret_val
-
 
     def _parse_time(self):
         ''' parse out a date from either the 'date' param, or separate month/day/year params
@@ -123,7 +119,6 @@ class ParamParser(object):
         ret_val = fmt.format(**self.__dict__)
         return ret_val
 
-
     def _normalize_time_parts(self):
         ''' convert date 
         '''
@@ -135,8 +130,6 @@ class ParamParser(object):
         except:
             pass
 
-
-
     @classmethod
     def make_time_object(cls, time_str, fmt="%h:%M%a"):
         ''' will convert self.time into a time object ... or if that fails, return the local time
@@ -147,10 +140,8 @@ class ParamParser(object):
             ret_val = time.localtime()
         return ret_val
 
-
     def param_exists(self, param):
         return param in self.params
-
 
     def get(self, name, def_val=None):
         '''
@@ -163,9 +154,7 @@ class ParamParser(object):
                 ret_val = self.params[name.lower()]
             except:
                 pass
-
         return ret_val
-
 
     def get_first_val(self, names, def_val=None):
         ''' pass in a list of 'names', and return the first name that has a value in self.params
@@ -186,7 +175,6 @@ class ParamParser(object):
         if v is not None and v != 'None':
             ret_val = v.strip().lstrip('0')
         return ret_val
-
 
     def get_first_val_as_numeric(self, names, def_val=None):
         ''' pass in a list of 'names', and return the first name that has a value in self.params
@@ -214,7 +202,6 @@ class ParamParser(object):
             ret_val = str
         return ret_val
 
-
     def get_first_val_as_bool(self, names, def_val=False):
         ''' pass in a list of 'names', and return the first name that has a value in self.params
             with the additional requirement that this value is an int value 
@@ -232,7 +219,6 @@ class ParamParser(object):
             pass
         return ret_val
 
-
     @classmethod
     def query_str_to_params(cls, qs):
         ret_val = {}
@@ -244,7 +230,6 @@ class ParamParser(object):
             elif len(q) == 1:
                 ret_val[q[0]] = True
         return ret_val
-
 
     @classmethod
     def strip_coord(cls, place):
@@ -258,7 +243,6 @@ class ParamParser(object):
         except Exception as ex:
             log.warning(ex)
         return ret_val
-
 
     @classmethod
     def has_valid_coord(cls, coord):
@@ -282,7 +266,6 @@ class ParamParser(object):
 
         return ret_val
 
-
     @classmethod
     def make_named_coord(cls, name, coord=None, def_val=None):
         '''
@@ -300,7 +283,6 @@ class ParamParser(object):
 
         return ret_val
 
-
     @classmethod
     def to_int(cls, str, def_val=0):
         ret_val = def_val
@@ -309,4 +291,3 @@ class ParamParser(object):
         except:
             pass
         return ret_val
-
