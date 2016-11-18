@@ -41,23 +41,21 @@ class ParamParser(object):
             &month={month}&day={day}&year={year}
         '''
         self.date = self.get_first_val(['Date'])
-        if self.date is None:
-            self.date = self._make_date_from_parts()
-        self._normalize_date_parts()
+        self.date = self._make_date_from_parts()
         return self.date
 
     def _make_date_from_parts(self, fmt="{year}-{month}-{day}"):
         ''' convert date 
         '''
-        date = self.make_date_object(self.date)
+        d = date_utils.str_to_date(self.date)
 
         self.day = self.get_first_val(['Day'])
         if self.day is None:
-            self.day = date.day
+            self.day = d.day
 
         self.month = self.get_first_val(['Month'])
         if self.month is None:
-            self.month = date.month
+            self.month = d.month
         if type(self.month) == str and len(self.month) == 3:
             # make sure month is not an abbreviation, ala Jun
             for num, abbr in enumerate(calendar.month_abbr):
@@ -73,35 +71,31 @@ class ParamParser(object):
         return ret_val
 
     def _normalize_date_parts(self):
-        ''' make sure we have all the date parts separated from the larger date field (since we build urls with that) 
+        ''' make sure we have all the date parts separated from the larger date field (since we build urls with that)
         '''
         try:
             d = self.date.split('-')
-            if self.year  is None:  self.year  = d[0]
-            if self.month is None:  self.month = d[1]
-            if self.day   is None:  self.day   = d[2]
-        except:
-            pass
+            if d and len(d) == 3:
+                self.year  = d[0]
+                self.month = d[1]
+                self.day   = d[2]
+            else:
+                log.info("{} doesn't look like a date string".format(self.date))
+        except Exception, e:
+            log.warning(e)
 
-    @classmethod
-    def make_date_object(cls, date_str, fmt="%Y-%m-%d"):
-        ''' will convert a date string into a date object ... or if that fails, return today's date
-            note: you need to know the format of the date string -- default is year-month-day ala 2013-09-15
+    def date_add_subtract_days(self, day_offset):
         '''
-        try:
-            ret_val = datetime.date.strptime(date_str, fmt)
-        except:
-            ret_val = datetime.date.today()
-        return ret_val
+        '''
+        d = self.make_date_object(self.date)
+
 
     def _parse_time(self):
         ''' parse out a date from either the 'date' param, or separate month/day/year params
             &Hour={hour}&Min={min}&AmPm={am_pm}
         '''
         self.time = self.get_first_val(['Time'])
-        if self.time is None:
-            self.time = self._make_time_from_parts()
-        self._normalize_time_parts()
+        self.time = self._make_time_from_parts()
         return self.time
 
     def _make_time_from_parts(self, fmt="{hour}:{min}{am_pm}", use_24_hour=False):
@@ -130,15 +124,18 @@ class ParamParser(object):
         return ret_val
 
     def _normalize_time_parts(self):
-        ''' convert date 
+        ''' take time, and break it into it's parts of hour, min, am_pm
         '''
         try:
             t = self.time.split(':')
-            if self.hour  is None: self.hour  = t[0]
-            if self.min   is None: self.min   = t[1][:2]
-            if self.am_pm is None: self.am_pm = t[1][2:].strip()
-        except:
-            pass
+            if t and len(t) == 2:
+                self.hour  = t[0]
+                self.min   = t[1][:2]
+                self.am_pm = t[1][2:].strip()
+            else:
+                log.info("{} doesn't look like a time string".format(self.time))
+        except Exception, e:
+            log.warning(e)
 
     @classmethod
     def make_time_object(cls, time_str, fmt="%h:%M%a"):
