@@ -21,10 +21,6 @@ class TripParamParser(ParamParser):
         self._parse_from()
         self._parse_to()
 
-        self.time  = None
-        self.hour  = None
-        self.min   = None
-        self.am_pm = None
         self.max_hours = config.get_int('otp_max_hours', def_val=6)
         self._parse_date()
         self._parse_time()

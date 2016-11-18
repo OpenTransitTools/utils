@@ -20,6 +20,11 @@ class ParamParser(object):
         self.month = None
         self.year  = None
 
+        self.time  = None
+        self.hour  = None
+        self.min   = None
+        self.am_pm = None
+
         self.request = request
         self.params = html_utils.params_to_dict(request)
         self.agency = self.get_first_val(['agency'], 'TriMet')
