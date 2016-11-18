@@ -84,11 +84,18 @@ class ParamParser(object):
         except Exception, e:
             log.warning(e)
 
-    def date_add_subtract_days(self, day_offset):
+    def date_offset(self, day_offset):
+        ''' change the date by x number of days, either +/-
         '''
-        '''
+        import pdb; pdb.set_trace()
         d = self.make_date_object(self.date)
-
+        d = d + datetime.timedelta(days=day_offset)
+        d = date_utils.date_to_str(d, fmt='%Y-%m-%d')
+        if d and isinstance(d, (str, unicode)):
+            self.date = d
+            self._normalize_date_parts()
+        else:
+            log.warning("couldn't change the date with offset {}".format(day_offset))
 
     def _parse_time(self):
         ''' parse out a date from either the 'date' param, or separate month/day/year params

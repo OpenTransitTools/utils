@@ -9,6 +9,7 @@ from .param_parser import ParamParser
 from ott.utils.config_util import ConfigUtil
 from ott.utils import object_utils
 
+
 class TripParamParser(ParamParser):
 
     def __init__(self, params):
@@ -39,7 +40,6 @@ class TripParamParser(ParamParser):
         self._parse_mode()
         self._parse_misc()
 
-
     def safe_format(self, fmt, def_val=''):
         ''' 
         '''
@@ -55,7 +55,6 @@ class TripParamParser(ParamParser):
                 ret_val = fmt.format(**self.__dict__)
             except:
                 pass
-
         except Exception, e:
             log.debug(e)
         return ret_val
@@ -96,7 +95,6 @@ class TripParamParser(ParamParser):
         ret_val = object_utils.fix_url(ret_val)
         return ret_val
 
-
     def otp_url_params(self, fmt="fromPlace={frm}&toPlace={to}&time={time}&maxHours={max_hours}&date={date}&mode={mode}&optimize={optimize}&maxWalkDistance={walk_meters}&arriveBy={arrive_depart}"):
         ''' return a string with the parameter values formatted for the OTP routing engine (opentripplanner-api-webapp)
         '''
@@ -121,7 +119,6 @@ class TripParamParser(ParamParser):
         ret_val = ret_val.replace("False", "false").replace("True", "true")
         ret_val = object_utils.fix_url(ret_val)
         return ret_val
-
 
     def get_itin_num(self, def_val="1"):
         ret_val = def_val
@@ -176,7 +173,6 @@ class TripParamParser(ParamParser):
                         coord = "{0},{1}".format(lat, lon)
                         self.frm = self.make_named_coord(name, coord)
 
-
     def _parse_to(self):
         ''' parse out the trip destination from get params ... the value could be a string,a coordinate or combo of the two
         '''
@@ -194,7 +190,6 @@ class TripParamParser(ParamParser):
                     if lat and lon:
                         coord = "{0},{1}".format(lat, lon)
                         self.to = self.make_named_coord(name, coord)
-
 
     def _parse_walk(self):
         ''' parse out the max walk (bike) distance ... default to 1 mile (~1609 meters)
@@ -223,6 +218,7 @@ class TripParamParser(ParamParser):
             if val in ('L', 'Late', 'Latest'):
                 self.arrive_depart = True
                 self.time = "1:30am"
+                self.date_offset(day_offset=1)
             if val in ('E', 'Early', 'Earliest'):
                 self.arrive_depart = False
                 self.time = "4:00am"
@@ -232,7 +228,6 @@ class TripParamParser(ParamParser):
         mh = self.get_first_val_as_int(['maxHours'])
         if mh:
             self.max_hours = mh
-
 
     def _parse_mode(self):
         ''' parse out the mode string ... and default to TRANSIT,WALK
@@ -274,4 +269,3 @@ class TripParamParser(ParamParser):
             self.optimize = 'SAFE'
         else:
             self.optimize = 'QUICK'
-
