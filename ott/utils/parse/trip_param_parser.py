@@ -21,11 +21,7 @@ class TripParamParser(ParamParser):
         self._parse_from()
         self._parse_to()
 
-        self.date  = None
         self.time  = None
-        self.day   = None
-        self.month = None
-        self.year  = None
         self.hour  = None
         self.min   = None
         self.am_pm = None

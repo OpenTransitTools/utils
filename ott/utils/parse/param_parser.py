@@ -15,6 +15,11 @@ from ott.utils import date_utils
 class ParamParser(object):
 
     def __init__(self, request):
+        self.date  = None
+        self.day   = None
+        self.month = None
+        self.year  = None
+
         self.request = request
         self.params = html_utils.params_to_dict(request)
         self.agency = self.get_first_val(['agency'], 'TriMet')

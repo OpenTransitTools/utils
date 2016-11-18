@@ -11,7 +11,7 @@ COMMIT_EDITMSG
 *#
 #*
 
-
+tests/
 cache/
 .idea
 .idea/
