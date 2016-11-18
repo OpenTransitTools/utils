@@ -219,6 +219,7 @@ class TripParamParser(ParamParser):
                 self.arrive_depart = True
                 self.time = "1:30am"
                 self.date_offset(day_offset=1)
+                self.arrive_depart = 'A'
             if val in ('E', 'Early', 'Earliest'):
                 self.arrive_depart = False
                 self.time = "4:00am"
