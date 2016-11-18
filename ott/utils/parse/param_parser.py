@@ -87,8 +87,8 @@ class ParamParser(object):
     def date_offset(self, day_offset):
         ''' change the date by x number of days, either +/-
         '''
-        import pdb; pdb.set_trace()
-        d = self.make_date_object(self.date)
+        #import pdb; pdb.set_trace()
+        d = date_utils.str_to_date(self.date)
         d = d + datetime.timedelta(days=day_offset)
         d = date_utils.date_to_str(d, fmt='%Y-%m-%d')
         if d and isinstance(d, (str, unicode)):
@@ -287,7 +287,6 @@ class ParamParser(object):
         ret_val = def_val
 
         if name and coord:
-            #import pdb; pdb.set_trace()
             name = name.split("::")[0]
             ret_val = "{0}::{1}".format(object_utils.to_str(name), coord)
         elif name:
