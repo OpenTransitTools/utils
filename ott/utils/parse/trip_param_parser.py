@@ -62,7 +62,7 @@ class TripParamParser(ParamParser):
     def pretty_output(self):
         return self.param_exists('pretty') or self.param_exists('is_pretty')
 
-    def ott_url_params(self, fmt="from={frm}&to={to}&Hour={hour}&Minute={min}&AmPm={am_pm}&maxHours={max_hours}&month={month}&day={day}&year={year}&Walk={walk}&Arr={arrive_depart_raw}&min={optimize}&mode={mode}"):
+    def ott_url_params(self, fmt="from={frm}&to={to}&Hour={hour}&Minute={min}&AmPm={am_pm}&month={month}&day={day}&year={year}&Walk={walk}&Arr={arrive_depart_raw}&min={optimize}&mode={mode}"):
         ''' return a string with the parameter values formatted for the OTT webapps
         '''
         ret_val = self.safe_format(fmt)
@@ -73,7 +73,7 @@ class TripParamParser(ParamParser):
         ''' return a string with the parameter values formatted for OTT with a return trip of hours+X and minutes+Y 
             (change am to pm if needed, etc...)
         '''
-        fmt = "Hour={add_hour}&Minute={add_min}&AmPm={add_am_pm}&maxHours={max_hours}&" + fmt
+        fmt = "Hour={add_hour}&Minute={add_min}&AmPm={add_am_pm}&" + fmt
 
         # handle the extra minutes for the reverse trip (increment hours if need be)
         self.add_min = self.to_int(self.min) + add_mins
@@ -95,7 +95,7 @@ class TripParamParser(ParamParser):
         ret_val = object_utils.fix_url(ret_val)
         return ret_val
 
-    def otp_url_params(self, fmt="fromPlace={frm}&toPlace={to}&time={time}&maxHours={max_hours}&date={date}&mode={mode}&optimize={optimize}&maxWalkDistance={walk_meters}&arriveBy={arrive_depart}"):
+    def otp_url_params(self, fmt="fromPlace={frm}&toPlace={to}&time={time}&date={date}&mode={mode}&optimize={optimize}&maxWalkDistance={walk_meters}&arriveBy={arrive_depart}"):
         ''' return a string with the parameter values formatted for the OTP routing engine (opentripplanner-api-webapp)
         '''
         ret_val = self.safe_format(fmt)
@@ -103,7 +103,7 @@ class TripParamParser(ParamParser):
         ret_val = object_utils.fix_url(ret_val)
         return ret_val
 
-    def map_url_params(self, fmt="from={frm}&to={to}&time={time}&maxHours={max_hours}&date={month}/{day}/{year}&mode={mode}&optimize={optimize}&maxWalkDistance={walk_meters:.0f}&arriveBy={arrive_depart}"):
+    def map_url_params(self, fmt="from={frm}&to={to}&time={time}&date={month}/{day}/{year}&mode={mode}&optimize={optimize}&maxWalkDistance={walk_meters:.0f}&arriveBy={arrive_depart}"):
         ''' return a string with the parameter values formatted for the OTT webapps
             http://maps.trimet.org/prod?
                 toPlace=ZOO%3A%3A45.509700%2C-122.716290
