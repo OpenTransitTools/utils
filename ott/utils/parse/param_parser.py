@@ -36,6 +36,33 @@ class ParamParser(object):
             self.query_string = self.params
             self.params = self.query_str_to_params(self.params)
 
+    @classmethod
+    def factory(cls, request):
+        return ParamParser(request)
+
+    def clone(self):
+        ''' copy this parser
+        '''
+        p = self.factory(self.request)
+        p.date = self.date
+        p.day = self.day
+        p.month = self.month
+        p.year = self.year
+
+        p.time = self.time
+        p.hour = self.hour
+        p.min = self.min
+        p.am_pm = self.am_pm
+
+        p.request = self.request
+        p.params = self.params
+        p.agency = self.agency
+        p.detailed = self.detailed
+        p.show_geo = self.show_geo
+        p.alerts = self.alerts
+
+        return p
+
     def _parse_date(self):
         ''' parse out a date from either the 'date' param, or separate month/day/year params
             &month={month}&day={day}&year={year}

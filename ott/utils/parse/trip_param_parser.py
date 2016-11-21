@@ -12,8 +12,8 @@ from ott.utils import object_utils
 
 class TripParamParser(ParamParser):
 
-    def __init__(self, params):
-        super(TripParamParser, self).__init__(params)
+    def __init__(self, request):
+        super(TripParamParser, self).__init__(request)
 
         config = ConfigUtil.factory(section="otp")
 
@@ -28,8 +28,6 @@ class TripParamParser(ParamParser):
 
         self.arrive_depart_raw = None
         self.arrive_depart = None
-        self.do_first    = False  # TODO ... Arrive / Depart / First Trip / Last Trip
-        self.do_last     = False
         self.optimize    = None
         self.walk        = None
         self.walk_meters = 0.0
@@ -39,6 +37,25 @@ class TripParamParser(ParamParser):
         self._parse_walk()
         self._parse_mode()
         self._parse_misc()
+
+    @classmethod
+    def factory(cls, request):
+        return TripParamParser(request)
+
+    def clone(self):
+        ''' copy this parser
+        '''
+        p = super(TripParamParser, self).clone()
+        p.frm = self.frm
+        p.to = self.to
+        p.max_hours = self.max_hours
+        p.arrive_depart_raw = self.arrive_depart_raw
+        p.arrive_depart = self.arrive_depart
+        p.optimize = self.optimize
+        p.walk = self.walk
+        p.walk_meters = self.walk_meters
+        p.mode = self.mode
+        return p
 
     def safe_format(self, fmt, def_val=''):
         ''' 
