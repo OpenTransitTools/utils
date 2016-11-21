@@ -155,6 +155,37 @@ class TripParamParser(ParamParser):
         if val:
             self.to = val
 
+    def get_arrive_param(self):
+        ''''''
+        return self.get_first_val(['Arr', 'arr'])
+
+    def is_arriveby(self, arr=None):
+        ''''''
+        ret_val = False
+        if arr is None:
+            arr = self.get_arrive_param()
+        if arr in ('A', 'Arr', 'Arrive', 'True', 'true'):
+            ret_val = True
+        return ret_val
+
+    def is_latest(self, arr=None):
+        ''''''
+        ret_val = False
+        if arr is None:
+            arr = self.get_arrive_param()
+        if arr in ('L', 'Late', 'Latest'):
+            ret_val = True
+        return ret_val
+
+    def is_earliest(self, arr=None):
+        ''''''
+        ret_val = False
+        if arr is None:
+            arr = self.get_arrive_param()
+        if arr in ('E', 'Early', 'Earliest'):
+            ret_val = True
+        return ret_val
+
     def _parse_from(self):
         ''' parse out the trip origin from get params ... the value could be a string, a coordinate or combo of the two
         '''
@@ -210,17 +241,15 @@ class TripParamParser(ParamParser):
         ''' parse out the arrive / depart string
         '''
         self.arrive_depart = False
-        val = self.get_first_val(['Arr', 'arr'])
+        val = self.get_arrive_param()
         if val:
             self.arrive_depart_raw = val
-            if val in ('A', 'Arr', 'Arrive', 'True', 'true'):
+            if self.is_arriveby(val):
                 self.arrive_depart = True
-            if val in ('L', 'Late', 'Latest'):
+            elif self.is_latest(val):
                 self.arrive_depart = True
                 self.time = "1:30am"
-                self.date_offset(day_offset=1)
-                self.arrive_depart_raw = 'A'
-            if val in ('E', 'Early', 'Earliest'):
+            elif self.is_earliest(val):
                 self.arrive_depart = False
                 self.time = "4:00am"
 
