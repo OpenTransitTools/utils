@@ -157,7 +157,7 @@ class TripParamParser(ParamParser):
 
     def get_arrive_param(self):
         ''''''
-        return self.get_first_val(['Arr', 'arr'])
+        return self.get_first_val(['Arr'])
 
     def is_arriveby(self, arr=None):
         ''''''
@@ -225,7 +225,7 @@ class TripParamParser(ParamParser):
     def _parse_walk(self):
         ''' parse out the max walk (bike) distance ... default to 1 mile (~1609 meters)
         '''
-        self.walk = self.get_first_val(['maxWalkDistance', 'maxWalk', 'walk', 'Walk'], "1609")
+        self.walk = self.get_first_val(['maxWalkDistance', 'maxWalk', 'Walk'], "1609")
         try:
             dist = float(self.walk)
             self.walk_meters = dist
@@ -263,7 +263,7 @@ class TripParamParser(ParamParser):
         ''' parse out the mode string ... and default to TRANSIT,WALK
             convert mode string, if it's legacy, to OTP mode strings 
         '''
-        self.mode = self.get_first_val(['mode', 'Mode'])
+        self.mode = self.get_first_val(['Mode'])
 
         # order is important....
         if self.mode is None:
@@ -292,7 +292,7 @@ class TripParamParser(ParamParser):
         ''' parse out the optimize flag
         '''
         #import pdb; pdb.set_trace()
-        self.optimize = self.get_first_val(['optimize', 'opt', 'Opt', 'min', 'Min'])
+        self.optimize = self.get_first_val(['Optimize', 'Opt', 'Min'])
         if self.optimize in ('F', 'X', 'TRANSFERS'):
             self.optimize = 'TRANSFERS'
         elif self.optimize in ('S', 'SAFE'):
