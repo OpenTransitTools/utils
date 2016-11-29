@@ -157,6 +157,14 @@ def str_to_list(str, def_val=[]):
             pass
     return ret_val
 
+def list_val(list, index=0, def_val=None):
+    ret_val = def_val
+    try:
+        ret_val = list[index]
+    except Exception, e:
+        log.info(e)
+    return ret_val
+
 def dval(obj, key, def_val=None):
     return safe_dict_val(obj, key, def_val)
 

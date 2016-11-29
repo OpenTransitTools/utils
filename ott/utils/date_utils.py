@@ -7,6 +7,7 @@ import time
 from calendar import monthrange
 
 from ott.utils import num_utils
+from ott.utils import object_utils
 
 def ret_me(s):
     return s
@@ -79,6 +80,17 @@ def get_day_info(dt=None):
         'm_name'  : dt.strftime("%B"),
         'numdays' : end,
         'day'     : dt.day
+    }
+    return ret_val
+
+def parse_month_day_year_string(mdy_str, sep='/'):
+    ''' convert MM/DD/YYYY string into parts
+    '''
+    p = mdy_str.split(sep)
+    ret_val = {
+        'month' : object_utils.list_val(p, 0),
+        'day'   : object_utils.list_val(p, 1),
+        'year'  : object_utils.list_val(p, 2)
     }
     return ret_val
 
