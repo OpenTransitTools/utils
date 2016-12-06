@@ -147,6 +147,18 @@ def pretty_date(dt=None, fmt='%A, %B %d, %Y'):
     ret_val =  dt.strftime(fmt).replace(' 0',' ')  # "Monday, March 4, 2013"
     return ret_val
 
+def pretty_date_from_ms(ms, fmt='%A, %B %d, %Y'):
+    dt = None
+    try:
+        if ms is not None:
+            if isinstance(ms, (str, unicode)):
+                ms = int(ms)
+            dt = datetime.datetime.fromtimestamp(ms/1000.0)
+    except Exception, e:
+        log.info(e)
+    ret_val = pretty_date(dt, fmt)
+    return ret_val
+
 def dow(dt=None, fmt='%A'):
     return pretty_date(dt, fmt)
 
