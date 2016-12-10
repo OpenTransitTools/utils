@@ -315,7 +315,8 @@ class ParamParser(object):
 
         if name and coord:
             name = name.split("::")[0]
-            ret_val = "{0}::{1}".format(object_utils.to_str(name), coord)
+            name = object_utils.to_str(name)
+            ret_val = "{0}::{1}".format(name, coord)
         elif name:
             ret_val = name
         elif coord:

@@ -221,6 +221,9 @@ class TripParamParser(ParamParser):
                         coord = "{0},{1}".format(lat, lon)
                         self.frm = self.make_named_coord(name, coord)
 
+            # escape the string
+            self.frm = self.frm.replace("&", "%26")  # escape & in the name
+
     def _parse_to(self):
         ''' parse out the trip destination from get params ... the value could be a string,a coordinate or combo of the two
         '''
@@ -238,6 +241,9 @@ class TripParamParser(ParamParser):
                     if lat and lon:
                         coord = "{0},{1}".format(lat, lon)
                         self.to = self.make_named_coord(name, coord)
+
+            # escape the string
+            self.to = self.to.replace("&", "%26")  # escape & in the name
 
     def _parse_walk(self):
         ''' parse out the max walk (bike) distance ... default to 1 mile (~1609 meters)
