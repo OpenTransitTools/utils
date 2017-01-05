@@ -25,8 +25,8 @@ class Csv(object):
         self.assign_uri(uri, path)
 
     def assign_uri(self, uri, path=None):
-        '''
-        '''
+        """
+        """
         if '/' in uri or '\\' in uri:
             self.csv_uri = uri
         else:
@@ -59,16 +59,16 @@ class Csv(object):
         return ret_val
 
     def open(self):
-        '''
-        '''
+        """
+        """
         log.debug("open rules {0}".format(self.csv_uri))
         if 'http' in self.csv_uri:
-            '''
+            """
             TODO: this ....
             with contextlib.closing(urllib.urlopen(url)) as stream:
                 otp = stream.read()
                 ret_val = json.loads(otp)
-            '''
+            """
             data = urllib.urlopen(self.csv_uri)
 
         else:
@@ -79,8 +79,8 @@ class Csv(object):
         return self.reader
 
     def close(self):
-        '''
-        '''
+        """
+        """
         if self.file:
             self.file.close()
             self.file = None
@@ -94,10 +94,10 @@ class Csv(object):
         return ret_val
 
     def timed_refresh_check(self, n_minutes):
-        ''' will check for new rules every N minutes (via the 'update_rules()' method), and
+        """ will check for new rules every N minutes (via the 'update_rules()' method), and
             trigger reloading of those rules if we've exceeded the n_minute time slice
             @todo: might we thread the rule refresh if we're pulling rules via the web???
-        '''
+        """
         ret_val = False
 
         if n_minutes is None or n_minutes < 0:
@@ -114,9 +114,9 @@ class Csv(object):
         return ret_val
 
     def new_data_check(self):
-        ''' open/download CSV of rules, and compare it existing rules 
+        """ open/download CSV of rules, and compare it existing rules 
             @return: True indicating that new data was reloaded...
-        '''
+        """
         ret_val = False
 
         # step 1: grab new CSV data...
@@ -134,8 +134,8 @@ class Csv(object):
         return ret_val
 
     def update_data(self, new_data):
-        ''' I'm probably overridden in sub classes
-        '''
+        """ I'm probably overridden in sub classes
+        """
         self.raw_data = new_data
         self.last_update = datetime.datetime.now()
 

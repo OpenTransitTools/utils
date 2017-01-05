@@ -6,9 +6,9 @@ log = logging.getLogger(__file__)
 
 
 def check_create_db(db_url, is_geospatial=False):
-    ''' generic check a database ... and create it if it doesn't exist
+    """ generic check a database ... and create it if it doesn't exist
         @TODO: add other database supports beyond postgres
-    '''
+    """
     #import pdb; pdb.set_trace()
     ret_val = True
     if 'postgres' in db_url:
@@ -20,8 +20,8 @@ def check_create_db(db_url, is_geospatial=False):
 
 
 def make_url(db_url, def_val=None):
-    '''' wrapper around sqlalchemy's make_url
-    '''
+    """ wrapper around sqlalchemy's make_url
+    """
     ret_val = def_val
     try:
         from sqlalchemy.engine.url import make_url
@@ -50,11 +50,11 @@ def username_from_url(db_url, def_val=None):
 
 
 def db_conn(url):
-    '''  create a generic scoped session to a database as defined by the param url
+    """  create a generic scoped session to a database as defined by the param url
          via sqlalchemy.  This routine meant as a quick way to grab a session / engine
          @param url: sqlite:///gtfs.db or postgresql+psycopg2://postgres@localhost:5432/transit
          @return: session, engine 
-    '''
+    """
     from sqlalchemy.orm import scoped_session
     from sqlalchemy.orm import sessionmaker
     session = scoped_session(sessionmaker())
@@ -68,7 +68,7 @@ def db_conn(url):
 
 
 def db_args():
-    ''' create a generic database commandline arg PARSER '''
+    """ create a generic database commandline arg PARSER """
     import argparse
     parser = argparse.ArgumentParser(prog='gtfs data loader', formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('--database_url', '-d',  default='sqlite:///gtfs.db', help='DATABASE URL with appropriate privileges')
@@ -79,9 +79,9 @@ def db_args():
 
 
 def db_gtfs_rt():
-    ''' get a command line PARSER and db connection to query gtfsrdb data
+    """ get a command line PARSER and db connection to query gtfsrdb data
         NOTE: meant as a quick dirty way to grab a connection for test apps
-    '''
+    """
     parser = db_args()
     parser.add_argument('--route',  '-r', default="12", help='what route?')
     parser.add_argument('--agency', '-a', default="TriMet", help='what agency?')
@@ -105,12 +105,12 @@ def closest_stops_tuple_to_dict(tup):
 
 
 def add_math_to_sqllite(conn, conn_record):
-    ''' This method is called for each new SQLAlchemy database connection. I'm using it as a connection decorator to
+    """ This method is called for each new SQLAlchemy database connection. I'm using it as a connection decorator to
         add math routines to a sqllite database
 
         @note: check out the call to (above): event.listen(self.engine, 'connect', Database.connection)
         @see:  http://docs.sqlalchemy.org/en/rel_0_8/core/events.html#sqlalchemy.events.PoolEvents
-    '''
+    """
     if 'sqlite' in type(conn).__module__:        
         print 'in method that adds math to sqllite'
         conn.create_function("sin",     1, math.sin)
@@ -122,14 +122,14 @@ def add_math_to_sqllite(conn, conn_record):
 
 
 def decorate_engine(engine, method=add_math_to_sqllite):
-    ''' for
-    '''
+    """ for
+    """
     from sqlalchemy import event
     event.listen(engine, 'connect', method)
 
 
 def sqlite_nearest_query(schema=None, table='stops'):
-    '''
+    """
         http://www.plumislandmedia.net/mysql/haversine-mysql-nearest-loc/
 
         SELECT stop_name, stop_code, stop_lat, stop_lon, 
@@ -142,7 +142,7 @@ def sqlite_nearest_query(schema=None, table='stops'):
         FROM ott.stops
         ORDER BY miles_away
         LIMIT 15
-    '''
+    """
     if schema:
         table = "{0}.{1}".format(schema, table)
 
@@ -160,8 +160,8 @@ def sqlite_nearest_query(schema=None, table='stops'):
 
 
 def sqlite_query_nearest_stops(conn, lon, lat, count, schema, table):
-    ''' execute the query...
-    '''
+    """ execute the query...
+    """
     if count is None or count > 250:
         count = 10
     clause  = sqlite_nearest_query(schema, table)
@@ -170,8 +170,8 @@ def sqlite_query_nearest_stops(conn, lon, lat, count, schema, table):
 
 
 def postgres_check_db(db_name, db_user, db_table=None):
-    '''
-    '''
+    """
+    """
     ret_val = True
     con = None
     try:
@@ -196,8 +196,8 @@ def postgres_check_db(db_name, db_user, db_table=None):
 
 
 def postgres_add_postgis(db_name, db_user):
-    ''' add postgis extension on a named database
-    '''
+    """ add postgis extension on a named database
+    """
     ret_val = True
     con = None
     try:
@@ -221,8 +221,8 @@ def postgres_add_postgis(db_name, db_user):
 
 
 def postgres_create_db(db_name, db_user):
-    ''' create a postgres db...and also maybe add the postgis extension
-    '''
+    """ create a postgres db...and also maybe add the postgis extension
+    """
     ret_val = True
     con = None
     try:
@@ -247,8 +247,8 @@ def postgres_create_db(db_name, db_user):
 
 
 def postgres_check_create_db(db_name, db_user, is_geospatial=False):
-    '''
-    '''
+    """
+    """
     ret_val = True
     try:
         exists = postgres_check_db(db_name, db_user)
@@ -264,7 +264,7 @@ def postgres_check_create_db(db_name, db_user, is_geospatial=False):
 
 
 def postgres_add_shp_file(db_url, db_user, is_geospatial=False):
-    '''
+    """
         @see http://geospatialpython.com/2016/08/pure-python-loading-shapefiles-into.html
-    '''
+    """
     ret_val = True

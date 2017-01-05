@@ -1,5 +1,6 @@
 import qrcode
 
+
 def qr_to_file(content, path='', name='qr', ext='png'): 
     img  = qrcode.make(content)
     file_name = "{0}{1}.{2}".format(path, name, ext)

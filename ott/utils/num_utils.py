@@ -4,12 +4,13 @@ log = logging.getLogger(__file__)
 
 from ott.utils import object_utils
 
+
 def distance_km(lat1, lon1, lat2, lon2):
-    ''' return distance between two points in km using haversine
+    """ return distance between two points in km using haversine
         http://en.wikipedia.org/wiki/Haversine_formula
         http://www.platoscave.net/blog/2009/oct/5/calculate-distance-latitude-longitude-python/
         Author: Wayne Dyck
-    '''
+    """
     ret_val = 0
     radius = 6371 # km
     lat1 = float(lat1)
@@ -27,11 +28,13 @@ def distance_km(lat1, lon1, lat2, lon2):
 
     return ret_val
 
+
 def distance_mi(lat1, lon1, lat2, lon2):
-    ''' return distance between two points in miles
-    '''
+    """ return distance between two points in miles
+    """
     km = distance_km(lat1, lon1, lat2, lon2)
     return km * 0.621371192
+
 
 def to_int(val, def_val):
     ret_val = def_val
@@ -41,6 +44,7 @@ def to_int(val, def_val):
         pass
     return ret_val
 
+
 def array_item_to_int(list, index, def_val=None):
     ret_val = def_val
     try:
@@ -48,5 +52,3 @@ def array_item_to_int(list, index, def_val=None):
     except:
         pass
     return ret_val
-
-

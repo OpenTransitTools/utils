@@ -22,9 +22,14 @@ VLOG_NAME  = "otp.v"
 OTP_DOWNLOAD_URL = "http://maven.conveyal.com.s3.amazonaws.com/org/opentripplanner/otp/0.20.0/otp-0.20.0-shaded.jar"
 
 
+def restart_call(self, call_db_path="call_center/db/call_db.tar.gz", call_runner="call_center/run.sh"):
+    if os.path.isfile(call_db_path):
+        subprocess.call([call_runner])
+
+
 def get_test_urls_from_config(section='otp', port=None, hostname=None, ws_path=None, map_path=None):
-    ''' return the OTP map and ws urls from
-    '''
+    """ return the OTP map and ws urls from
+    """
     #import pdb; pdb.set_trace()
     config = ConfigUtil(section=section)
 
@@ -43,9 +48,10 @@ def get_test_urls_from_config(section='otp', port=None, hostname=None, ws_path=N
 
     return ws_url, map_url
 
+
 def call_planner_svc(url, accept='application/xml'):
-    ''' make a call to the OTP web service
-    '''
+    """ make a call to the OTP web service
+    """
     ret_val = None
     try:
         socket.setdefaulttimeout(2000)
@@ -59,18 +65,20 @@ def call_planner_svc(url, accept='application/xml'):
         log.warn('ERROR: could not get data from url (timeout?): {0}'.format(url))
     return ret_val
 
+
 def run_otp_server(dir=None, port=DEF_PORT, ssl=DEF_SSL_PORT, otp_name=OTP_NAME, java_mem=None, **kwargs):
-    ''' launch the server in a separate process
-    '''
+    """ launch the server in a separate process
+    """
     file_utils.cd(dir)
     otp_path = os.path.join(dir, otp_name)
     cmd='-server -jar {} --port {} --securePort {} --router "" --graphs {}'.format(otp_path, port, ssl, dir)
     ret_val = exe_utils.run_java(cmd, fork=True, big_xmx=java_mem, pid_file="pid.txt")
     return ret_val
 
+
 def run_graph_builder(graph_dir, graph_name=GRAPH_NAME, otp_name=OTP_NAME, java_mem=None):
-    ''' run OTP graph builder
-    '''
+    """ run OTP graph builder
+    """
     log.info("building the graph")
     graph_path = os.path.join(graph_dir, graph_name)
     otp_path = os.path.join(graph_dir, otp_name)
@@ -80,6 +88,7 @@ def run_graph_builder(graph_dir, graph_name=GRAPH_NAME, otp_name=OTP_NAME, java_
     ret_val = exe_utils.run_java(cmd, big_xmx=java_mem)
     return ret_val
 
+
 def vizualize_graph(graph_dir, java_mem=None, otp_name=OTP_NAME):
     otp_path = os.path.join(graph_dir, otp_name)
     file_utils.cd(graph_dir)
@@ -87,15 +96,17 @@ def vizualize_graph(graph_dir, java_mem=None, otp_name=OTP_NAME):
     ret_val = exe_utils.run_java(cmd, big_xmx=java_mem)
     return ret_val
 
+
 def send_build_test_email(to, build_status=True, test_status=True, server_status=True):
-    ''' utility to make the graph dir, copy OTP config files into the graph directory, etc...
-    '''
+    """ utility to make the graph dir, copy OTP config files into the graph directory, etc...
+    """
     #name = graph_config.get('name', DEF_NAME)
     web_utils.simple_email("msg", to)
 
+
 def config_graph_dir(graph_config, base_dir, overwrite=False):
-    ''' utility to make the graph dir, copy OTP config files into the graph directory, etc...
-    '''
+    """ utility to make the graph dir, copy OTP config files into the graph directory, etc...
+    """
     name = graph_config.get('name', DEF_NAME)
     dir  = graph_config.get('dir',  name)     # optional 'dir' name overrides graph name
 
@@ -112,24 +123,27 @@ def config_graph_dir(graph_config, base_dir, overwrite=False):
     check_otp_jar(graph_dir)
     return graph_dir
 
+
 def get_initial_arg_parser():
-    ''' make the initial cli argparse for OTP graph building and other fun things
-    '''
+    """ make the initial cli argparse for OTP graph building and other fun things
+    """
     import argparse
     parser = argparse.ArgumentParser(prog='otp-build', formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('name', default="all", nargs='?', help="Name of OTP graph folder in the 'cache' build (e.g., 'all', 'prod', 'test' or 'call')")
     parser.add_argument('--test_suite', '-ts', help="regex name of test suites to run (e.g., 'rail', 'bus|rail', etc...)")
     return parser
 
+
 def get_graphs(cache):
-    ''' routine that both returns the list of graphs, but also (the main
+    """ routine that both returns the list of graphs, but also (the main
         purpose) add the 'dir' for each graph folder based on graph name
-    '''
+    """
     return get_graphs_from_config(cache.config, cache.this_module_dir)
 
+
 def get_graphs_from_config(config=None, graph_root_dir='.'):
-    ''' return the OTP graph info from config --  from
-    '''
+    """ return the OTP graph info from config --  from
+    """
     if config is None:
         config = ConfigUtil(section='otp')
 
@@ -139,9 +153,10 @@ def get_graphs_from_config(config=None, graph_root_dir='.'):
         g['dir'] = dir
     return graphs
 
+
 def find_graph(graphs, find_name):
-    ''' will build and test each of the graphs we have in self.graphs
-    '''
+    """ will build and test each of the graphs we have in self.graphs
+    """
     #import pdb; pdb.set_trace()
     ret_val = None
     if graphs is None or len(graphs) < 1:
@@ -153,10 +168,11 @@ def find_graph(graphs, find_name):
                 break
     return ret_val
 
+
 def get_graph_details(graphs, index=0):
-    ''' utility function to find a graph config (e.g., graph folder name, web port, etc...) from self.graphs
+    """ utility function to find a graph config (e.g., graph folder name, web port, etc...) from self.graphs
         @see [otp] section in config/app.ini
-    '''
+    """
     ret_val = None
     if graphs is None or len(graphs) < 1:
         ret_val = {"name":DEF_NAME, "port":DEF_PORT, "ssl":DEF_SSL_PORT}
@@ -167,6 +183,7 @@ def get_graph_details(graphs, index=0):
             log.warn("graph index of {} exceeds list length, so defaulting to index 0".format(index))
         ret_val = graphs[index]
     return ret_val
+
 
 def check_otp_jar(graph_dir, jar=OTP_NAME, expected_size=50000000, download_url=OTP_DOWNLOAD_URL):
     """ utility to make sure otp.jar exists in the particular graph dir...
@@ -179,6 +196,7 @@ def check_otp_jar(graph_dir, jar=OTP_NAME, expected_size=50000000, download_url=
         log.info("we don't see OTP {} in {}, so will download {} now".format(jar, graph_dir, download_url))
         web_utils.wget(download_url, jar_path)
     return jar_path
+
 
 def append_vlog_file(dir, feed_msg=None, vlog_name=VLOG_NAME):
     """ print out gtfs feed(s) version numbers and dates to the otp.v log file
@@ -196,6 +214,7 @@ def append_vlog_file(dir, feed_msg=None, vlog_name=VLOG_NAME):
     f.write(msg)
     f.flush()
     f.close()
+
 
 def diff_vlog_files(svr, dir, vlog_name=VLOG_NAME):
     """ return True if the files are different and need to be redeployed ...

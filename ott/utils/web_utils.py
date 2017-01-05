@@ -18,16 +18,19 @@ import exe_utils
 def get_hostname():
     return socket.gethostname()
 
+
 def basic_web_server(port="50080"):
     Handler = SimpleHTTPServer.SimpleHTTPRequestHandler
     httpd = SocketServer.TCPServer(("", port), Handler)
     print "serving at port", port
     httpd.serve_forever()
 
+
 def background_web_server(dir=None, port="50080"):
     file_utils.cd(dir)
     ret_val = exe_utils.run_python("-m SimpleHTTPServer " + port, fork=True, pid_file="py_server.pid")
     return ret_val
+
 
 def my_wget(url, file_path, delete_first=True):
     """ wget a file from url
@@ -55,6 +58,7 @@ def my_wget(url, file_path, delete_first=True):
         is_success = False
     return is_success
 
+
 def wget(url, file_path, delete_first=True):
     """ wget a file from url
         IMPORTANT NOTE: this will *not* work if the URL is a redirect, etc...
@@ -66,9 +70,10 @@ def wget(url, file_path, delete_first=True):
     log.info("wget: downloaded {} into file {}".format(url, file_path))
     return is_success
 
+
 def post(hostname, port, path, data):
-    '''
-    '''
+    """
+    """
     statuscode = -111
     try:
         webservice = httplib.HTTP("{}:{}".format(hostname, port))
@@ -86,11 +91,13 @@ def post(hostname, port, path, data):
         log.info(e)
     return statuscode
 
+
 def post_data(url, data):
-    '''
-    '''
+    """
+    """
     u = urlparse.urlparse(url)
     return post(u.hostname, u.port, u.path, data)
+
 
 def post_file(url, file_path):
     """ http post a file to a url
@@ -106,9 +113,10 @@ def post_file(url, file_path):
         log.info(e)
     return statuscode
 
+
 def get(url):
-    ''' safe http get of url, with return of
-    '''
+    """ safe http get of url, with return of
+    """
     success = True
     response = None
     try:
@@ -118,9 +126,10 @@ def get(url):
         success = False
     return success, response
 
+
 def get_response(url, show_info=False):
-    ''' safe / simple get response
-    '''
+    """ safe / simple get response
+    """
     ret_val = None
     response = None
     try:
@@ -136,8 +145,9 @@ def get_response(url, show_info=False):
             response.close()
     return ret_val
 
+
 def write_url_response_file(file_path, url, response):
-    ''' write url atop a file, and the response body below...
+    """ write url atop a file, and the response body below...
         will looks something like:
             http://maps7:80/prod?submit&module=planner&fromPlace=ME::45.468019,-122.655552&toPlace=OHSU::45.499049,-122.684283&maxWalkDistance=840&optimize=QUICK&time=10:00AM&date=11-02-2016
 
@@ -147,7 +157,7 @@ def write_url_response_file(file_path, url, response):
 
             RESPONSE:
             {"requestParameters":{"date":"11-02-2016","submit":"","optimize":"QUICK","fromPlace":"ME::45.468019,-12...
-    '''
+    """
     f = None
     try:
         f = open(file_path, 'w')
@@ -161,9 +171,10 @@ def write_url_response_file(file_path, url, response):
         if f is not None:
             f.close()
 
+
 def simple_email(msg, to, from_email="mail@opentriptools.com", subject="loader email", mail_server="localhost"):
-    ''' simple send email
-    '''
+    """ simple send email
+    """
     is_success = False
 
     # step 1: sort out the recipeients of this email and other params
@@ -178,6 +189,7 @@ def simple_email(msg, to, from_email="mail@opentriptools.com", subject="loader e
     if recipients:
         is_success = email(msg, subject, recipients, from_email, mail_server)
     return is_success
+
 
 def email(msg, subject, recipients, from_email, mail_server):
     """ send an email to someone...

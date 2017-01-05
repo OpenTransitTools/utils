@@ -11,7 +11,7 @@ import string_utils
 
 
 def get_mtime(file):
-    ''' datetime for the modified file time '''
+    """ datetime for the modified file time """
     try:
         mtime = os.path.getmtime(file)
     except:
@@ -29,14 +29,14 @@ def file_time(file):
     return dt
 
 def file_age(file):
-    ''' age in days '''
+    """ age in days """
     mtime = file_time(file)
     now = datetime.datetime.now()
     diff = now - mtime
     return diff.days
 
 def file_age_seconds(file):
-    ''' age in days '''
+    """ age in days """
     mtime = file_time(file)
     now = datetime.datetime.now()
     diff = now - mtime
@@ -44,10 +44,10 @@ def file_age_seconds(file):
     return ret_val
 
 def file_size(file):
-    ''' return size of file path
+    """ return size of file path
         note: symlinks are kinda broken here python
               os.path.realpath(path) doesn't work on mac to get real file path
-    '''
+    """
     try:
         s = os.stat(file)
     except:
@@ -109,8 +109,8 @@ def is_a_newer_than_b(file_a, file_b):
     return ret_val
 
 def dir_has_newer_files(file, dir, include_filter=None, exclude_filter=None):
-    ''' determine if any files in the directory have a newer update date than target file
-    '''
+    """ determine if any files in the directory have a newer update date than target file
+    """
     #import pdb; pdb.set_trace()
     ret_val = False
     if not os.path.exists(file):
@@ -182,9 +182,9 @@ def rm(file):
         os.remove(file)
 
 def purge(dir, pattern):
-    ''' remove multiple files
+    """ remove multiple files
         borrowed from http://stackoverflow.com/questions/1548704/delete-multiple-files-matching-a-pattern
-    '''
+    """
     try:
         for f in os.listdir(dir):
             if re.search(pattern, f):
@@ -193,8 +193,8 @@ def purge(dir, pattern):
         log.info(e)
 
 def ls(dir, include_filter=None):
-    ''' return a list of files in a directory, with an optional name filter
-    '''
+    """ return a list of files in a directory, with an optional name filter
+    """
     ret_val = []
     file_paths = next(os.walk(dir))[2]
     for f in file_paths:
@@ -287,8 +287,8 @@ def unzip_file(zip_path, file_name, target_file_path=None):
     return ret_val
 
 def remove_file_from_zip(zip_path, file_name):
-    ''' remove a file(s) from a zip
-    '''
+    """ remove a file(s) from a zip
+    """
     # step 1: remove tmp zip file file
     tmpzip = zip_path + '.tmp'
     rm(tmpzip)
@@ -308,8 +308,8 @@ def remove_file_from_zip(zip_path, file_name):
     mv(tmpzip, zip_path)
 
 def add_file_to_zip(zip_path, file_path, basename=None):
-    ''' add a file to a zip file
-    '''
+    """ add a file to a zip file
+    """
     if basename is None:
         basename = os.path.basename(file_path)
     zip = zipfile.ZipFile(zip_path, mode='a', compression=zipfile.ZIP_DEFLATED)
@@ -317,9 +317,9 @@ def add_file_to_zip(zip_path, file_path, basename=None):
     zip.close()
 
 def replace_strings_in_zipfile(zip_path, file_name, regex_str, replace_str, zip_basename=None):
-    ''' collective of file utils functions to open a file from a .zip file, replace contents in that zip, and bundle
+    """ collective of file utils functions to open a file from a .zip file, replace contents in that zip, and bundle
         the .zip file back up with the edited contents
-    '''
+    """
     file_path = unzip_file(zip_path, file_name)
     replace_strings_in_file(file_path, regex_str, replace_str)
     remove_file_from_zip(zip_path, file_name)

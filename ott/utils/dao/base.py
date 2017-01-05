@@ -6,9 +6,9 @@ import datetime
 
 
 class SerializerRegistry(object):
-    ''' @see: http://stackoverflow.com/questions/4821940/how-to-make-simplejson-serializable-class
+    """ @see: http://stackoverflow.com/questions/4821940/how-to-make-simplejson-serializable-class
         this class will help serialize abitrary python objects into JSON (along with date / datetime handelling)
-    '''
+    """
     def __init__(self):
         self._classes = {}
 
@@ -86,8 +86,8 @@ class BaseDao(object):
 
     @classmethod
     def orm_to_geojson(cls, orm):
-        ''' export orm column 'geom'
-        '''
+        """ export orm column 'geom'
+        """
         geojson = None
         try:
             geojson = cls.geom_to_geojson(orm.session, orm.geom)

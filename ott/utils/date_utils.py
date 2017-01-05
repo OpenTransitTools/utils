@@ -23,16 +23,16 @@ def get_local_date():
     return datetime.date.today()
 
 def get_hour(tm=None):
-    ''' return hour from input time as int
-    '''
+    """ return hour from input time as int
+    """
     if tm is None:
         tm = get_local_time()
     return tm.tm_hour
 
 def get_day_before(year=None, month=None, day=None, num_days=1):
-    ''' return a datetime.date for the day before specified date
+    """ return a datetime.date for the day before specified date
         NOTE: if no params sent, default is yesterday
-    '''
+    """
     dt = get_local_date()
     y = num_utils.to_int(year, dt.year)
     m = num_utils.to_int(month, dt.month)
@@ -42,9 +42,9 @@ def get_day_before(year=None, month=None, day=None, num_days=1):
     return before
 
 def is_today(month, day, def_val=False):
-    ''' return True if month and day are same as today, else return False
+    """ return True if month and day are same as today, else return False
         if either day or month are None, return def_val
-    '''
+    """
     ret_val = def_val
     if month and day:
         dt = get_local_date()
@@ -55,8 +55,8 @@ def is_today(month, day, def_val=False):
     return ret_val
 
 def get_time_info(tm=None):
-    ''' gets a dict with a few params based on input date-time object
-    '''
+    """ gets a dict with a few params based on input date-time object
+    """
     if tm is None:
         tm = get_local_time()
     ret_val = {
@@ -67,8 +67,8 @@ def get_time_info(tm=None):
     return ret_val
 
 def get_day_info(dt=None):
-    ''' gets a dict with a few params based on input date-time object
-    '''
+    """ gets a dict with a few params based on input date-time object
+    """
     if dt is None:
         dt = get_local_date()
 
@@ -84,8 +84,8 @@ def get_day_info(dt=None):
     return ret_val
 
 def parse_month_day_year_string(mdy_str, sep='/'):
-    ''' convert MM/DD/YYYY string into parts
-    '''
+    """ convert MM/DD/YYYY string into parts
+    """
     p = mdy_str.split(sep)
     ret_val = {
         'month' : object_utils.list_val(p, 0),
@@ -95,14 +95,14 @@ def parse_month_day_year_string(mdy_str, sep='/'):
     return ret_val
 
 def normalize_year(input_month, input_year=None):
-    ''' This routine is used when we only have month parameters (text planner / stop schedule lookup) and the
+    """ This routine is used when we only have month parameters (text planner / stop schedule lookup) and the
         year is implied...
 
         RULES:
           return last year if we're w/in a few months of the new year, today is in the months of Jan-March and the search month is Sept-Dec
           return next year if we're w/in a few months of the new year, today is in the months of April-Dec and the search month is this month - 3 
           return this year otherwise...
-    '''
+    """
     today = get_local_date()
 
     input_year  = num_utils.to_int(input_year,  today.year)
@@ -118,8 +118,8 @@ def normalize_year(input_month, input_year=None):
     return ret_val
 
 def set_date(dt=None, month=None, day=None, year=None):
-    ''' return a datetime object, setting new month & day ranges
-    '''
+    """ return a datetime object, setting new month & day ranges
+    """
     if dt is None:
         dt = get_local_date()
 
@@ -172,8 +172,8 @@ def secs_since_epoch(t=None):
     return secs 
 
 def is_distant(dt, days=35):
-    ''' test whether date time is in 'distant' past compared to today
-    '''
+    """ test whether date time is in 'distant' past compared to today
+    """
     ret_val = False
     today = get_local_date()
     if type(dt) is datetime.datetime:
@@ -183,8 +183,8 @@ def is_distant(dt, days=35):
     return ret_val
 
 def is_past(secs, min_val=1000000000):
-    ''' test whether second is in the past compared to now in epoch seconds
-    '''
+    """ test whether second is in the past compared to now in epoch seconds
+    """
     ret_val = False
     now = secs_since_epoch()
     if secs > min_val and secs < now:
@@ -192,8 +192,8 @@ def is_past(secs, min_val=1000000000):
     return ret_val
 
 def is_future(secs, min_val=1000000000):
-    ''' test whether second is in the future compared to now in epoch seconds 
-    '''
+    """ test whether second is in the future compared to now in epoch seconds 
+    """
     ret_val = False
     now = secs_since_epoch()
     if secs > min_val and secs > now:
@@ -201,9 +201,9 @@ def is_future(secs, min_val=1000000000):
     return ret_val
 
 def make_tab_obj(name, uri=None, date=None, append=None):
-    ''' for the date tab on the stop schedule page, we expect an object that has a name and a url
+    """ for the date tab on the stop schedule page, we expect an object that has a name and a url
         this method builds that structure, and most importantly, the url for those tabs
-    '''
+    """
     ret_val = {}
 
     # put the name of the tab first (and strip off any leading / trailing ZEROs if the name is a date)
@@ -223,8 +223,8 @@ def make_tab_obj(name, uri=None, date=None, append=None):
     return ret_val
 
 def get_svc_date_tabs(dt, uri, more_tab=True, translate=ret_me, fmt='%m/%d/%Y', smfmt='%m/%d', pttyfmt='%A, %B %d, %Y'):
-    ''' return 3 date strings representing the next WEEKDAY, SAT, SUN 
-    '''
+    """ return 3 date strings representing the next WEEKDAY, SAT, SUN 
+    """
     ret_val = []
 
     #import pdb; pdb.set_trace()
@@ -267,8 +267,8 @@ def get_svc_date_tabs(dt, uri, more_tab=True, translate=ret_me, fmt='%m/%d/%Y', 
     return ret_val
 
 def str_to_date(str_date, fmt_list=['%Y-%m-%d', '%m/%d/%Y', '%m-%d-%Y'], def_val=None):
-    ''' utility function to parse a request object for something that looks like a date object...
-    '''
+    """ utility function to parse a request object for something that looks like a date object...
+    """
     if def_val is None:
         def_val = get_local_date()
 
@@ -306,11 +306,11 @@ def make_date_from_timestamp(num, def_val=None):
     return ret_val
 
 def is_date_between(start, end, now=None):
-    ''' will compare a datetime (now) to a start and end datetime.
+    """ will compare a datetime (now) to a start and end datetime.
         the datetime being compared defaults to 'now()'
         if a date() submitted, then defaults will be added to turn that into a datetime() for date() at 12am
         if a time() is submitted, then defaults will be added to turn that into a datetime() of today at time()
-    '''
+    """
     ret_val = False
 
     try:
@@ -335,8 +335,8 @@ def is_date_between(start, end, now=None):
     return ret_val
 
 def split_time(time):
-    ''' given 02:33:44 as a time string, return
-    '''
+    """ given 02:33:44 as a time string, return
+    """
     h = None
     m = None
     try:
@@ -348,12 +348,12 @@ def split_time(time):
     return h, m
 
 def now_time_code(time, now=None, tolerance_minutes=30):
-    ''' return a code comparing NOW to time string in milatary format
+    """ return a code comparing NOW to time string in milatary format
         return values:
             "E" = Earlier time than NOW
             "N" = NOW
             "L" = Later time than NOW
-    '''
+    """
     ret_val = "E"
     if now is None:
         now = datetime.datetime.now()
@@ -392,10 +392,10 @@ def now_time_code(time, now=None, tolerance_minutes=30):
     return ret_val
 
 def military_to_english_time(time, fmt="{0}:{1:02d}{2}"):
-    ''' assumes 08:33:55 and 22:33:42 type times
+    """ assumes 08:33:55 and 22:33:42 type times
         will return 8:33am and 10:33pm
         (not we floor the minutes)
-    '''
+    """
     ret_val = time
     try:
         h, m = split_time(time)

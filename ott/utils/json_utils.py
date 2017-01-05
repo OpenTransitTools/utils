@@ -11,8 +11,8 @@ import contextlib
 
 
 def stream_json(u, args=None, extra_path=None):
-    ''' utility class to stream .json
-    '''
+    """ utility class to stream .json
+    """
     ret_val={}
     url = u
     if extra_path:
@@ -24,9 +24,10 @@ def stream_json(u, args=None, extra_path=None):
         ret_val = json.loads(otp)
     return ret_val
 
+
 def get_json(file, path='ott/utils/tests/json'):
-    ''' utility class to load a static .json file for mock'ing a service
-    '''
+    """ utility class to load a static .json file for mock'ing a service
+    """
     ret_val={}
     try:
         with open(file) as f:
@@ -41,9 +42,10 @@ def get_json(file, path='ott/utils/tests/json'):
 
     return ret_val
 
+
 def str_to_json(str, def_val={}):
-    ''' utility class to load a static .json file for mock'ing a service
-    '''
+    """ utility class to load a static .json file for mock'ing a service
+    """
     ret_val=def_val
     try:
         ret_val = json.loads(str)
@@ -52,13 +54,14 @@ def str_to_json(str, def_val={}):
 
     return ret_val
 
+
 def json_repr(obj, pretty_print=False):
-    ''' Represent instance of a class as JSON.
+    """ Represent instance of a class as JSON.
         returns a string that represents a JSON-encoded object.
         @from: http://stackoverflow.com/a/4682553/2125598
-    '''
+    """
     def serialize(obj):
-        '''Recursively walk object's hierarchy.'''
+        """Recursively walk object's hierarchy."""
         if(obj is None):
             return None
         if isinstance(obj, (bool, int, long, float, basestring)):
@@ -90,4 +93,3 @@ def json_repr(obj, pretty_print=False):
 
     ## step 3: return result
     return ret_val
-

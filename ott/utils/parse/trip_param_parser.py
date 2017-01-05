@@ -43,8 +43,8 @@ class TripParamParser(ParamParser):
         return TripParamParser(request)
 
     def clone(self):
-        ''' copy this parser
-        '''
+        """ copy this parser
+        """
         p = super(TripParamParser, self).clone()
         p.frm = self.frm
         p.to = self.to
@@ -58,8 +58,8 @@ class TripParamParser(ParamParser):
         return p
 
     def safe_format(self, fmt, def_val=''):
-        ''' 
-        '''
+        """ 
+        """
         ret_val = def_val
         try:
             ret_val = fmt.format(**self.__dict__)
@@ -80,16 +80,16 @@ class TripParamParser(ParamParser):
         return self.param_exists('pretty') or self.param_exists('is_pretty')
 
     def ott_url_params(self, fmt="from={frm}&to={to}&Hour={hour}&Minute={min}&AmPm={am_pm}&month={month}&day={day}&year={year}&Walk={walk}&Arr={arrive_depart_raw}&min={optimize}&mode={mode}"):
-        ''' return a string with the parameter values formatted for the OTT webapps
-        '''
+        """ return a string with the parameter values formatted for the OTT webapps
+        """
         ret_val = self.safe_format(fmt)
         ret_val = object_utils.fix_url(ret_val)
         return ret_val
 
     def ott_url_params_return_trip(self, add_hours=1, add_mins=30, fmt="from={to}&to={frm}&month={month}&day={day}&year={year}&Walk={walk}&Arr={arrive_depart_raw}&min={optimize}&mode={mode}"):
-        ''' return a string with the parameter values formatted for OTT with a return trip of hours+X and minutes+Y 
+        """ return a string with the parameter values formatted for OTT with a return trip of hours+X and minutes+Y 
             (change am to pm if needed, etc...)
-        '''
+        """
         fmt = "Hour={add_hour}&Minute={add_min}&AmPm={add_am_pm}&" + fmt
 
         # handle the extra minutes for the reverse trip (increment hours if need be)
@@ -113,15 +113,15 @@ class TripParamParser(ParamParser):
         return ret_val
 
     def otp_url_params(self, fmt="fromPlace={frm}&toPlace={to}&time={time}&date={date}&mode={mode}&optimize={optimize}&maxWalkDistance={walk_meters}&arriveBy={arrive_depart}"):
-        ''' return a string with the parameter values formatted for the OTP routing engine (opentripplanner-api-webapp)
-        '''
+        """ return a string with the parameter values formatted for the OTP routing engine (opentripplanner-api-webapp)
+        """
         ret_val = self.safe_format(fmt)
         ret_val = ret_val.replace("False", "false").replace("True", "true")
         ret_val = object_utils.fix_url(ret_val)
         return ret_val
 
     def map_url_params(self, fmt="from={frm}&to={to}&time={time}&date={month}/{day}/{year}&mode={mode}&optimize={optimize}&maxWalkDistance={walk_meters:.0f}&arriveBy={arrive_depart}"):
-        ''' return a string with the parameter values formatted for the OTT webapps
+        """ return a string with the parameter values formatted for the OTT webapps
             http://maps.trimet.org/prod?
                 toPlace=ZOO%3A%3A45.509700%2C-122.716290
                 fromPlace=PDX%3A%3A45.587647%2C-122.593173
@@ -131,7 +131,7 @@ class TripParamParser(ParamParser):
                 optimize=QUICK
                 maxWalkDistance=420
                 arriveBy=true
-        '''
+        """
         ret_val = self.safe_format(fmt)
         ret_val = ret_val.replace("False", "false").replace("True", "true")
         ret_val = object_utils.fix_url(ret_val)
@@ -173,11 +173,11 @@ class TripParamParser(ParamParser):
             self.to = val
 
     def get_arrive_param(self):
-        ''''''
+        """"""
         return self.get_first_val(['Arr'])
 
     def is_arriveby(self, arr=None):
-        ''''''
+        """"""
         ret_val = False
         if arr is None:
             arr = self.get_arrive_param()
@@ -186,7 +186,7 @@ class TripParamParser(ParamParser):
         return ret_val
 
     def is_latest(self, arr=None):
-        ''''''
+        """"""
         ret_val = False
         if arr is None:
             arr = self.get_arrive_param()
@@ -195,7 +195,7 @@ class TripParamParser(ParamParser):
         return ret_val
 
     def is_earliest(self, arr=None):
-        ''''''
+        """"""
         ret_val = False
         if arr is None:
             arr = self.get_arrive_param()
@@ -204,8 +204,8 @@ class TripParamParser(ParamParser):
         return ret_val
 
     def _parse_from(self):
-        ''' parse out the trip origin from get params ... the value could be a string, a coordinate or combo of the two
-        '''
+        """ parse out the trip origin from get params ... the value could be a string, a coordinate or combo of the two
+        """
         name = self.get_first_val(['from', 'fromPlace', 'f'])
         if name:
             self.frm = object_utils.to_str(name)
@@ -225,8 +225,8 @@ class TripParamParser(ParamParser):
             self.frm = self.frm.replace("&", "%26")  # escape & in the name
 
     def _parse_to(self):
-        ''' parse out the trip destination from get params ... the value could be a string,a coordinate or combo of the two
-        '''
+        """ parse out the trip destination from get params ... the value could be a string,a coordinate or combo of the two
+        """
         name = self.get_first_val(['to', 'toPlace', 't'])
         if name:
             self.to = object_utils.to_str(name)
@@ -246,8 +246,8 @@ class TripParamParser(ParamParser):
             self.to = self.to.replace("&", "%26")  # escape & in the name
 
     def _parse_walk(self):
-        ''' parse out the max walk (bike) distance ... default to 1 mile (~1609 meters)
-        '''
+        """ parse out the max walk (bike) distance ... default to 1 mile (~1609 meters)
+        """
         self.walk = self.get_first_val(['maxWalkDistance', 'maxWalk', 'Walk'], "1609")
         try:
             dist = float(self.walk)
@@ -261,8 +261,8 @@ class TripParamParser(ParamParser):
             pass
 
     def _parse_arrive_depart(self):
-        ''' parse out the arrive / depart string
-        '''
+        """ parse out the arrive / depart string
+        """
         self.arrive_depart = False
         val = self.get_arrive_param()
         if val:
@@ -277,15 +277,15 @@ class TripParamParser(ParamParser):
                 self.time = "4:00am"
 
     def _parse_misc(self):
-        ''' parse everything else for a param'''
+        """ parse everything else for a param"""
         mh = self.get_first_val_as_int(['maxHours'])
         if mh:
             self.max_hours = mh
 
     def _parse_mode(self):
-        ''' parse out the mode string ... and default to TRANSIT,WALK
+        """ parse out the mode string ... and default to TRANSIT,WALK
             convert mode string, if it's legacy, to OTP mode strings 
-        '''
+        """
         self.mode = self.get_first_val(['Mode'])
 
         # order is important....
@@ -312,8 +312,8 @@ class TripParamParser(ParamParser):
             self.mode = 'TRANSIT,WALK'
 
     def _parse_optimize(self):
-        ''' parse out the optimize flag
-        '''
+        """ parse out the optimize flag
+        """
         #import pdb; pdb.set_trace()
         self.optimize = self.get_first_val(['Optimize', 'Opt', 'Min'])
         if self.optimize in ('F', 'X', 'TRANSFERS'):

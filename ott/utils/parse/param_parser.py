@@ -1,5 +1,5 @@
-'''
-'''
+"""
+"""
 import re
 import time
 import datetime
@@ -41,8 +41,8 @@ class ParamParser(object):
         return ParamParser(request)
 
     def clone(self):
-        ''' copy this parser
-        '''
+        """ copy this parser
+        """
         p = self.factory(self.request)
         p.date = self.date
         p.day = self.day
@@ -64,16 +64,16 @@ class ParamParser(object):
         return p
 
     def _parse_date(self):
-        ''' parse out a date from either the 'date' param, or separate month/day/year params
+        """ parse out a date from either the 'date' param, or separate month/day/year params
             &month={month}&day={day}&year={year}
-        '''
+        """
         self.date = self.get_first_val(['Date'])
         self.date = self._make_date_from_parts()
         return self.date
 
     def _make_date_from_parts(self, fmt="{year}-{month}-{day}"):
-        ''' convert date 
-        '''
+        """ convert date 
+        """
         d = date_utils.str_to_date(self.date)
 
         self.day = self.get_first_val(['Day'])
@@ -98,8 +98,8 @@ class ParamParser(object):
         return ret_val
 
     def _normalize_date_parts(self):
-        ''' make sure we have all the date parts separated from the larger date field (since we build urls with that)
-        '''
+        """ make sure we have all the date parts separated from the larger date field (since we build urls with that)
+        """
         try:
             d = self.date.split('-')
             if d and len(d) == 3:
@@ -112,8 +112,8 @@ class ParamParser(object):
             log.warning(e)
 
     def date_offset(self, day_offset):
-        ''' change the date by x number of days, either +/-
-        '''
+        """ change the date by x number of days, either +/-
+        """
         #import pdb; pdb.set_trace()
         d = date_utils.str_to_date(self.date)
         d = d + datetime.timedelta(days=day_offset)
@@ -125,16 +125,16 @@ class ParamParser(object):
             log.warning("couldn't change the date with offset {}".format(day_offset))
 
     def _parse_time(self):
-        ''' parse out a date from either the 'date' param, or separate month/day/year params
+        """ parse out a date from either the 'date' param, or separate month/day/year params
             &Hour={hour}&Min={min}&AmPm={am_pm}
-        '''
+        """
         self.time = self.get_first_val(['Time'])
         self.time = self._make_time_from_parts()
         return self.time
 
     def _make_time_from_parts(self, fmt="{hour}:{min}{am_pm}", use_24_hour=False):
-        ''' convert date 
-        '''
+        """ convert date 
+        """
         loc_time = self.make_time_object(self.time)
 
         self.hour = self.get_first_val(['Hour'])
@@ -158,8 +158,8 @@ class ParamParser(object):
         return ret_val
 
     def _normalize_time_parts(self):
-        ''' take time, and break it into it's parts of hour, min, am_pm
-        '''
+        """ take time, and break it into it's parts of hour, min, am_pm
+        """
         try:
             t = self.time.split(':')
             if t and len(t) == 2:
@@ -173,8 +173,8 @@ class ParamParser(object):
 
     @classmethod
     def make_time_object(cls, time_str, fmt="%h:%M%a"):
-        ''' will convert self.time into a time object ... or if that fails, return the local time
-        '''
+        """ will convert self.time into a time object ... or if that fails, return the local time
+        """
         try:
             ret_val = datetime.time.strptime(time_str, fmt)
         except:
@@ -185,8 +185,8 @@ class ParamParser(object):
         return param in self.params
 
     def get(self, name, def_val=None):
-        '''
-        '''
+        """
+        """
         ret_val = def_val
         try:
             ret_val = self.params[name]
@@ -198,8 +198,8 @@ class ParamParser(object):
         return ret_val
 
     def get_first_val(self, names, def_val=None):
-        ''' pass in a list of 'names', and return the first name that has a value in self.params
-        '''
+        """ pass in a list of 'names', and return the first name that has a value in self.params
+        """
         ret_val = def_val
         for n in names:
             v = self.get(n)
@@ -209,8 +209,8 @@ class ParamParser(object):
         return ret_val
 
     def get_first_val_trim(self, names, def_val=None):
-        ''' get the first value, but trim back white space and leading ZEROs (good for IDs, etc...)
-        '''
+        """ get the first value, but trim back white space and leading ZEROs (good for IDs, etc...)
+        """
         ret_val = def_val
         v = self.get_first_val(names, def_val)
         if v is not None and v != 'None':
@@ -218,9 +218,9 @@ class ParamParser(object):
         return ret_val
 
     def get_first_val_as_numeric(self, names, def_val=None):
-        ''' pass in a list of 'names', and return the first name that has a value in self.params
+        """ pass in a list of 'names', and return the first name that has a value in self.params
             with the additional requirement that this value is a numeric value 
-        '''
+        """
         ret_val = None
         str = def_val
         try:
@@ -231,9 +231,9 @@ class ParamParser(object):
         return ret_val
 
     def get_first_val_as_int(self, names, def_val=None):
-        ''' pass in a list of 'names', and return the first name that has a value in self.params
+        """ pass in a list of 'names', and return the first name that has a value in self.params
             with the additional requirement that this value is an int value 
-        '''
+        """
         ret_val = None
         str = def_val
         try:
@@ -244,9 +244,9 @@ class ParamParser(object):
         return ret_val
 
     def get_first_val_as_bool(self, names, def_val=False):
-        ''' pass in a list of 'names', and return the first name that has a value in self.params
+        """ pass in a list of 'names', and return the first name that has a value in self.params
             with the additional requirement that this value is an int value 
-        '''
+        """
         ret_val = def_val
         try:
             val = self.get_first_val(names)
@@ -274,9 +274,9 @@ class ParamParser(object):
 
     @classmethod
     def strip_coord(cls, place):
-        ''' break up any PLACE::45.5,-122.5 into name & coord part
+        """ break up any PLACE::45.5,-122.5 into name & coord part
             (if no ::, then coord is assumed to be whole input string) 
-        '''
+        """
         ret_val = place
         try:
             parts = place.split("::")
@@ -287,8 +287,8 @@ class ParamParser(object):
 
     @classmethod
     def has_valid_coord(cls, coord):
-        '''
-        '''
+        """
+        """
         ret_val = False
 
         try:
@@ -309,8 +309,8 @@ class ParamParser(object):
 
     @classmethod
     def make_named_coord(cls, name, coord=None, def_val=None):
-        '''
-        '''
+        """
+        """
         ret_val = def_val
 
         if name and coord:

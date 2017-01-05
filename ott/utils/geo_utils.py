@@ -20,8 +20,8 @@ def is_coord(str):
     return ret_val
 
 def is_address(str):
-    ''' does string look kinda-like an (US postal) address 
-    '''
+    """ does string look kinda-like an (US postal) address 
+    """
     ret_val = False
     try:
         if ADDRESS_RE.search(str):
@@ -31,8 +31,8 @@ def is_address(str):
     return ret_val
 
 def contains_coord(place):
-    ''' determine if the string has something that looks like a coord
-    '''
+    """ determine if the string has something that looks like a coord
+    """
     ret_val = False
     coord = place
     if coord and "::" in coord:
@@ -42,8 +42,8 @@ def contains_coord(place):
     return ret_val
 
 def is_param_a_coord(request, type='place'):
-    ''' determine if the url has either a typeCoord url parameter, or a type::45.5,-122.5 param
-    '''
+    """ determine if the url has either a typeCoord url parameter, or a type::45.5,-122.5 param
+    """
     ret_val = False
     coord = html_utils.get_first_param(request, type + 'Coord')
     if is_coord(coord):
@@ -55,8 +55,8 @@ def is_param_a_coord(request, type='place'):
     return ret_val
 
 def get_coord_from_dict(coord, def_val=None):
-    ''' return lat,lon based on {"lat":y, "lon":x}
-    '''
+    """ return lat,lon based on {"lat":y, "lon":x}
+    """
     lat = object_utils.dval(coord, 'lat', def_val)
     lon = object_utils.dval(coord, 'lon', def_val)
 
@@ -70,8 +70,8 @@ def get_coord_from_dict(coord, def_val=None):
     return lat, lon
 
 def to_OSPN(lon, lat):
-    ''' return Oregon State-Plane North X,Y for input lon,lat
-    '''
+    """ return Oregon State-Plane North X,Y for input lon,lat
+    """
     lon = float(lon)
     lat = float(lat)
     x = ((6350713.93 -(111123.3583*(lat-45.1687259619)+9.77067* math.pow(lat-45.1687259619, 2) + 5.62487 * math.pow(lat-45.1687259619, 3) + 0.024544 * math.pow(lat-45.1687259619, 4) ))* math.sin(((3.14159265359*((120.5+lon) * math.sin(45.1687259*3.14159265359/180)))/180))+2500000)/0.3048
@@ -81,8 +81,8 @@ def to_OSPN(lon, lat):
     return x,y
 
 def to_lon_lat(x, y):
-    ''' return lon,lat from OSPN
-    '''
+    """ return lon,lat from OSPN
+    """
     x = float(x)
     y = float(y)
     lon = +((((math.atan(((x*0.3048)-2500000)/(6350713.93-((y*0.3048)-166910.7663))))*180)/(3.14159265359*0.709186016884))-120.5)
@@ -90,13 +90,13 @@ def to_lon_lat(x, y):
     return lon,lat
 
 def get_address_from_dict(address, def_val=None):
-    '''
+    """
         "street": "355 Binney St",
         "city": "Cambridge",
         "region_name": "Massachusetts",
         "postal_code": "02139",
         "country_code": "US"
-    '''
+    """
     street = object_utils.dval(address, 'street', def_val)
     city   = object_utils.dval(address, 'city',   def_val)
     state  = object_utils.dval(address, 'state',  def_val)
@@ -112,8 +112,8 @@ def get_address_from_dict(address, def_val=None):
     return street, city, state, zip
 
 def get_coord_from_request(request, param_name='placeCoord', def_val=None):
-    ''' return lat,lon based on either a coord name, or lat/lon parametres
-    '''
+    """ return lat,lon based on either a coord name, or lat/lon parametres
+    """
     ret_val = def_val
     try:
         c = html_utils.get_first_param(request, param_name)
@@ -129,8 +129,8 @@ def get_coord_from_request(request, param_name='placeCoord', def_val=None):
     return ret_val
 
 def get_named_param_from_request(request, param_name, def_val=None):
-    ''' return a fully built out NAME::lat,lon string based on params in the request
-    '''
+    """ return a fully built out NAME::lat,lon string based on params in the request
+    """
     ret_val = def_val
     try:
         # step 1: get name (which may/may not be a fully NAME::COORD string...
@@ -182,8 +182,8 @@ def name_from_named_place(place, def_val=None):
     return ret_val
 
 def city_from_named_place(place, def_val=None):
-    ''' PDX::-122,45::Portland ... will return the Portland portion, if it exists...
-    '''
+    """ PDX::-122,45::Portland ... will return the Portland portion, if it exists...
+    """
     ret_val = def_val
     if place and "::" in place:
         p = place.split("::")
@@ -192,8 +192,8 @@ def city_from_named_place(place, def_val=None):
     return ret_val
 
 def ll_from_str(place, def_val=None, to_float=False):
-    ''' break 45.5,-122.5 to lat,lon components
-    '''
+    """ break 45.5,-122.5 to lat,lon components
+    """
     lat = def_val
     lon = def_val
     try:
@@ -216,8 +216,8 @@ def ll_from_str(place, def_val=None, to_float=False):
     return lat,lon
 
 def get_name_city_from_string(str):
-    ''' will break up something like 834 SE X Street, Portland <97xxx> into '834 SE X Street' and 'Portland'
-    '''
+    """ will break up something like 834 SE X Street, Portland <97xxx> into '834 SE X Street' and 'Portland'
+    """
     name = None
     city = None
     try:
@@ -234,11 +234,11 @@ def get_name_city_from_string(str):
     return name,city
 
 def is_nearby(latA, lonA, latB, lonB, decimal_diff=0.0015):
-    ''' compares lat/lon A vs lat/lon B to sees whether their values
+    """ compares lat/lon A vs lat/lon B to sees whether their values
         are within a certain decimal place of each other
         NOTE: default is 0.0015 ... if the distant between latA and latB, and lonA and lonB is
               each 0.0015 absolute differnce  
-    '''
+    """
     ret_val = False
     try:
         lat_diff = abs(latA - latB)
@@ -254,9 +254,9 @@ def make_place(name, lat, lon, city=None, place=None):
     return ret_val
 
 def from_place_str(place):
-    ''' will return a dict of descrete values from a place string...
+    """ will return a dict of descrete values from a place string...
         ala PDX::45.5,-122.5::Portland will populate this dict...
-    '''
+    """
     ret_val = None
     try:
         name = name_from_named_place(place, place)

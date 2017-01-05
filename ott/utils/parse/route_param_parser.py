@@ -1,8 +1,10 @@
 from ott.utils import date_utils
 from .param_parser import ParamParser
 
-ROUTE_IDS=['route_id', 'routeID', 'routeId', 'route', 'line']
-DIR_IDS=['dir', 'direction', 'direction_id', 'dir_id', 'directionID', 'dirID', 'directionId', 'dirId']
+
+ROUTE_IDS = ['route_id', 'routeID', 'routeId', 'route', 'line']
+DIR_IDS = ['dir', 'direction', 'direction_id', 'dir_id', 'directionID', 'dirID', 'directionId', 'dirId']
+
 
 class RouteParamParser(ParamParser):
     def __init__(self, params):

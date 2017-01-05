@@ -9,8 +9,8 @@ import object_utils
 
 
 def run_python(cmd_line, fork=False, py_cmd="python", shell=None, pid_file=None, log_file=None):
-    ''' run a python command
-    '''
+    """ run a python command
+    """
     cmd_line = "{} {}".format(py_cmd, cmd_line)
     if shell is None:
         shell = does_cmd_need_a_shell(py_cmd, "--version", fork)
@@ -18,10 +18,10 @@ def run_python(cmd_line, fork=False, py_cmd="python", shell=None, pid_file=None,
     return ret_val
 
 def run_java(cmd_line, fork=False, big_xmx="-Xmx4096m", small_xmx="-Xmx1536m", java_cmd="java", shell=None, pid_file=None, log_file=None):
-    ''' run java ... if we get an exception, try to run again with lower heap size
+    """ run java ... if we get an exception, try to run again with lower heap size
         @pid_file: send this variable with the name of a file (e.g., "pid.txt") in to get the process pid written out
         NOTE: shell is None NONE None, since we want to test if java can run first w/out an environment
-    '''
+    """
     ret_val = None
     if shell is None:
         shell = does_cmd_need_a_shell(java_cmd, "-version", fork)
@@ -39,9 +39,9 @@ def run_java(cmd_line, fork=False, big_xmx="-Xmx4096m", small_xmx="-Xmx1536m", j
     return ret_val
 
 def does_cmd_need_a_shell(cmd, cmd_line="", fork=False):
-    ''' does the cmd need a shell to run properly? ...
+    """ does the cmd need a shell to run properly? ...
         if we get thrown an exception, assume that we do need a shell to execute java
-    '''
+    """
     ret_val = False
     cmd = "{} {}".format(cmd, cmd_line)
     try:
@@ -54,7 +54,7 @@ def does_cmd_need_a_shell(cmd, cmd_line="", fork=False):
     return ret_val
 
 def run_cmd(cmd_line, fork=False, shell=False, pid_file=None, log_file=None):
-    ''' run_cmd("sleep 200") will block for 200 seconds
+    """ run_cmd("sleep 200") will block for 200 seconds
         run_cmd("sleep 200", True) will background the process
 
         @pid_file: send this variable with the name of a file (e.g., "pid.txt") in to get the process pid written out
@@ -62,7 +62,7 @@ def run_cmd(cmd_line, fork=False, shell=False, pid_file=None, log_file=None):
         NOTE: some other options for piping output...
           devnull = open(os.devnull, 'wb')
           subprocess.Popen(['nohup', 'sleep', '100'], stdout=devnull, stderr=devnull)
-    '''
+    """
     log.info(cmd_line)
     kill_old_pid(pid_file)
 
@@ -83,8 +83,8 @@ def run_cmd(cmd_line, fork=False, shell=False, pid_file=None, log_file=None):
     return pid
 
 def kill_old_pid(pid_file):
-    ''' read pid file and then kill process
-    '''
+    """ read pid file and then kill process
+    """
     try:
         pf = open(pid_file, 'r')
         pid = pf.read().strip()
@@ -95,8 +95,8 @@ def kill_old_pid(pid_file):
         log.debug(e)
 
 def write_pid_file(pid_file, pid):
-    ''' write a pid file
-    '''
+    """ write a pid file
+    """
     try:
         pf = open(pid_file, 'w')
         pf.write(str(pid))
@@ -106,8 +106,8 @@ def write_pid_file(pid_file, pid):
         log.debug("Couldn't write to the pid file -- {}".format(e))
 
 def kill(pid):
-    ''' kill a process
-    '''
+    """ kill a process
+    """
     #import pdb; pdb.set_trace()
     try:
         os.kill(int(pid), signal.SIGKILL)

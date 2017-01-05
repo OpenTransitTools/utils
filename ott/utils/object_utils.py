@@ -6,15 +6,16 @@ log = logging.getLogger(__file__)
 
 
 def to_hash(str):
-    ''' generates nice 0AI3Mk6FErSH4Q== type hashes from strings '''
+    """ generates nice 0AI3Mk6FErSH4Q== type hashes from strings """
     hasher = hashlib.sha1(str)
     ret_val = base64.urlsafe_b64encode(hasher.digest()[0:10])
     return ret_val
 
+
 def get_error_message(err, def_val=None):
-    ''' return error message from an OTP error object
+    """ return error message from an OTP error object
         {'error': {'msg': 'Origin is within a trivial distance of the destination.', 'id': 409}}
-    '''
+    """
     ret_val = def_val
     try:
         ret_val = err.error.msg
@@ -29,9 +30,10 @@ def get_error_message(err, def_val=None):
                 ret_val = def_val
     return ret_val
 
+
 def update_object(tgt, src):
-    ''' copy values from src to tgt, for any shared element names between the two objects
-    '''
+    """ copy values from src to tgt, for any shared element names between the two objects
+    """
     for k, v in src.__dict__.items():
         try:
             if tgt.__dict__.has_key(k):
@@ -39,9 +41,10 @@ def update_object(tgt, src):
         except:
             pass
 
+
 def get_striped_dict_val(dict, name, def_val=None, strip_all_spaces=False, warn_not_avail=True):
-    ''' grab a value from a dict, which strips spaces (and potentially all spaces)
-    '''
+    """ grab a value from a dict, which strips spaces (and potentially all spaces)
+    """
     ret_val = def_val
     try:
         if name in dict:
@@ -70,12 +73,14 @@ def str_compare(str1, str2, insensitive=True):
         pass
     return ret_val
 
+
 def fix_url(url):
-    ''' do things like escape the & in intersection names, ala "17th %26 Center"
-    '''
+    """ do things like escape the & in intersection names, ala "17th %26 Center"
+    """
     ret_val = url
     ret_val = ret_val.replace(" & ", " %26 ")
     return ret_val
+
 
 def has_content(obj):
     ret_val = False
@@ -85,6 +90,7 @@ def has_content(obj):
             ret_val = False
     return ret_val
 
+
 def safe_str(obj, def_val=''):
     ret_val = def_val
     try:
@@ -92,6 +98,7 @@ def safe_str(obj, def_val=''):
     except:
         pass
     return ret_val
+
 
 def safe_int(obj, def_val=None):
     ret_val = def_val
@@ -101,6 +108,7 @@ def safe_int(obj, def_val=None):
         pass
     return ret_val
 
+
 def safe_dict_val(obj, key, def_val=None):
     ret_val = def_val
     try:
@@ -108,6 +116,7 @@ def safe_dict_val(obj, key, def_val=None):
     except:
         pass
     return ret_val
+
 
 def safe_array_val(list, index, def_val=None):
     ret_val = def_val
@@ -117,10 +126,11 @@ def safe_array_val(list, index, def_val=None):
         pass
     return ret_val
 
+
 def safe_get(obj, key, def_val=None):
-    ''' try to return the key'd value from either a class or a dict
+    """ try to return the key'd value from either a class or a dict
         (or return the raw value if we were handed a native type)
-    '''
+    """
     ret_val = def_val
     try:
         ret_val = getattr(obj, key)
@@ -132,9 +142,10 @@ def safe_get(obj, key, def_val=None):
                 ret_val = obj
     return ret_val
 
+
 def safe_get_any(obj, keys, def_val=None):
-    ''' :return object element value matching the first key to have an associated value
-    '''
+    """ :return object element value matching the first key to have an associated value
+    """
     ret_val = def_val
     for k in keys:
         v = safe_get(obj, k)
@@ -143,9 +154,10 @@ def safe_get_any(obj, keys, def_val=None):
             break
     return ret_val
 
+
 def str_to_list(str, def_val=[]):
-    ''' try to return a list of some sort
-    '''
+    """ try to return a list of some sort
+    """
     ret_val = def_val
     try:
         ret_val = str.split(",")
@@ -157,6 +169,7 @@ def str_to_list(str, def_val=[]):
             pass
     return ret_val
 
+
 def list_val(list, index=0, def_val=None):
     ret_val = def_val
     try:
@@ -165,11 +178,14 @@ def list_val(list, index=0, def_val=None):
         log.info(e)
     return ret_val
 
+
 def dval(obj, key, def_val=None):
     return safe_dict_val(obj, key, def_val)
 
+
 def dval_list(obj, key, def_val=[]):
     return safe_dict_val(obj, key, def_val)
+
 
 def strip_tuple(obj, def_val=None):
     ret_val = def_val
@@ -178,6 +194,7 @@ def strip_tuple(obj, def_val=None):
     except:
         pass
     return ret_val
+
 
 def strip_tuple_list(obj_list, def_val=None):
     ret_val = def_val
@@ -191,9 +208,10 @@ def strip_tuple_list(obj_list, def_val=None):
         pass
     return ret_val
 
+
 def to_str(s, def_val=''):
-    ''' multi-byte compliant version of str() unicode conversion...
-    '''
+    """ multi-byte compliant version of str() unicode conversion...
+    """
     ret_val = def_val
     try:
         ret_val = s.encode('utf-8')
@@ -204,6 +222,7 @@ def to_str(s, def_val=''):
             pass
     return ret_val
 
+
 def to_url_param_val(s, def_val=''):
     ret_val = to_str(s, def_val)
     try:
@@ -213,9 +232,10 @@ def to_url_param_val(s, def_val=''):
         pass
     return ret_val
 
+
 def to_code(s, def_val=''):
-    ''' multi-byte compliant version of str() unicode conversion...
-    '''
+    """ multi-byte compliant version of str() unicode conversion...
+    """
     ret_val = def_val
     try:
         ret_val = s.decode('utf-8')
@@ -225,10 +245,11 @@ def to_code(s, def_val=''):
         except:
             pass
     return ret_val
+
 
 def to_str_code(s, def_val=''):
-    ''' multi-byte compliant version of str() unicode conversion...
-    '''
+    """ multi-byte compliant version of str() unicode conversion...
+    """
     ret_val = def_val
     try:
         ret_val = s.decode('utf-8')
@@ -239,11 +260,12 @@ def to_str_code(s, def_val=''):
             pass
     return ret_val
 
+
 def dict_update(src, target, append=False):
-    ''' better than the dict.update(), in that None or '' won't overwrite values
+    """ better than the dict.update(), in that None or '' won't overwrite values
         @param: append variable will append new source into target (regardless of value)
         @return: nothing ... will update / append values to 'target' parameter
-    '''
+    """
     for k,v in src.iteritems():
         if k in target:
             if v:
@@ -251,9 +273,10 @@ def dict_update(src, target, append=False):
         elif append:
             target[k] = v
 
+
 def is_force_update(argv=sys.argv, force=["force", "update", "reload"]):
-    ''' scan argv for words that indicate an update is necessary
-    '''
+    """ scan argv for words that indicate an update is necessary
+    """
     ret_val = False
 
     # test 1 : force update word is a url parameter

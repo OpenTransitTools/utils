@@ -1,11 +1,11 @@
 from .param_parser import ParamParser
 
 NAME_IDS = ['name', 'desc']
-NUM_IDS  = ['num',  'count', 'limit']
-LON_IDS  = ['x',    'lon']
-LAT_IDS  = ['y',    'lat']
+NUM_IDS = ['num',  'count', 'limit']
+LON_IDS = ['x',    'lon']
+LAT_IDS = ['y',    'lat']
 SRID_IDS = ['srid']
-PLACE    = ['place', 'point', 'loc']
+PLACE = ['place', 'point', 'loc']
 
 
 class GeoParamParser(ParamParser):

@@ -64,6 +64,7 @@ def sparkline_discrete(results, output=None, dmin=None, dmax=None, upper=None, w
     else:
         return im
 
+
 def sparkline_smooth(results, output=None, dmin=None, dmax=None, step=2, height=20, \
                           min_color='#0000FF',max_color='#00FF00', last_color='#FF0000', \
                           has_min=False, has_max=False, has_last=False,
