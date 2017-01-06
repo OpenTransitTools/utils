@@ -71,6 +71,25 @@ def wget(url, file_path, delete_first=True):
     return is_success
 
 
+def scp_client(host, user, password=None):
+    """ return the 'scp' & 'ssh' clients (ssh probably not needed, but if it loses scope the tunnel gets closed)
+        NOTE: caller is responsible to call scp.close() on this object
+    """
+    from paramiko import SSHClient
+    from scp import SCPClient
+
+    ssh = SSHClient()
+    ssh.load_system_host_keys()
+    if password:
+        ssh.connect(host, username=user, password=password)
+    else:
+        # assumes that the two servers have a trust relationship ala known_hosts file
+        ssh.connect(host, username=user)
+
+    scp = SCPClient(ssh.get_transport())
+    return scp, ssh
+
+
 def post(hostname, port, path, data):
     """
     """
