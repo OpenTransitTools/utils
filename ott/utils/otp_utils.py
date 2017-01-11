@@ -35,7 +35,6 @@ def restart_call(self, call_db_path="call_center/db/call_db.tar.gz", call_runner
 def get_test_urls_from_config(section='otp', port=None, hostname=None, ws_path=None, map_path=None):
     """ return the OTP map and ws urls from
     """
-    #import pdb; pdb.set_trace()
     config = ConfigUtil(section=section)
 
     if not hostname:
@@ -162,7 +161,6 @@ def get_graphs_from_config(config=None, graph_root_dir='.'):
 def find_graph(graphs, find_name):
     """ will build and test each of the graphs we have in self.graphs
     """
-    #import pdb; pdb.set_trace()
     ret_val = None
     if graphs is None or len(graphs) < 1:
         ret_val = get_graph_details(None)
@@ -265,6 +263,7 @@ def diff_vlog_files(svr, dir, vlog_name=VLOG_NAME):
 def deploy_new_otp_graph(dir, graph_name=GRAPH_NAME, vlog_name=VLOG_NAME, otp_name=OTP_NAME):
     """ go thru steps of backing up old graph and moving new graph into place
     """
+    # import pdb; pdb.set_trace()
     ret_val = False
 
     new_graph = file_utils.make_new_path(dir, graph_name)
@@ -275,15 +274,13 @@ def deploy_new_otp_graph(dir, graph_name=GRAPH_NAME, vlog_name=VLOG_NAME, otp_na
     if file_utils.is_min_sized(new_graph, quiet=True) and file_utils.is_min_sized(new_vlog, 20, quiet=True):
         new_otp_exists = file_utils.is_min_sized(new_otp, quiet=True)
 
-        # step 2: have a place to put old stuff into
-        old_path = file_utils.make_old_dir(dir)
-
-        # step 3a: current paths
+        # step 2: current paths
         curr_graph = os.path.join(dir, graph_name)
         curr_vlog = os.path.join(dir, vlog_name)
         curr_otp = os.path.join(dir, otp_name)
 
-        # step 3b: old paths
+        # step 3: create OLD folder and build old paths
+        old_path = file_utils.make_old_dir(dir)
         old_graph = os.path.join(old_path, graph_name)
         old_vlog = os.path.join(old_path, vlog_name)
         old_otp = os.path.join(old_path, otp_name)
@@ -296,7 +293,7 @@ def deploy_new_otp_graph(dir, graph_name=GRAPH_NAME, vlog_name=VLOG_NAME, otp_na
         # step 5: make sure we moved old stuff out of the way ... if not, we have to exit
         if file_utils.is_min_sized(curr_graph, quiet=True) or (new_otp_exists and file_utils.is_min_sized(curr_otp, quiet=True)):
             # @todo this should be an email in addtion to a log message
-            log.error("in trying to deploy new graph, I wasn't able to mv old {} (or {}) out of the way".format(curr_graph,                                                                                                            curr_otp))
+            log.error("in trying to deploy new graph, I wasn't able to mv old {} (or {}) out of the way".format(curr_graph, curr_otp))
         else:
             # step 6: ok, we could move the graph (and maybe otp) to OLD dir ... now let's back those files up (rename with date stamp)
             file_utils.mv(curr_vlog, old_vlog)
@@ -309,7 +306,7 @@ def deploy_new_otp_graph(dir, graph_name=GRAPH_NAME, vlog_name=VLOG_NAME, otp_na
             file_utils.mv(new_graph, curr_graph)
             file_utils.mv(new_vlog, curr_vlog)
             if new_otp_exists:
-                file_utils.mv(new_vlog, curr_otp)
+                file_utils.mv(new_otp, curr_otp)
 
             # step 8: last check to make sure we did move things around properly
             if file_utils.is_min_sized(curr_graph) and file_utils.is_min_sized(curr_otp):
