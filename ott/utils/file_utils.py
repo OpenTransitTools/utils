@@ -4,10 +4,11 @@ import datetime
 import zipfile
 import filecmp
 import shutil
+
+from . import string_utils
+
 import logging
 log = logging.getLogger(__file__)
-
-import string_utils
 
 
 def get_mtime(file):
@@ -23,10 +24,12 @@ def get_mtime(file):
             mtime = os.lstat(file).st_mtime
     return mtime
 
+
 def file_time(file):
     mtime = get_mtime(file)
     dt = datetime.datetime.fromtimestamp(mtime)
     return dt
+
 
 def file_age(file):
     """ age in days """
@@ -35,6 +38,7 @@ def file_age(file):
     diff = now - mtime
     return diff.days
 
+
 def file_age_seconds(file):
     """ age in days """
     mtime = file_time(file)
@@ -42,6 +46,7 @@ def file_age_seconds(file):
     diff = now - mtime
     ret_val = diff.seconds + diff.days * 86400
     return ret_val
+
 
 def file_size(file):
     """ return size of file path
@@ -54,12 +59,14 @@ def file_size(file):
         s = os.stat(os.readlink(file))
     return s.st_size
 
+
 def touch(file):
     try:
         os.utime(file, None)
     except:
         # doesn't exist ... unlike touch, don't create the file tho...
         pass
+
 
 def exists_and_sized(file, size, expire):
     ret_val = True
@@ -74,6 +81,7 @@ def exists_and_sized(file, size, expire):
         ret_val = False
     return ret_val
 
+
 def is_min_sized(file, min_size=1000000):
     ret_val = False
     try:
@@ -83,6 +91,7 @@ def is_min_sized(file, min_size=1000000):
     except Exception, e:
         log.warn("{}".format(e))
     return ret_val
+
 
 def is_a_larger_than_b(file_a, file_b):
     ret_val = False
@@ -96,6 +105,7 @@ def is_a_larger_than_b(file_a, file_b):
             ret_val = True
     return ret_val
 
+
 def is_a_newer_than_b(file_a, file_b):
     ret_val = False
     if not os.path.exists(file_b):
@@ -107,6 +117,7 @@ def is_a_newer_than_b(file_a, file_b):
         if a_age > b_age:
             ret_val = True
     return ret_val
+
 
 def dir_has_newer_files(file, dir, include_filter=None, exclude_filter=None):
     """ determine if any files in the directory have a newer update date than target file
@@ -129,6 +140,7 @@ def dir_has_newer_files(file, dir, include_filter=None, exclude_filter=None):
                 break
     return ret_val
 
+
 def bkup(file, rm_orig=True):
     ret_val = False
     try:
@@ -145,9 +157,11 @@ def bkup(file, rm_orig=True):
         log.error('could not backup file {}'.format(file))
     return ret_val
 
+
 def cd(dir):
     if dir:
         os.chdir(dir)
+
 
 def envvar(name, def_val=None, suffix=None):
     """ envvar interface
@@ -156,6 +170,7 @@ def envvar(name, def_val=None, suffix=None):
     if suffix is not None:
         ret_val = ret_val + suffix
     return ret_val
+
 
 def mv(src, dst, delete_dst_first=True, update_ftime=True):
     ret_val = False
@@ -170,6 +185,7 @@ def mv(src, dst, delete_dst_first=True, update_ftime=True):
         log.error('could not mv file {} to {}'.format(src, dst))
     return ret_val
 
+
 def cp(src, dst):
     if src and dst and os.path.isfile(src):
         shutil.copy2(src, dst)
@@ -177,9 +193,11 @@ def cp(src, dst):
     else:
         log.error('could not copy file {} to {}'.format(src, dst))
 
+
 def rm(file):
     if file and os.path.exists(file):
         os.remove(file)
+
 
 def purge(dir, pattern):
     """ remove multiple files
@@ -192,6 +210,7 @@ def purge(dir, pattern):
     except Exception, e:
         log.info(e)
 
+
 def ls(dir, include_filter=None):
     """ return a list of files in a directory, with an optional name filter
     """
@@ -203,9 +222,11 @@ def ls(dir, include_filter=None):
         ret_val.append(f)
     return ret_val
 
+
 def mkdir(dir):
     if dir and not os.path.exists(dir):
         os.makedirs(dir)
+
 
 def copy_contents(src_dir, target_dir, overwrite=True):
     file_paths = next(os.walk(src_dir))[2]
@@ -215,9 +236,11 @@ def copy_contents(src_dir, target_dir, overwrite=True):
         if overwrite or not os.path.exists(tgt):
             cp(src, tgt)
 
+
 def get_file_name_from_url(url):
     ret_val = url.split('/')[-1:][0]
     return ret_val
+
 
 def diff_files(old_name, new_name):
     """ return True if the files are DIFFERENT ... False == files are THE SAME...
@@ -261,6 +284,7 @@ def diff_files(old_name, new_name):
         ret_val = True
     return ret_val
 
+
 def unzip_file(zip_path, file_name, target_file_path=None):
     """ unzips a file from a zip file...
         @returns target_file_path
@@ -283,8 +307,8 @@ def unzip_file(zip_path, file_name, target_file_path=None):
         zip.close()
     except Exception, e:
         log.warn("problems extracting {} from {} into file {} ({})".format(file_name, zip_path, target_file_path, e))
-
     return ret_val
+
 
 def remove_file_from_zip(zip_path, file_name):
     """ remove a file(s) from a zip
@@ -307,6 +331,7 @@ def remove_file_from_zip(zip_path, file_name):
     rm(zip_path)
     mv(tmpzip, zip_path)
 
+
 def add_file_to_zip(zip_path, file_path, basename=None):
     """ add a file to a zip file
     """
@@ -316,6 +341,7 @@ def add_file_to_zip(zip_path, file_path, basename=None):
     zip.write(file_path, basename)
     zip.close()
 
+
 def replace_strings_in_zipfile(zip_path, file_name, regex_str, replace_str, zip_basename=None):
     """ collective of file utils functions to open a file from a .zip file, replace contents in that zip, and bundle
         the .zip file back up with the edited contents
@@ -324,6 +350,7 @@ def replace_strings_in_zipfile(zip_path, file_name, regex_str, replace_str, zip_
     replace_strings_in_file(file_path, regex_str, replace_str)
     remove_file_from_zip(zip_path, file_name)
     add_file_to_zip(zip_path, file_path, zip_basename)
+
 
 def replace_strings_in_file(file_path, regex_str, replace_str):
     """ replace a pattern in each line of a text file

@@ -19,10 +19,15 @@ DEF_SSL_PORT = "55551"
 GRAPH_NAME = "Graph.obj"
 OTP_NAME   = "otp.jar"
 VLOG_NAME  = "otp.v"
+NEW_SUFFIX = "-new"
 OTP_DOWNLOAD_URL = "http://maven.conveyal.com.s3.amazonaws.com/org/opentripplanner/otp/0.20.0/otp-0.20.0-shaded.jar"
 
 
 def restart_call(self, call_db_path="call_center/db/call_db.tar.gz", call_runner="call_center/run.sh"):
+    """ retstart call-center app
+        basically, if we see 'call' a database export (backup) in the call_center folder, we'll assume that call runs
+        here and we'll restart the call server from a shell script (all pretty TriMet specific)
+    """
     if os.path.isfile(call_db_path):
         subprocess.call([call_runner])
 
@@ -255,4 +260,17 @@ def diff_vlog_files(svr, dir, vlog_name=VLOG_NAME):
                     ret_val = True
                     logging.info("{0} != {1} ... will try to grab new OTP from {2} and deploy".format(tmp_vlog_path, vlog_path, svr))
     return ret_val
+
+
+def check_new_otp_graph(dir, graph_name=GRAPH_NAME):
+    """ check if either new OTP graph exists """
+    ret_val = False
+    try:
+        graph_path = os.path.join(dir, graph_name, NEW_SUFFIX)
+        if
+        pass
+    except Exception, e:
+        log.warn(e)
+    return ret_val
+
 

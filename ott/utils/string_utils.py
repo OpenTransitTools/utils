@@ -1,11 +1,10 @@
-import sys
 import string
 import logging
 log = logging.getLogger(__file__)
 
 
 def is_in_string(in_str, targets):
-    """ xxx
+    """ x
     """
     ret_val = False
 
@@ -18,7 +17,6 @@ def is_in_string(in_str, targets):
             if t.strip() in in_str:
                 ret_val = True
                 break
-
     return ret_val
 
 
