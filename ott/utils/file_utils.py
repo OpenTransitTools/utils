@@ -11,6 +11,10 @@ import logging
 log = logging.getLogger(__file__)
 
 
+NEW_SUFFIX = "-new"
+OLD_DIR_NAME = "OLD"
+
+
 def get_mtime(file):
     """ datetime for the modified file time """
     try:
@@ -82,14 +86,15 @@ def exists_and_sized(file, size, expire):
     return ret_val
 
 
-def is_min_sized(file, min_size=1000000):
+def is_min_sized(file, min_size=1000000, quiet=False):
     ret_val = False
     try:
         size = file_size(file)
         if size >= min_size:
             ret_val = True
     except Exception, e:
-        log.warn("{}".format(e))
+        if not quiet:
+            log.warn("{}".format(e))
     return ret_val
 
 
@@ -240,6 +245,17 @@ def copy_contents(src_dir, target_dir, overwrite=True):
 def get_file_name_from_url(url):
     ret_val = url.split('/')[-1:][0]
     return ret_val
+
+
+def make_new_path(dir, file_name, new_suffix=NEW_SUFFIX):
+    new_path = os.path.join(dir, file_name + new_suffix)
+    return new_path
+
+
+def make_old_dir(dir, old_name=OLD_DIR_NAME):
+    old_path = os.path.join(dir, old_name)
+    mkdir(old_path)
+    return old_path
 
 
 def diff_files(old_name, new_name):
