@@ -70,11 +70,11 @@ def call_planner_svc(url, accept='application/xml'):
     return ret_val
 
 
-def run_otp_server(dir=None, port=DEF_PORT, ssl=DEF_SSL_PORT, otp_name=OTP_NAME, java_mem=None, **kwargs):
+def run_otp_server(dir_path=None, port=DEF_PORT, ssl=DEF_SSL_PORT, otp_name=OTP_NAME, java_mem=None, **kwargs):
     """ launch the server in a separate process
     """
-    file_utils.cd(dir)
-    otp_path = os.path.join(dir, otp_name)
+    file_utils.cd(dir_path)
+    otp_path = os.path.join(dir_path, otp_name)
     cmd='-server -jar {} --port {} --securePort {} --router "" --graphs {}'.format(otp_path, port, ssl, dir)
     ret_val = exe_utils.run_java(cmd, fork=True, big_xmx=java_mem, pid_file="pid.txt")
     return ret_val
@@ -153,8 +153,8 @@ def get_graphs_from_config(config=None, graph_root_dir='.'):
 
     graphs = config.get_json('graphs')
     for g in graphs:
-        dir = os.path.join(graph_root_dir, g['name'])
-        g['dir'] = dir
+        dir_path = os.path.join(graph_root_dir, g['name'])
+        g['dir'] = dir_path
     return graphs
 
 
@@ -201,16 +201,16 @@ def check_otp_jar(graph_dir, jar=OTP_NAME, expected_size=50000000, download_url=
     return jar_path
 
 
-def get_vlog_file_path(dir, vlog_name=VLOG_NAME):
+def get_vlog_file_path(dir_path, vlog_name=VLOG_NAME):
     """ build otp.vlog path """
-    vlog_path = os.path.join(dir, vlog_name)
+    # import pdb; pdb.set_trace()
+    vlog_path = os.path.join(dir_path, vlog_name)
     return vlog_path
 
 
-def append_vlog_file(dir, feed_msg=None, vlog_name=VLOG_NAME):
+def append_vlog_file(dir_path, feed_msg=None, vlog_name=VLOG_NAME):
     """ print out gtfs feed(s) version numbers and dates to the otp.v log file
     """
-    #
     msg = "\nUpdated graph on {} with GTFS feed(s):\n".format(datetime.datetime.now().strftime("%B %d, %Y @ %I:%M %p"))
 
     # add any specific feeds messages
@@ -218,14 +218,14 @@ def append_vlog_file(dir, feed_msg=None, vlog_name=VLOG_NAME):
         msg = "{}{}\n".format(msg, feed_msg)
 
     # write message to vlog file
-    vlog_path = get_vlog_file_path(dir, vlog_name)
+    vlog_path = get_vlog_file_path(dir_path, vlog_name)
     f = open(vlog_path, 'a')
     f.write(msg)
     f.flush()
     f.close()
 
 
-def diff_vlog_files(svr, dir, vlog_name=VLOG_NAME):
+def diff_vlog_files(svr, dir_path, vlog_name=VLOG_NAME):
     """ return True if the files are different and need to be redeployed ...
 
         - grab vlog from remote server that builds new OTP graphs
@@ -236,7 +236,7 @@ def diff_vlog_files(svr, dir, vlog_name=VLOG_NAME):
 
     # step 1: grab otp.v from build server
     url = "{}/{}".format(svr, vlog_name)
-    vlog_path = get_vlog_file_path(dir, vlog_name)
+    vlog_path = get_vlog_file_path(dir_path, vlog_name)
     tmp_vlog_path = vlog_path + ".tmp"
     ok = web_utils.wget(url, tmp_vlog_path, 10)
 
@@ -266,27 +266,26 @@ def diff_vlog_files(svr, dir, vlog_name=VLOG_NAME):
     return ret_val
 
 
-def deploy_new_otp_graph(dir, graph_name=GRAPH_NAME, vlog_name=VLOG_NAME, otp_name=OTP_NAME):
+def deploy_new_otp_graph(dir_path, graph_name=GRAPH_NAME, vlog_name=VLOG_NAME, otp_name=OTP_NAME):
     """ go thru steps of backing up old graph and moving new graph into place
     """
-    # import pdb; pdb.set_trace()
     ret_val = False
 
-    new_graph = file_utils.make_new_path(dir, graph_name)
-    new_vlog = file_utils.make_new_path(dir, vlog_name)
-    new_otp = file_utils.make_new_path(dir, otp_name)
+    new_graph = file_utils.make_new_path(dir_path, graph_name)
+    new_vlog = file_utils.make_new_path(dir_path, vlog_name)
+    new_otp = file_utils.make_new_path(dir_path, otp_name)
 
     # step 1: check if new OTP GRAPH and VLOG exist ... if both do, proceed
     if file_utils.is_min_sized(new_graph, quiet=True) and file_utils.is_min_sized(new_vlog, 20, quiet=True):
         new_otp_exists = file_utils.is_min_sized(new_otp, quiet=True)
 
         # step 2: current paths
-        curr_graph = os.path.join(dir, graph_name)
-        curr_vlog = os.path.join(dir, vlog_name)
-        curr_otp = os.path.join(dir, otp_name)
+        curr_graph = os.path.join(dir_path, graph_name)
+        curr_vlog = os.path.join(dir_path, vlog_name)
+        curr_otp = os.path.join(dir_path, otp_name)
 
         # step 3: create OLD folder and build old paths
-        old_path = file_utils.make_old_dir(dir)
+        old_path = file_utils.make_old_dir(dir_path)
         old_graph = os.path.join(old_path, graph_name)
         old_vlog = os.path.join(old_path, vlog_name)
         old_otp = os.path.join(old_path, otp_name)

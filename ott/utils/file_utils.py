@@ -124,7 +124,7 @@ def is_a_newer_than_b(file_a, file_b):
     return ret_val
 
 
-def dir_has_newer_files(file, dir, include_filter=None, exclude_filter=None):
+def dir_has_newer_files(file, dir_path, include_filter=None, exclude_filter=None):
     """ determine if any files in the directory have a newer update date than target file
     """
     #import pdb; pdb.set_trace()
@@ -133,13 +133,13 @@ def dir_has_newer_files(file, dir, include_filter=None, exclude_filter=None):
         log.info("{} doesn't exist ".format(file))
         ret_val = True
     else:
-        file_paths = next(os.walk(dir))[2]
+        file_paths = next(os.walk(dir_path))[2]
         for f in file_paths:
             if include_filter and not string_utils.is_in_string(f, include_filter):
                 continue
             if exclude_filter and string_utils.is_in_string(f, exclude_filter):
                 continue
-            dir_file = os.path.join(dir, f)
+            dir_file = os.path.join(dir_path, f)
             if is_a_newer_than_b(dir_file, file):
                 ret_val = True
                 break
@@ -163,9 +163,9 @@ def bkup(file, rm_orig=True):
     return ret_val
 
 
-def cd(dir):
-    if dir:
-        os.chdir(dir)
+def cd(dir_path):
+    if dir_path:
+        os.chdir(dir_path)
 
 
 def envvar(name, def_val=None, suffix=None):
@@ -204,23 +204,23 @@ def rm(file):
         os.remove(file)
 
 
-def purge(dir, pattern):
+def purge(dir_path, pattern):
     """ remove multiple files
         borrowed from http://stackoverflow.com/questions/1548704/delete-multiple-files-matching-a-pattern
     """
     try:
-        for f in os.listdir(dir):
+        for f in os.listdir(dir_path):
             if re.search(pattern, f):
-                os.remove(os.path.join(dir, f))
+                os.remove(os.path.join(dir_path, f))
     except Exception, e:
         log.info(e)
 
 
-def ls(dir, include_filter=None):
+def ls(dir_path, include_filter=None):
     """ return a list of files in a directory, with an optional name filter
     """
     ret_val = []
-    file_paths = next(os.walk(dir))[2]
+    file_paths = next(os.walk(dir_path))[2]
     for f in file_paths:
         if include_filter and not string_utils.is_in_string(f, include_filter):
             continue
@@ -228,9 +228,9 @@ def ls(dir, include_filter=None):
     return ret_val
 
 
-def mkdir(dir):
-    if dir and not os.path.exists(dir):
-        os.makedirs(dir)
+def mkdir(dir_path):
+    if dir_path and not os.path.exists(dir_path):
+        os.makedirs(dir_path)
 
 
 def copy_contents(src_dir, target_dir, overwrite=True):
@@ -247,16 +247,16 @@ def get_file_name_from_url(url):
     return ret_val
 
 
-def make_new_path(dir, file_name=None, new_suffix=NEW_SUFFIX):
+def make_new_path(dir_path, file_name=None, new_suffix=NEW_SUFFIX):
     if file_name:
-        new_path = os.path.join(dir, file_name + new_suffix)
+        new_path = os.path.join(dir_path, file_name + new_suffix)
     else:
-        new_path = dir + new_suffix
+        new_path = dir_path + new_suffix
     return new_path
 
 
-def make_old_dir(dir, old_name=OLD_DIR_NAME):
-    old_path = os.path.join(dir, old_name)
+def make_old_dir(dir_path, old_name=OLD_DIR_NAME):
+    old_path = os.path.join(dir_path, old_name)
     mkdir(old_path)
     return old_path
 
