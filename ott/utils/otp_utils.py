@@ -201,6 +201,12 @@ def check_otp_jar(graph_dir, jar=OTP_NAME, expected_size=50000000, download_url=
     return jar_path
 
 
+def get_vlog_file_path(dir, vlog_name=VLOG_NAME):
+    """ build otp.vlog path """
+    vlog_path = os.path.join(dir, vlog_name)
+    return vlog_path
+
+
 def append_vlog_file(dir, feed_msg=None, vlog_name=VLOG_NAME):
     """ print out gtfs feed(s) version numbers and dates to the otp.v log file
     """
@@ -212,8 +218,8 @@ def append_vlog_file(dir, feed_msg=None, vlog_name=VLOG_NAME):
         msg = "{}{}\n".format(msg, feed_msg)
 
     # write message to vlog file
-    vlog = os.path.join(dir, vlog_name)
-    f = open(vlog, 'a')
+    vlog_path = get_vlog_file_path(dir, vlog_name)
+    f = open(vlog_path, 'a')
     f.write(msg)
     f.flush()
     f.close()
@@ -230,7 +236,7 @@ def diff_vlog_files(svr, dir, vlog_name=VLOG_NAME):
 
     # step 1: grab otp.v from build server
     url = "{}/{}".format(svr, vlog_name)
-    vlog_path = os.path.join(dir, vlog_name)
+    vlog_path = get_vlog_file_path(dir, vlog_name)
     tmp_vlog_path = vlog_path + ".tmp"
     ok = web_utils.wget(url, tmp_vlog_path, 10)
 

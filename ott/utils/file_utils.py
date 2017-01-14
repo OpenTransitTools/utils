@@ -247,8 +247,11 @@ def get_file_name_from_url(url):
     return ret_val
 
 
-def make_new_path(dir, file_name, new_suffix=NEW_SUFFIX):
-    new_path = os.path.join(dir, file_name + new_suffix)
+def make_new_path(dir, file_name=None, new_suffix=NEW_SUFFIX):
+    if file_name:
+        new_path = os.path.join(dir, file_name + new_suffix)
+    else:
+        new_path = dir + new_suffix
     return new_path
 
 
