@@ -32,6 +32,24 @@ def restart_call(self, call_db_path="call_center/db/call_db.tar.gz", call_runner
         subprocess.call([call_runner])
 
 
+def get_graph_path(dir_path=None, graph_name=GRAPH_NAME):
+    graph_path = os.path.join(dir_path, graph_name)
+    return graph_path
+
+
+def get_otp_path(dir_path=None, otp_name=OTP_NAME):
+    """"return otp.jar path"""
+    otp_path = os.path.join(dir_path, otp_name)
+    return otp_path
+
+
+def get_vlog_file_path(dir_path, vlog_name=VLOG_NAME):
+    """return otp.vlog directory path"""
+    # import pdb; pdb.set_trace()
+    vlog_path = os.path.join(dir_path, vlog_name)
+    return vlog_path
+
+
 def get_test_urls_from_config(section='otp', port=None, hostname=None, ws_path=None, map_path=None):
     """ return the OTP map and ws urls from
     """
@@ -74,7 +92,7 @@ def run_otp_server(dir_path=None, port=DEF_PORT, ssl=DEF_SSL_PORT, otp_name=OTP_
     """ launch the server in a separate process
     """
     file_utils.cd(dir_path)
-    otp_path = os.path.join(dir_path, otp_name)
+    otp_path = get_otp_path(dir_path, otp_name)
     cmd='-server -jar {} --port {} --securePort {} --router "" --graphs {}'.format(otp_path, port, ssl, dir)
     ret_val = exe_utils.run_java(cmd, fork=True, big_xmx=java_mem, pid_file="pid.txt")
     return ret_val
@@ -84,8 +102,8 @@ def run_graph_builder(graph_dir, graph_name=GRAPH_NAME, otp_name=OTP_NAME, java_
     """ run OTP graph builder
     """
     log.info("building the graph")
-    graph_path = os.path.join(graph_dir, graph_name)
-    otp_path = os.path.join(graph_dir, otp_name)
+    graph_path = get_graph_path(graph_dir, graph_name)
+    otp_path = get_otp_path(graph_dir, otp_name)
     file_utils.rm(graph_path)
     file_utils.cd(graph_dir)
     cmd='-jar {} --build {} --cache {}'.format(otp_path, graph_dir, graph_dir)
@@ -199,13 +217,6 @@ def check_otp_jar(graph_dir, jar=OTP_NAME, expected_size=50000000, download_url=
         log.info("we don't see OTP {} in {}, so will download {} now".format(jar, graph_dir, download_url))
         web_utils.wget(download_url, jar_path)
     return jar_path
-
-
-def get_vlog_file_path(dir_path, vlog_name=VLOG_NAME):
-    """ build otp.vlog path """
-    # import pdb; pdb.set_trace()
-    vlog_path = os.path.join(dir_path, vlog_name)
-    return vlog_path
 
 
 def append_vlog_file(dir_path, feed_msg=None, vlog_name=VLOG_NAME):
