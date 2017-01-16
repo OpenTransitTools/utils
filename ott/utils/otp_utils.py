@@ -14,12 +14,13 @@ from ott.utils import web_utils
 
 
 # constants
+GRAPH_NAME = "Graph.obj"
+OTP_NAME = "otp.jar"
+VLOG_NAME = "otp.v"
+
 DEF_NAME   = "prod"
 DEF_PORT   = "55555"
 DEF_SSL_PORT = "55551"
-GRAPH_NAME = "Graph.obj"
-OTP_NAME   = "otp.jar"
-VLOG_NAME  = "otp.v"
 OTP_DOWNLOAD_URL = "http://maven.conveyal.com.s3.amazonaws.com/org/opentripplanner/otp/0.20.0/otp-0.20.0-shaded.jar"
 
 
