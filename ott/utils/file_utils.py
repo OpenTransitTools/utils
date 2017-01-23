@@ -72,6 +72,19 @@ def touch(file):
         pass
 
 
+def exists(dir, file=None):
+    ret_val = False
+
+    if file:
+        file = os.path.join(dir, file)
+    else:
+        file = dir
+
+    if os.path.exists(file):
+        ret_val = True
+    return ret_val
+
+
 def exists_and_sized(file, size, expire):
     ret_val = True
     if os.path.exists(file) is False:
