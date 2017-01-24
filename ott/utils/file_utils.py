@@ -85,16 +85,16 @@ def exists(dir, file=None):
     return ret_val
 
 
-def exists_and_sized(file, size, expire):
+def exists_and_sized(file, size, expire=None):
     ret_val = True
     if os.path.exists(file) is False:
         log.info("{} doesn't exist ".format(file))
         ret_val = False
-    elif file_age(file) > expire:
-        log.info("{} is {} days old, thus older than the {} day refresh threshold".format(file, file_age(file), expire))
-        ret_val = False
     elif file_size(file) < size:
         log.info("{} is smaller than {} bytes in size".format(file, size))
+        ret_val = False
+    elif expire and file_age(file) > expire:
+        log.info("{} is {} days old, thus older than the {} day refresh threshold".format(file, file_age(file), expire))
         ret_val = False
     return ret_val
 

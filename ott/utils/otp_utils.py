@@ -278,6 +278,25 @@ def diff_vlog_files(svr, dir_path, vlog_name=VLOG_NAME):
     return ret_val
 
 
+def package_new(dir, graph_name=GRAPH_NAME):
+    """ copy otp.v, otp.jar and Graph.obj to *-new paths
+    """
+    graph_path = get_graph_path(dir_path=dir, graph_name=graph_name)
+    new_graph_path = file_utils.make_new_path(graph_path)
+    file_utils.rm(new_graph_path)
+    file_utils.cp(graph_path, new_graph_path)
+
+    vlog_path = get_vlog_file_path(dir_path=dir)
+    new_vlog_path = file_utils.make_new_path(vlog_path)
+    file_utils.rm(new_vlog_path)
+    file_utils.cp(vlog_path, new_vlog_path)
+
+    otp_path = get_otp_path(dir_path=dir)
+    new_otp_path = file_utils.make_new_path(otp_path)
+    file_utils.rm(new_otp_path)
+    file_utils.cp(otp_path, new_otp_path)
+
+
 def mv_new_files_into_place(dir_path, graph_name=GRAPH_NAME, vlog_name=VLOG_NAME, otp_name=OTP_NAME):
     """ go thru steps of backing up old graph and moving new graph into place on the server
     """
