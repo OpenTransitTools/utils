@@ -278,8 +278,8 @@ def diff_vlog_files(svr, dir_path, vlog_name=VLOG_NAME):
     return ret_val
 
 
-def deploy_new_otp_graph(dir_path, graph_name=GRAPH_NAME, vlog_name=VLOG_NAME, otp_name=OTP_NAME):
-    """ go thru steps of backing up old graph and moving new graph into place
+def mv_new_files_into_place(dir_path, graph_name=GRAPH_NAME, vlog_name=VLOG_NAME, otp_name=OTP_NAME):
+    """ go thru steps of backing up old graph and moving new graph into place on the server
     """
     ret_val = False
 
