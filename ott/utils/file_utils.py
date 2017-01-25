@@ -260,6 +260,31 @@ def get_file_name_from_url(url):
     return ret_val
 
 
+def append_to_path(path, append, end_with_sep=True):
+    """  with return .../path/append/ from separate .../path + append variables
+         (will try to do the best thing to figure out the proper separator character, and where to place it)
+    """
+    # step 1: figure out separator
+    sep = None
+    if "/" in path:
+        sep = "/"
+    elif "\\" in path:
+        sep = "\\"
+
+    # step 2: if current path doesn't end with a sep, append one
+    if sep and not path.endswith(sep):
+        path = path + sep
+
+    # step 3: append path with thing we're appending
+    ret_val = path + append
+
+    # step 4: optional ending separator (default)
+    if sep and end_with_sep:
+        ret_val = ret_val + sep
+
+    return ret_val
+
+
 def make_new_path(dir_path, file_name=None, new_suffix=NEW_SUFFIX):
     if file_name:
         new_path = os.path.join(dir_path, file_name + new_suffix)
