@@ -94,7 +94,7 @@ def run_otp_server(graph_dir=None, port=DEF_PORT, ssl=DEF_SSL_PORT, otp_name=OTP
     """
     file_utils.cd(graph_dir)
     otp_path = get_otp_path(graph_dir, otp_name)
-    cmd='-server -jar {} --port {} --securePort {} --router "" --graphs {}'.format(otp_path, port, ssl, dir)
+    cmd='-server -jar {} --port {} --securePort {} --router "" --graphs {}'.format(otp_path, port, ssl, graph_dir)
     ret_val = exe_utils.run_java(cmd, fork=True, big_xmx=java_mem, pid_file="pid.txt")
     return ret_val
 
@@ -130,19 +130,21 @@ def send_build_test_email(to, build_status=True, test_status=True, server_status
 def config_graph_dir(graph_config, base_dir, overwrite=False):
     """ utility to make the graph dir, copy OTP config files into the graph directory, etc...
     """
-    name = graph_config.get('name', DEF_NAME)
-    dir  = graph_config.get('dir',  name)     # optional 'dir' name overrides graph name
+    # step 1: get the graph_dir path
+    graph_dir = graph_config.get('dir')
+    if graph_dir is None:
+        name = graph_config.get('name', DEF_NAME)
+        graph_dir = os.path.join(base_dir, name)
 
-    # step 1: mkdir (makes the dir if it doesn't exist)
-    graph_dir = os.path.join(base_dir, dir)
+    # step 2: mkdir (e.g., makes the dir if it doesn't already exist)
     file_utils.mkdir(graph_dir)
-    graph_config['dir'] = graph_dir  # save off the full graph dir back struct
+    graph_config['dir'] = graph_dir  # save off the full graph dir back object
 
-    # step 2: copy OTP config files
+    # step 3: copy OTP config files
     config_dir = os.path.join(base_dir, "config")
     file_utils.copy_contents(config_dir, graph_dir, overwrite)
 
-    # step 3: check OTP jar exists in config dir
+    # step 4: check OTP jar exists in config dir
     check_otp_jar(graph_dir)
     return graph_dir
 
