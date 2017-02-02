@@ -53,6 +53,17 @@ def does_cmd_need_a_shell(cmd, cmd_line="", fork=False):
         ret_val = True
     return ret_val
 
+def write_pid_file(pid_file, pid):
+    """ write a pid file
+    """
+    try:
+        pf = open(pid_file, 'w')
+        pf.write(str(pid))
+        pf.flush()
+        pf.close()
+    except Exception, e:
+        log.debug("Couldn't write to the pid file -- {}".format(e))
+
 def run_cmd(cmd_line, fork=False, shell=False, pid_file=None, log_file=None):
     """ run_cmd("sleep 200") will block for 200 seconds
         run_cmd("sleep 200", True) will background the process
@@ -94,22 +105,12 @@ def kill_old_pid(pid_file):
     except Exception, e:
         log.debug(e)
 
-def write_pid_file(pid_file, pid):
-    """ write a pid file
-    """
-    try:
-        pf = open(pid_file, 'w')
-        pf.write(str(pid))
-        pf.flush()
-        pf.close()
-    except Exception, e:
-        log.debug("Couldn't write to the pid file -- {}".format(e))
-
 def kill(pid):
     """ kill a process
     """
     #import pdb; pdb.set_trace()
     try:
+        log.debug("trying to kill pid {}".format(pid))
         os.kill(int(pid), signal.SIGKILL)
     except Exception, e:
         log.debug(e)
