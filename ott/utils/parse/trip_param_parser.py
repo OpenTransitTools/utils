@@ -87,7 +87,7 @@ class TripParamParser(ParamParser):
         ret_val = object_utils.fix_url(ret_val)
         return ret_val
 
-    def add_banned_routes(self, url_params, banned_param="bannedRoutes"):
+    def add_banned_routes_param(self, url_params, banned_param="bannedRoutes"):
         ret_val = url_params
         if self.banned_routes:
             ret_val = "{}&{}={}".format(ret_val, banned_param, self.banned_routes)
@@ -122,11 +122,11 @@ class TripParamParser(ParamParser):
     def otp_url_params(self, fmt="fromPlace={frm}&toPlace={to}&time={time}&date={date}&mode={mode}&optimize={optimize}&maxWalkDistance={walk_meters}&arriveBy={arrive_depart}"):
         """ return a string with the parameter values formatted for the OTP routing engine (opentripplanner-api-webapp)
         """
+        # import pdb; pdb.set_trace()
         ret_val = self.safe_format(fmt)
         ret_val = ret_val.replace("False", "false").replace("True", "true")
-        ret_val = self.banned_routes(ret_val)
+        ret_val = self.add_banned_routes_param(ret_val)
         ret_val = object_utils.fix_url(ret_val)
-
         return ret_val
 
     def map_url_params(self, fmt="from={frm}&to={to}&time={time}&date={month}/{day}/{year}&mode={mode}&optimize={optimize}&maxWalkDistance={walk_meters:.0f}&arriveBy={arrive_depart}"):
@@ -143,7 +143,7 @@ class TripParamParser(ParamParser):
         """
         ret_val = self.safe_format(fmt)
         ret_val = ret_val.replace("False", "false").replace("True", "true")
-        ret_val = self.banned_routes(ret_val)
+        ret_val = self.add_banned_routes_param(ret_val)
         ret_val = object_utils.fix_url(ret_val)
         return ret_val
 
@@ -324,7 +324,6 @@ class TripParamParser(ParamParser):
     def _parse_optimize(self):
         """ parse out the optimize flag
         """
-        #import pdb; pdb.set_trace()
         self.optimize = self.get_first_val(['Optimize', 'Opt', 'Min'])
         if self.optimize in ('F', 'X', 'TRANSFERS'):
             self.optimize = 'TRANSFERS'
