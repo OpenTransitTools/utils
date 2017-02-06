@@ -32,6 +32,7 @@ class TripParamParser(ParamParser):
         self.walk        = None
         self.walk_meters = 0.0
         self.mode        = None
+        self.banned_routes = None
         self._parse_arrive_depart()
         self._parse_optimize()
         self._parse_walk()
@@ -86,6 +87,12 @@ class TripParamParser(ParamParser):
         ret_val = object_utils.fix_url(ret_val)
         return ret_val
 
+    def add_banned_routes(self, url_params, banned_param="bannedRoutes"):
+        ret_val = url_params
+        if self.banned_routes:
+            ret_val = "{}&{}={}".format(ret_val, banned_param, self.banned_routes)
+        return ret_val
+
     def ott_url_params_return_trip(self, add_hours=1, add_mins=30, fmt="from={to}&to={frm}&month={month}&day={day}&year={year}&Walk={walk}&Arr={arrive_depart_raw}&min={optimize}&mode={mode}"):
         """ return a string with the parameter values formatted for OTT with a return trip of hours+X and minutes+Y 
             (change am to pm if needed, etc...)
@@ -117,7 +124,9 @@ class TripParamParser(ParamParser):
         """
         ret_val = self.safe_format(fmt)
         ret_val = ret_val.replace("False", "false").replace("True", "true")
+        ret_val = self.banned_routes(ret_val)
         ret_val = object_utils.fix_url(ret_val)
+
         return ret_val
 
     def map_url_params(self, fmt="from={frm}&to={to}&time={time}&date={month}/{day}/{year}&mode={mode}&optimize={optimize}&maxWalkDistance={walk_meters:.0f}&arriveBy={arrive_depart}"):
@@ -134,6 +143,7 @@ class TripParamParser(ParamParser):
         """
         ret_val = self.safe_format(fmt)
         ret_val = ret_val.replace("False", "false").replace("True", "true")
+        ret_val = self.banned_routes(ret_val)
         ret_val = object_utils.fix_url(ret_val)
         return ret_val
 
