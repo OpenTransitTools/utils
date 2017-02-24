@@ -124,7 +124,7 @@ def is_a_larger_than_b(file_a, file_b):
     return ret_val
 
 
-def is_a_newer_than_b(file_a, file_b):
+def is_a_newer_than_b(file_a, file_b, offset_minutes=0):
     ret_val = False
     if not os.path.exists(file_b):
         ret_val = True
@@ -132,12 +132,12 @@ def is_a_newer_than_b(file_a, file_b):
     else:
         a_age = get_mtime(file_a)
         b_age = get_mtime(file_b)
-        if a_age > b_age:
+        if a_age > b_age + (offset_minutes * 1000):
             ret_val = True
     return ret_val
 
 
-def dir_has_newer_files(file, dir_path, include_filter=None, exclude_filter=None):
+def dir_has_newer_files(file, dir_path, offset_minutes=0, include_filter=None, exclude_filter=None):
     """ determine if any files in the directory have a newer update date than target file
     """
     #import pdb; pdb.set_trace()
@@ -153,7 +153,7 @@ def dir_has_newer_files(file, dir_path, include_filter=None, exclude_filter=None
             if exclude_filter and string_utils.is_in_string(f, exclude_filter):
                 continue
             dir_file = os.path.join(dir_path, f)
-            if is_a_newer_than_b(dir_file, file):
+            if is_a_newer_than_b(dir_file, file, offset_minutes):
                 ret_val = True
                 break
     return ret_val
