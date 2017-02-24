@@ -299,6 +299,22 @@ def package_new(graph_dir, graph_name=GRAPH_NAME):
     file_utils.cp(otp_path, new_otp_path)
 
 
+def rm_new(graph_dir, graph_name=GRAPH_NAME):
+    """ remove -new files
+    """
+    graph_path = get_graph_path(graph_dir=graph_dir, graph_name=graph_name)
+    new_graph_path = file_utils.make_new_path(graph_path)
+    file_utils.rm(new_graph_path)
+
+    vlog_path = get_vlog_file_path(graph_dir=graph_dir)
+    new_vlog_path = file_utils.make_new_path(vlog_path)
+    file_utils.rm(new_vlog_path)
+
+    otp_path = get_otp_path(graph_dir=graph_dir)
+    new_otp_path = file_utils.make_new_path(otp_path)
+    file_utils.rm(new_otp_path)
+
+
 def mv_new_files_into_place(graph_dir, graph_name=GRAPH_NAME, vlog_name=VLOG_NAME, otp_name=OTP_NAME):
     """ go thru steps of backing up old graph and moving new graph into place on the server
     """
