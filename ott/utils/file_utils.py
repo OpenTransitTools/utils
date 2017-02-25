@@ -16,7 +16,7 @@ OLD_DIR_NAME = "OLD"
 
 
 def get_mtime(file):
-    """ datetime for the modified file time """
+    """ datetime for the modified file time ... returns time in seconds """
     try:
         mtime = os.path.getmtime(file)
     except:
@@ -132,7 +132,7 @@ def is_a_newer_than_b(file_a, file_b, offset_minutes=0):
     else:
         a_age = get_mtime(file_a)
         b_age = get_mtime(file_b)
-        if a_age > b_age + (offset_minutes * 1000):
+        if a_age > b_age + (offset_minutes * 60):
             ret_val = True
     return ret_val
 
