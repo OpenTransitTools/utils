@@ -57,10 +57,11 @@ def write_pid_file(pid_file, pid):
     """ write a pid file
     """
     try:
-        pf = open(pid_file, 'w')
-        pf.write(str(pid))
-        pf.flush()
-        pf.close()
+        if pid_file:
+            pf = open(pid_file, 'w')
+            pf.write(str(pid))
+            pf.flush()
+            pf.close()
     except Exception, e:
         log.debug("Couldn't write to the pid file -- {}".format(e))
 

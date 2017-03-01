@@ -263,6 +263,22 @@ def postgres_check_create_db(db_name, db_user, is_geospatial=False):
     return ret_val
 
 
+def postgres_drop_schema(db_url, db_user, move=False):
+    """ drop / rename
+    """
+    ret_val = True
+    try:
+        if move:
+            ret_val = postgres_add_postgis(db_name, db_user)
+        else:
+            pass
+    except Exception, e:
+        log.error("POSTGRES DROP (RENAME) DATABASE ERROR : {}".format(e))
+        ret_val = False
+
+    return ret_val
+
+
 def postgres_add_shp_file(db_url, db_user, is_geospatial=False):
     """
         @see http://geospatialpython.com/2016/08/pure-python-loading-shapefiles-into.html
