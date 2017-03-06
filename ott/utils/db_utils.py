@@ -265,6 +265,7 @@ def postgres_check_create_db(db_name, db_user, is_geospatial=False):
 
 def postgres_drop_schema(db_url, db_user, move=False):
     """ drop / rename
+        TODO: more work needed here
     """
     ret_val = True
     try:
