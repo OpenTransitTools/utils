@@ -38,6 +38,15 @@ def run_java(cmd_line, fork=False, big_xmx="-Xmx4096m", small_xmx="-Xmx1536m", j
         ret_val = run_cmd(cmd_line, fork, shell, pid_file, log_file)
     return ret_val
 
+
+def run_cmd_get_stdout(cmd):
+    """ 2.7 way to run things and get output
+        @see: http://stackoverflow.com/questions/4760215/running-shell-command-from-python-and-capturing-the-output
+    """
+    output = subprocess.check_output(cmd, shell=True)
+    return output
+
+
 def does_cmd_need_a_shell(cmd, cmd_line="", fork=False):
     """ does the cmd need a shell to run properly? ...
         if we get thrown an exception, assume that we do need a shell to execute java

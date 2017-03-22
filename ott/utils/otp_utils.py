@@ -99,6 +99,26 @@ def run_otp_server(graph_dir=None, port=DEF_PORT, ssl=DEF_SSL_PORT, otp_name=OTP
     return ret_val
 
 
+def get_otp_version(graph_dir=None, otp_name=OTP_NAME):
+    """ find the version and commit strings
+    """
+    version = None
+    commit = None
+    try:
+        file_utils.cd(graph_dir)
+        otp_path = get_otp_path(graph_dir, otp_name)
+        cmd = "java -jar {} --version".format(otp_path)
+        stdout = exe_utils.run_cmd_get_stdout(cmd)
+        for s in stdout.split("\n"):
+            if 'version' in s:
+                version = s
+            if 'commit' in s:
+                commit = s
+    except Exception, e:
+        log.info(e)
+    return version,commit
+
+
 def run_graph_builder(graph_dir, graph_name=GRAPH_NAME, otp_name=OTP_NAME, java_mem=None):
     """ run OTP graph builder
     """
@@ -225,7 +245,9 @@ def check_otp_jar(graph_dir, jar=OTP_NAME, expected_size=50000000, download_url=
 def append_vlog_file(graph_dir, feed_msg=None, vlog_name=VLOG_NAME):
     """ print out gtfs feed(s) version numbers and dates to the otp.v log file
     """
-    msg = "\nUpdated graph on {} with GTFS feed(s):\n".format(datetime.datetime.now().strftime("%B %d, %Y @ %I:%M %p"))
+    now = datetime.datetime.now().strftime("%B %d, %Y @ %I:%M %p")
+    version, commit = get_otp_version(graph_dir)
+    msg = "\nUpdated graph ({}, {}) on {} with GTFS feed(s):\n".format(version, commit, now)
 
     # add any specific feeds messages
     if feed_msg and len(feed_msg) > 1:
