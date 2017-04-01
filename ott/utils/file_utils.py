@@ -1,5 +1,6 @@
 import os
 import re
+import csv
 import datetime
 import zipfile
 import filecmp
@@ -440,3 +441,13 @@ def replace_strings_in_file(file_path, regex_str, replace_str):
         log.warn("problems editing file {}\n(exception: {})".format(file_path, e))
 
 
+def make_csv_writer(fp, fieldnames=None):
+    """ :return from the input file pointer (and optional header field names list), return a csv writer
+    """
+    writer = None
+    if fieldnames and len(fieldnames) > 0:
+        writer = csv.DictWriter(fp, fieldnames=fieldnames)
+        writer.writeheader()
+    else:
+        writer = csv.DictWriter(fp)
+    return writer
