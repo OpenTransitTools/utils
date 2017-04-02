@@ -1,3 +1,7 @@
+""" a lot of code borrowed from fullstackpython.com article  
+    @see https://www.fullstackpython.com/blog/build-first-slack-bot-python.html
+"""
+
 import time
 
 
