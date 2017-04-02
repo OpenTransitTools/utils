@@ -18,13 +18,13 @@ def get_bot_id(slack_client, bot_name):
     return bot_id
 
 
-def parse_slack_output(slack_rtm_output, at_bot):
-    """
-        The Slack Real Time Messaging API is an events firehose.
-        this parsing function returns None unless a message is
-        directed at the Bot, based on its ID.
+def slack_message_monitor(slack_rtm_output, bot_id):
+    """ The Slack Real Time Messaging API is an message event firehose.  This parsing function returns None unless 
+        a message is directed at the Bot (@BotName), based on its ID.
+        Default @bot_name is the key to responding in this method
     """
     output_list = slack_rtm_output
+    at_bot = "<@{}>".format(bot_id)
     if output_list and len(output_list) > 0:
         for output in output_list:
             if output and 'text' in output and at_bot in output['text']:
@@ -33,7 +33,7 @@ def parse_slack_output(slack_rtm_output, at_bot):
     return None, None
 
 
-def handle_command(slack_client, command, channel):
+def slack_bot_responder(slack_client, command, channel):
     """ Receives commands directed at the bot and determines if they
         are valid commands. If so, then acts on the commands. If not,
         returns back what it needs for clarification.
@@ -44,17 +44,23 @@ def handle_command(slack_client, command, channel):
     response = "Not sure what '{}' means...".format(command)
     if command.startswith('do '):
         response = "Sure...write some more code then I can then '{}'!".format(command)
+    if "wing" in command or "zero" in command:
+        response = "all your base are belong to us, so... {}".format(command)
     slack_client.api_call("chat.postMessage", channel=channel, text=response, as_user=True)
 
 
-def connect_to_slack(slack_client, at_bot, process=handle_command):
+def connect_to_slack(slack_client, bot_id, slack_responder=slack_bot_responder, slack_monitor=slack_message_monitor):
+    """ creates the client that monitors a slackbot
+        'responder' should be over written so you can add functionality to the bot
+        'monitor' might be overwritten, but not necessary
+    """
     READ_WEBSOCKET_DELAY = 1  # 1 second delay between reading from firehose
     if slack_client.rtm_connect():
         print("StarterBot connected and running!")
         while True:
-            command, channel = parse_slack_output(slack_client.rtm_read(), at_bot)
+            command, channel = slack_monitor(slack_client.rtm_read(), bot_id)
             if command and channel:
-                process(slack_client, command, channel)
+                slack_responder(slack_client, command, channel)
             time.sleep(READ_WEBSOCKET_DELAY)
     else:
         print("Connection failed. Invalid Slack token or bot ID?")
