@@ -213,7 +213,7 @@ def simple_email(msg, to, from_email="mail@opentriptools.com", subject="loader e
 def email(msg, subject, recipients, from_email, mail_server):
     """ send an email to someone...
     """
-    #import pdb; pdb.set_trace()
+    # import pdb; pdb.set_trace()
     is_success = False
     message = """From: {}
 To:  {}
