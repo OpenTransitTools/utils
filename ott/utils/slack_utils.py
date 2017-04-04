@@ -18,7 +18,7 @@ def get_bot_id(slack_client, bot_name):
                 bot_id = user.get('id')
                 break
     else:
-        print("could not find bot user with the name " + bot_name)
+        print("could not find bot user with the name '{}' and token '{}'".format(bot_name, slack_client.token))
     return bot_id
 
 
