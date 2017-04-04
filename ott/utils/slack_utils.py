@@ -67,4 +67,4 @@ def connect_to_slack(slack_client, bot_id, slack_responder=slack_bot_responder, 
                 slack_responder(slack_client, command, channel)
             time.sleep(READ_WEBSOCKET_DELAY)
     else:
-        print("Connection failed. Invalid Slack token ({}) or bot ID ({})?".format(slack_client, bot_id))
+        print("Connection failed. Invalid Slack token '{}' or bot ID '{}'?".format(slack_client.token, bot_id))
