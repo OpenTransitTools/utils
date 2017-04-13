@@ -86,6 +86,17 @@ def exists(dir, file=None):
     return ret_val
 
 
+def exists_and_newer(file, age=10000):
+    ret_val = False
+    if os.path.exists(file):
+        log.info("{} does exist ".format(file))
+        ret_val = True
+        if file_age(file) > age:
+            log.info("{} is {} days old, thus older than the {} days specified".format(file, file_age(file), age))
+            ret_val = False
+    return ret_val
+
+
 def exists_and_sized(file, size, expire=None):
     ret_val = True
     if os.path.exists(file) is False:
