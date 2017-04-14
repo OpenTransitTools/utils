@@ -1,13 +1,10 @@
-# FXP TODO -- commenting this out, since it might be f'n with performance
-#import socket
-#socket.setdefaulttimeout(40)
 import os
-import logging
-log = logging.getLogger(__file__)
-
 import simplejson as json
 import urllib
 import contextlib
+
+import logging
+log = logging.getLogger(__file__)
 
 
 def stream_json(u, args=None, extra_path=None):
@@ -51,16 +48,14 @@ def str_to_json(str, def_val={}):
         ret_val = json.loads(str)
     except Exception, e:
         log.info("Couldn't convert {0} to json\n{1}".format(str, e))
-
     return ret_val
 
 
-def serialize(obj):
-    """ Represent instance of a class as JSON.
-        returns a string that represents a JSON-encoded object.
+def obj_to_dict(obj):
+    """ Represent instance of a class as JSON object (dictionary of named elements) 
+        :returns a nested dictionary that represents a JSON-encoded object.
         @from: http://stackoverflow.com/a/4682553/2125598
-
-        Recursively walk object's hierarchy.
+        NOTE: reecursively walks object's hierarchy, creating a nested dict representing the elements of the class
     """
     if(obj is None):
         return None
@@ -69,38 +64,41 @@ def serialize(obj):
     elif isinstance(obj, dict):
         obj = obj.copy()
         for key in obj:
-            obj[key.lower()] = serialize(obj[key])
+            obj[key.lower()] = obj_to_dict(obj[key])
         return obj
     elif isinstance(obj, list):
         return [serialize(item) for item in obj]
     elif isinstance(obj, tuple):
-        return tuple(serialize([item for item in obj]))
+        return tuple(obj_to_dict([item for item in obj]))
     elif hasattr(obj, '__dict__'):
-        return serialize(obj.__dict__)
+        return obj_to_dict(obj.__dict__)
     else:
         return repr(obj) # Don't know how to handle, convert to string
 
 
-def json_repr(obj, pretty_print=False):
-
-    ## step 1: call serializer, which walks object tree and returns a cleaned up dict representation of the object
-    data = serialize(obj)
-
-    ## step 2: dump serialized object into json string
+def dict_to_json_str(data, pretty_print=False):
+    """ dump nested dict into string """
     ret_val = None
     if pretty_print:
         ret_val = json.dumps(data, sort_keys=True, indent=4)
     else:
         ret_val = json.dumps(data)
-
-    ## step 3: return result as string
     return ret_val
 
 
 def object_to_json_file(file_path, obj, pretty_print=False):
-    data = serialize(obj)
+    data = obj_to_dict(obj)
     with open(file_path, 'w') as outfile:
         if pretty_print:
             json.dump(data, outfile, sort_keys=True, indent=4)
         else:
             json.dump(data, outfile)
+
+
+def json_repr(obj, pretty_print=False):
+    ## step 1: call serializer, which walks object tree and returns a cleaned up dict representation of the object
+    data = obj_to_dict(obj)
+
+    ## step 2: dump serialized object into json string
+    return dict_to_json_str(data, pretty_print)
+
