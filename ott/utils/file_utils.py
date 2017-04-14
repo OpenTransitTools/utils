@@ -7,6 +7,7 @@ import filecmp
 import shutil
 
 from . import string_utils
+from . import date_utils
 
 import logging
 log = logging.getLogger(__file__)
@@ -42,6 +43,11 @@ def file_time(file):
     mtime = get_mtime(file)
     dt = datetime.datetime.fromtimestamp(mtime)
     return dt
+
+
+def file_pretty_date(file, fmt=None):
+    dt = file_time(file)
+    return date_utils.pretty_date(dt, fmt)
 
 
 def file_age(file):

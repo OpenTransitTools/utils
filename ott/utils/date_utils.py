@@ -141,13 +141,15 @@ def pretty_time(dt, fmt=" %I:%M%p", def_val=None):
         log.warn(e)
     return ret_val
 
-def pretty_date(dt=None, fmt='%A, %B %d, %Y'):
+def pretty_date(dt=None, fmt=None):
+    if fmt is None:
+        fmt = '%A, %B %d, %Y'
     if dt is None:
         dt = get_local_date()
     ret_val =  dt.strftime(fmt).replace(' 0',' ')  # "Monday, March 4, 2013"
     return ret_val
 
-def pretty_date_from_ms(ms, fmt='%A, %B %d, %Y'):
+def pretty_date_from_ms(ms, fmt=None):
     dt = None
     try:
         if ms is not None:
