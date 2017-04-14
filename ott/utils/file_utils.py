@@ -17,6 +17,16 @@ NEW_SUFFIX = "-new"
 OLD_DIR_NAME = "OLD"
 
 
+def find_files(dir_path, ext=".txt"):
+    """ find files that have a certain ending extension """
+    ret_val = []
+    for file in os.listdir(dir_path):
+        if file.endswith(ext):
+            f = os.path.join(dir_path, file)
+            ret_val.append(f)
+    return ret_val
+
+
 def read_file_into_string(file_path):
     """read file into a string"""
     ret_val = None
@@ -284,6 +294,10 @@ def copy_contents(src_dir, target_dir, overwrite=True):
 def get_file_name_from_url(url):
     ret_val = url.split('/')[-1:][0]
     return ret_val
+
+
+def get_file_name_from_path(file_path):
+    return os.path.basename(file_path)
 
 
 def append_to_path(path, append, end_with_sep=True):
