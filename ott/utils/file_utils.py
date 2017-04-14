@@ -16,6 +16,14 @@ NEW_SUFFIX = "-new"
 OLD_DIR_NAME = "OLD"
 
 
+def read_file_into_string(file_path):
+    """read file into a string"""
+    ret_val = None
+    with open(file_path, "r") as f:
+        ret_val = f.readlines()
+    return ret_val
+
+
 def get_mtime(file):
     """ datetime for the modified file time ... returns time in seconds """
     try:
