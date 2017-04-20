@@ -247,11 +247,11 @@ def append_vlog_file(graph_dir, feed_msg=None, vlog_name=VLOG_NAME):
     """
     now = datetime.datetime.now().strftime("%B %d, %Y @ %I:%M %p")
     version, commit = get_otp_version(graph_dir)
-    msg = "\nUpdated graph ({}, {}) on {} with GTFS feed(s):\n".format(version, commit, now)
+    msg = "Updated graph ({}, {}) on {} with GTFS feed(s):\n".format(version, commit, now)
 
     # add any specific feeds messages
     if feed_msg and len(feed_msg) > 1:
-        msg = "{}{}\n".format(msg, feed_msg)
+        msg = "{}{}\n\n".format(msg, feed_msg)
 
     # write message to vlog file
     vlog_path = get_vlog_file_path(graph_dir, vlog_name)

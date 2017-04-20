@@ -43,7 +43,8 @@ def prepend_file(file_path, content):
     with open(file_path, 'r+') as f:
         old_content = f.read()
         f.seek(0, 0)
-        f.write(content + '\n' + old_content)
+        f.write(content)
+        f.write(old_content)
 
 
 def get_mtime(file):
