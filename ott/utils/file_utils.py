@@ -35,6 +35,17 @@ def read_file_into_string(file_path):
     return ret_val
 
 
+def prepend_file(file_path, content):
+    """ simple file prepender
+        @note: assumes there are no issues loading the contents of the file into memory
+        @see http://stackoverflow.com/questions/5914627/prepend-line-to-beginning-of-a-file
+    """
+    with open(file_path, 'r+') as f:
+        old_content = f.read()
+        f.seek(0, 0)
+        f.write(content + '\n' + old_content)
+
+
 def get_mtime(file):
     """ datetime for the modified file time ... returns time in seconds """
     try:

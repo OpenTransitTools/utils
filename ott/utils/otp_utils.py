@@ -255,10 +255,7 @@ def append_vlog_file(graph_dir, feed_msg=None, vlog_name=VLOG_NAME):
 
     # write message to vlog file
     vlog_path = get_vlog_file_path(graph_dir, vlog_name)
-    f = open(vlog_path, 'a')
-    f.write(msg)
-    f.flush()
-    f.close()
+    file_utils.prepend_file(vlog_path, msg)
 
 
 def diff_vlog_files(svr, graph_dir, vlog_name=VLOG_NAME):
