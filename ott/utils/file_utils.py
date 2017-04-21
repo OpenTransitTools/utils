@@ -40,7 +40,7 @@ def prepend_file(file_path, content):
         @note: assumes there are no issues loading the contents of the file into memory
         @see http://stackoverflow.com/questions/5914627/prepend-line-to-beginning-of-a-file
     """
-    with open(file_path, 'r+') as f:
+    with open(file_path, 'wr+') as f:
         old_content = f.read()
         f.seek(0, 0)
         f.write(content)
