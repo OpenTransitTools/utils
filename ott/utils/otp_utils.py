@@ -251,7 +251,7 @@ def append_vlog_file(graph_dir, feed_msg=None, vlog_name=VLOG_NAME):
 
     # add any specific feeds messages
     if feed_msg and len(feed_msg) > 1:
-        msg = "{}{}\n\n".format(msg, feed_msg)
+        msg = "{}{}\n".format(msg, feed_msg)
 
     # write message to vlog file
     vlog_path = get_vlog_file_path(graph_dir, vlog_name)
