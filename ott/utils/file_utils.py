@@ -40,7 +40,7 @@ def prepend_file(file_path, content):
         @note: assumes there are no issues loading the contents of the file into memory
         @see http://stackoverflow.com/questions/5914627/prepend-line-to-beginning-of-a-file
     """
-    if os.path.exists(file):
+    if os.path.exists(file_path):
         fperms = 'r+'
     else:
         fperms = 'w+'
@@ -51,110 +51,110 @@ def prepend_file(file_path, content):
         f.write(old_content)
 
 
-def get_mtime(file):
+def get_mtime(file_path):
     """ datetime for the modified file time ... returns time in seconds """
     try:
-        mtime = os.path.getmtime(file)
+        mtime = os.path.getmtime(file_path)
     except:
         try:
             # attempt to get time from a symlink (ln -s file)
-            mtime = os.path.getmtime(os.readlink(file))
+            mtime = os.path.getmtime(os.readlink(file_path))
         except:
             # one last sym link try...
-            mtime = os.lstat(file).st_mtime
+            mtime = os.lstat(file_path).st_mtime
     return mtime
 
 
-def file_time(file):
-    mtime = get_mtime(file)
+def file_time(file_path):
+    mtime = get_mtime(file_path)
     dt = datetime.datetime.fromtimestamp(mtime)
     return dt
 
 
-def file_pretty_date(file, fmt=None):
-    dt = file_time(file)
+def file_pretty_date(file_path, fmt=None):
+    dt = file_time(file_path)
     return date_utils.pretty_date(dt, fmt)
 
 
-def file_age(file):
+def file_age(file_path):
     """ age in days """
-    mtime = file_time(file)
+    mtime = file_time(file_path)
     now = datetime.datetime.now()
     diff = now - mtime
     return diff.days
 
 
-def file_age_seconds(file):
+def file_age_seconds(file_path):
     """ age in days """
-    mtime = file_time(file)
+    mtime = file_time(file_path)
     now = datetime.datetime.now()
     diff = now - mtime
     ret_val = diff.seconds + diff.days * 86400
     return ret_val
 
 
-def file_size(file):
+def file_size(file_path):
     """ return size of file path
         note: symlinks are kinda broken here python
               os.path.realpath(path) doesn't work on mac to get real file path
     """
     try:
-        s = os.stat(file)
+        s = os.stat(file_path)
     except:
-        s = os.stat(os.readlink(file))
+        s = os.stat(os.readlink(file_path))
     return s.st_size
 
 
-def touch(file):
+def touch(file_path):
     try:
-        os.utime(file, None)
+        os.utime(file_path, None)
     except:
         # doesn't exist ... unlike touch, don't create the file tho...
         pass
 
 
-def exists(dir, file=None):
+def exists(dir, file_name=None):
     ret_val = False
 
-    if file:
-        file = os.path.join(dir, file)
+    if file_name:
+        file_path = os.path.join(dir, file_name)
     else:
-        file = dir
+        file_path = dir
 
-    if os.path.exists(file):
+    if os.path.exists(file_path):
         ret_val = True
     return ret_val
 
 
-def exists_and_newer(file, age=10000):
+def exists_and_newer(file_path, age=10000):
     ret_val = False
-    if os.path.exists(file):
-        log.info("{} does exist ".format(file))
+    if os.path.exists(file_path):
+        log.info("{} does exist ".format(file_path))
         ret_val = True
-        if file_age(file) > age:
-            log.info("{} is {} days old, thus older than the {} days specified".format(file, file_age(file), age))
+        if file_age(file_path) > age:
+            log.info("{} is {} days old, thus older than the {} days specified".format(file_path, file_age(file_path), age))
             ret_val = False
     return ret_val
 
 
-def exists_and_sized(file, size, expire=None):
+def exists_and_sized(file_path, size, expire=None):
     ret_val = True
-    if os.path.exists(file) is False:
-        log.info("{} doesn't exist ".format(file))
+    if os.path.exists(file_path) is False:
+        log.info("{} doesn't exist ".format(file_path))
         ret_val = False
-    elif file_size(file) < size:
-        log.info("{} is smaller than {} bytes in size".format(file, size))
+    elif file_size(file_path) < size:
+        log.info("{} is smaller than {} bytes in size".format(file_path, size))
         ret_val = False
-    elif expire and file_age(file) > expire:
-        log.info("{} is {} days old, thus older than the {} day refresh threshold".format(file, file_age(file), expire))
+    elif expire and file_age(file_path) > expire:
+        log.info("{} is {} days old, thus older than the {} day refresh threshold".format(file_path, file_age(file_path), expire))
         ret_val = False
     return ret_val
 
 
-def is_min_sized(file, min_size=1000000, quiet=False):
+def is_min_sized(file_path, min_size=1000000, quiet=False):
     ret_val = False
     try:
-        size = file_size(file)
+        size = file_size(file_path)
         if size >= min_size:
             ret_val = True
     except Exception, e:
@@ -189,13 +189,13 @@ def is_a_newer_than_b(file_a, file_b, offset_minutes=0):
     return ret_val
 
 
-def dir_has_newer_files(file, dir_path, offset_minutes=0, include_filter=None, exclude_filter=None):
+def dir_has_newer_files(cmp_file, dir_path, offset_minutes=0, include_filter=None, exclude_filter=None):
     """ determine if any files in the directory have a newer update date than target file
     """
     #import pdb; pdb.set_trace()
     ret_val = False
-    if not os.path.exists(file):
-        log.info("{} doesn't exist ".format(file))
+    if not os.path.exists(cmp_file):
+        log.info("{} doesn't exist ".format(cmp_file))
         ret_val = True
     else:
         file_paths = next(os.walk(dir_path))[2]
@@ -205,26 +205,26 @@ def dir_has_newer_files(file, dir_path, offset_minutes=0, include_filter=None, e
             if exclude_filter and string_utils.is_in_string(f, exclude_filter):
                 continue
             dir_file = os.path.join(dir_path, f)
-            if is_a_newer_than_b(dir_file, file, offset_minutes):
+            if is_a_newer_than_b(dir_file, cmp_file, offset_minutes):
                 ret_val = True
                 break
     return ret_val
 
 
-def bkup(file, rm_orig=True):
+def bkup(file_path, rm_orig=True):
     ret_val = False
     try:
-        if os.path.exists(file):
-            mtime = file_time(file)
-            tmp_file = "{}.{:%Y%m%d}".format(file, mtime)
+        if os.path.exists(file_path):
+            mtime = file_time(file_path)
+            tmp_file = "{}.{:%Y%m%d}".format(file_path, mtime)
             rm(tmp_file)
             if rm_orig:
-                os.rename(file, tmp_file)
+                os.rename(file_path, tmp_file)
             else:
-                cp(file, tmp_file)
+                cp(file_path, tmp_file)
             ret_val = True
     except:
-        log.error('could not backup file {}'.format(file))
+        log.error('could not backup file {}'.format(file_path))
     return ret_val
 
 
@@ -264,9 +264,9 @@ def cp(src, dst):
         log.error('could not copy file {} to {}'.format(src, dst))
 
 
-def rm(file):
-    if file and os.path.exists(file):
-        os.remove(file)
+def rm(file_path):
+    if file_path and os.path.exists(file_path):
+        os.remove(file_path)
 
 
 def purge(dir_path, pattern):
@@ -506,3 +506,4 @@ def make_csv_writer(fp, fieldnames=None):
     else:
         writer = csv.DictWriter(fp)
     return writer
+
