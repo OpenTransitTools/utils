@@ -34,19 +34,19 @@ def restart_call(self, call_db_path="call_center/db/call_db.tar.gz", call_runner
 
 
 def get_graph_path(graph_dir=None, graph_name=GRAPH_NAME):
+    """"return full path to Graph.obj"""
     graph_path = os.path.join(graph_dir, graph_name)
     return graph_path
 
 
 def get_otp_path(graph_dir=None, otp_name=OTP_NAME):
-    """"return otp.jar path"""
+    """"return full path to otp.jar"""
     otp_path = os.path.join(graph_dir, otp_name)
     return otp_path
 
 
 def get_vlog_file_path(graph_dir, vlog_name=VLOG_NAME):
-    """return otp.vlog directory path"""
-    # import pdb; pdb.set_trace()
+    """return full path to otp.vlog"""
     vlog_path = os.path.join(graph_dir, vlog_name)
     return vlog_path
 
@@ -247,7 +247,7 @@ def append_vlog_file(graph_dir, feed_msg=None, vlog_name=VLOG_NAME):
     """
     now = datetime.datetime.now().strftime("%B %d, %Y @ %I:%M %p")
     version, commit = get_otp_version(graph_dir)
-    msg = "\nUpdated graph ({}, {}) on {} with GTFS feed(s):\n".format(version, commit, now)
+    msg = "Updated graph ({}, {}) on {} with GTFS feed(s):\n".format(version, commit, now)
 
     # add any specific feeds messages
     if feed_msg and len(feed_msg) > 1:
@@ -255,10 +255,7 @@ def append_vlog_file(graph_dir, feed_msg=None, vlog_name=VLOG_NAME):
 
     # write message to vlog file
     vlog_path = get_vlog_file_path(graph_dir, vlog_name)
-    f = open(vlog_path, 'a')
-    f.write(msg)
-    f.flush()
-    f.close()
+    file_utils.prepend_file(vlog_path, msg)
 
 
 def diff_vlog_files(svr, graph_dir, vlog_name=VLOG_NAME):
@@ -302,38 +299,39 @@ def diff_vlog_files(svr, graph_dir, vlog_name=VLOG_NAME):
     return ret_val
 
 
-def package_new(graph_dir, graph_name=GRAPH_NAME):
+
+def package_new(graph_dir, graph_name=GRAPH_NAME, vlog_name=VLOG_NAME, otp_name=OTP_NAME):
     """ copy otp.v, otp.jar and Graph.obj to *-new paths
     """
-    graph_path = get_graph_path(graph_dir=graph_dir, graph_name=graph_name)
-    new_graph_path = file_utils.make_new_path(graph_path)
+    graph_path = os.path.join(graph_dir, graph_name)
+    new_graph_path = file_utils.make_new_path(graph_dir, graph_name)
     file_utils.rm(new_graph_path)
     file_utils.cp(graph_path, new_graph_path)
 
-    vlog_path = get_vlog_file_path(graph_dir=graph_dir)
-    new_vlog_path = file_utils.make_new_path(vlog_path)
+    vlog_path = os.path.join(graph_dir, vlog_name)
+    new_vlog_path = file_utils.make_new_path(graph_dir, vlog_name)
     file_utils.rm(new_vlog_path)
     file_utils.cp(vlog_path, new_vlog_path)
 
-    otp_path = get_otp_path(graph_dir=graph_dir)
-    new_otp_path = file_utils.make_new_path(otp_path)
+    otp_path = os.path.join(graph_dir, otp_name)
+    new_otp_path = file_utils.make_new_path(graph_dir, otp_name)
     file_utils.rm(new_otp_path)
     file_utils.cp(otp_path, new_otp_path)
 
 
-def rm_new(graph_dir, graph_name=GRAPH_NAME):
+def rm_new(graph_dir, graph_name=GRAPH_NAME, vlog_name=VLOG_NAME, otp_name=OTP_NAME):
     """ remove -new files
     """
-    graph_path = get_graph_path(graph_dir=graph_dir, graph_name=graph_name)
-    new_graph_path = file_utils.make_new_path(graph_path)
+    graph_path = os.path.join(graph_dir, graph_name)
+    new_graph_path = file_utils.make_new_path(graph_dir, graph_name)
     file_utils.rm(new_graph_path)
 
-    vlog_path = get_vlog_file_path(graph_dir=graph_dir)
-    new_vlog_path = file_utils.make_new_path(vlog_path)
+    vlog_path = os.path.join(graph_dir, vlog_name)
+    new_vlog_path = file_utils.make_new_path(graph_dir, vlog_name)
     file_utils.rm(new_vlog_path)
 
-    otp_path = get_otp_path(graph_dir=graph_dir)
-    new_otp_path = file_utils.make_new_path(otp_path)
+    otp_path = os.path.join(graph_dir, otp_name)
+    new_otp_path = file_utils.make_new_path(graph_dir, otp_name)
     file_utils.rm(new_otp_path)
 
 
@@ -390,5 +388,4 @@ def mv_new_files_into_place(graph_dir, graph_name=GRAPH_NAME, vlog_name=VLOG_NAM
             else:
                 # @todo this should be an email in addtion to a log message
                 log.error("ruh roh: after trying to deploy a new graph, I don't see either {} or {}".format(curr_graph, curr_otp))
-
     return ret_val
