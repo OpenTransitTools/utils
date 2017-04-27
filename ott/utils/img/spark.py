@@ -1,26 +1,31 @@
 """spark.py
 A python module for generating sparklines.
 Requires the Python Imaging Library 
-"""
 
+NOTES:
 __author__ = "Joe Gregorio (joe@bitworking.org), Matthew Perry (perrygeo@gmail.com"
 __copyright__ = "Copyright 2005, Joe Gregorio"
 __contributors__ = ['Alan Powell, Matthew Perry']
 __version__ = "0.1"
 __license__ = "MIT"
-__history__ = """
+__history__ = 
 
 20070510 abstracted functions away from cgi-specific arg objects (MTP)
-
 """
+
+import logging
+log = logging.getLogger(__file__)
 
 try:
     # on PC, you need to do from PIL (else you get an error when running under Pyramid)
     from PIL import Image, ImageDraw
 except ImportError:
     # but on Mac, etc... there isn't a PIL module...
-    import Image, ImageDraw
-
+    try:
+        import Image, ImageDraw
+    except Exception, e:
+        log.warn(e)
+        log.warn("NOTE: missing image manipulation lib, so the sparkline utility probably won't work...")
 
 def sparkline_discrete(results, output=None, dmin=None, dmax=None, upper=None, width=2, height=14, \
                             below_color='gray', above_color='red', longlines=False):

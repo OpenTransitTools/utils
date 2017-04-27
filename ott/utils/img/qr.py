@@ -1,4 +1,11 @@
-import qrcode
+import logging
+log = logging.getLogger(__file__)
+
+try:
+    import qrcode
+except Exception, e:
+    log.warn(e)
+    log.warn("NOTE: missing qr dependencies ..  qr codes probably won't work...")
 
 
 def qr_to_file(content, path='', name='qr', ext='png'): 
