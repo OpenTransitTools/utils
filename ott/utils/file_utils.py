@@ -294,6 +294,20 @@ def ls(dir_path, include_filter=None):
     return ret_val
 
 
+def grep(file_path, search_regexp, case=True):
+    ret_val = []
+    if case:
+        p = re.compile(search_regexp)
+    else:
+        p = re.compile(search_regexp, re.IGNORECASE)
+    with open(file_path) as f:
+        for num, line in enumerate(f):
+            if p.search(line):
+                ret_val.append(line)
+                log.debug("{} found on line {}: {}".format(search_regexp, num, line))
+    return ret_val
+
+
 def mkdir(dir_path):
     if dir_path and not os.path.exists(dir_path):
         os.makedirs(dir_path)
@@ -515,3 +529,4 @@ def get_module_dir(clazz):
     file = inspect.getsourcefile(clazz)
     dir = os.path.dirname(os.path.abspath(file))
     return dir
+
