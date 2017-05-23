@@ -5,6 +5,7 @@ import datetime
 import zipfile
 import filecmp
 import shutil
+import inspect
 
 from . import string_utils
 from . import date_utils
@@ -507,3 +508,10 @@ def make_csv_writer(fp, fieldnames=None):
         writer = csv.DictWriter(fp)
     return writer
 
+
+def get_module_dir(clazz):
+    """ send me a __class__, and I'll return the path to the directory where it lives
+    """
+    file = inspect.getsourcefile(clazz)
+    dir = os.path.dirname(os.path.abspath(file))
+    return dir
