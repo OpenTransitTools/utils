@@ -10,7 +10,7 @@ log = logging.getLogger(__file__)
 def stream_json(u, args=None, extra_path=None):
     """ utility class to stream .json
     """
-    ret_val={}
+    ret_val = {}
     url = u
     if extra_path:
         url = "{0}/{1}".format(url, extra_path)
@@ -25,7 +25,7 @@ def stream_json(u, args=None, extra_path=None):
 def get_json(file, path='ott/utils/tests/json'):
     """ utility class to load a static .json file for mock'ing a service
     """
-    ret_val={}
+    ret_val = {}
     try:
         with open(file) as f:
             ret_val = json.load(f)
@@ -43,7 +43,7 @@ def get_json(file, path='ott/utils/tests/json'):
 def str_to_json(str, def_val={}):
     """ utility class to load a static .json file for mock'ing a service
     """
-    ret_val=def_val
+    ret_val = def_val
     try:
         ret_val = json.loads(str)
     except Exception, e:
