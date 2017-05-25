@@ -51,25 +51,25 @@ def get_vlog_file_path(graph_dir, vlog_name=VLOG_NAME):
     return vlog_path
 
 
-def get_test_urls_from_config(section='otp', port=None, hostname=None, ws_path=None, map_path=None):
+def get_test_urls_from_config(section='otp', hostname=None, ws_path=None, ws_port=None, app_path=None, app_port=None):
     """ return the OTP map and ws urls from
     """
     config = ConfigUtil(section=section)
 
     if not hostname:
         hostname = config.get('host', def_val=web_utils.get_hostname())
-    if not port:
-        port = DEF_PORT
 
+    if ws_port is None:  ws_port = DEF_PORT
     if ws_path is None:
         ws_path = config.get('ws_url_path', def_val="/otp/routers/default/plan")
-    ws_url = "http://{}:{}{}".format(hostname, port, ws_path)
+    ws_url = "http://{}:{}{}".format(hostname, ws_port, ws_path)
 
-    if map_path is None:
-        map_path = config.get('map_url_path', def_val="")
-    map_url = "http://{}:{}{}".format(hostname, port, map_path)
+    if app_port is None: app_port = "80"
+    if app_path is None:
+        app_path = config.get('app_path', def_val="")
+    app_url = "http://{}:{}{}".format(hostname, app_port, app_path)
 
-    return ws_url, map_url
+    return ws_url, app_url
 
 
 def call_planner_svc(url, accept='application/xml'):
