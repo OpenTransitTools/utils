@@ -179,14 +179,17 @@ def is_a_larger_than_b(file_a, file_b):
 
 def is_a_newer_than_b(file_a, file_b, offset_minutes=0):
     ret_val = False
-    if not os.path.exists(file_b):
-        ret_val = True
-        log.info("{} doesn't exist ".format(file_b))
-    else:
-        a_age = get_mtime(file_a)
-        b_age = get_mtime(file_b)
-        if a_age > b_age + (offset_minutes * 60):
+    if os.path.exists(file_a):
+        if not os.path.exists(file_b):
             ret_val = True
+            log.info("{} doesn't exist ".format(file_b))
+        else:
+            a_age = get_mtime(file_a)
+            b_age = get_mtime(file_b)
+            if a_age > b_age + (offset_minutes * 60):
+                ret_val = True
+    else:
+        log.info("{} doesn't exist ".format(file_a))
     return ret_val
 
 
