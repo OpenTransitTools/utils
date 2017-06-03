@@ -236,6 +236,19 @@ def get_lang(request, def_val="en"):
     return get_first_param(request, "_LOCALE_", def_val)
 
 
+def unescape_html_str(html_str, def_val=""):
+    ret_val = def_val
+    try:
+        # python 3.3+
+        import html
+        ret_val = html.unescape(html_str)
+    except:
+        # python 2.7
+        import HTMLParser
+        ret_val = HTMLParser.HTMLParser().unescape(html_str)
+    return ret_val
+
+
 def unescape_html(dict_list):
     """ replace html escaped &lt; and &gt; characters with < or >
         @see: http://stackoverflow.com/questions/1076536/replacing-values-in-a-python-list-dictionary
