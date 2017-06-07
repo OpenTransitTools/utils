@@ -204,8 +204,9 @@ def get_first_param_as_str(request, name, def_val=None):
     return get_first_param(request, name, def_val)
 
 
-
 def get_first_param_safe_str(request, name, max_len=60, def_val=None):
+    """ return a string, of which check the lenght and also strip out <> chars to prevent xss vulnerabilities 
+    """
     ret_val = def_val
     s = get_first_param(request, name)
     if s:
@@ -213,7 +214,6 @@ def get_first_param_safe_str(request, name, max_len=60, def_val=None):
             s = s[0:max_len]
         ret_val = s.replace("<", "").replace(">", "").replace("lt", "").replace("rt", "")
     return ret_val
-
 
 
 def get_first_param(request, name, def_val=None):
@@ -272,6 +272,7 @@ def unescape_html(dict_list):
 
 
 html_escape_table = {
+        " ": "%20",
         "&": "%26",
         '"': "%22",
         "'": "%27",
@@ -285,7 +286,7 @@ def html_escape(text):
     """
     ret_val = text
     try:
-        ret_val = "".join(html_escape_table.get(c,c) for c in text)
+        ret_val = "".join(html_escape_table.get(c, c) for c in text)
     except:
         pass
     return ret_val
