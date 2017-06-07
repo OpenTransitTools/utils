@@ -205,15 +205,30 @@ def get_first_param_as_str(request, name, def_val=None):
 
 
 def get_first_param_safe_str(request, name, max_len=60, def_val=None):
-    """ return a string, of which check the lenght and also strip out <> chars to prevent xss vulnerabilities 
+    """ return a string, of which check the lenght and also strip out <> chars to prevent 
+        xss vulnerabilities.  Further, there's a psudo-markdown markup language added to 
+        replace certain strings with bold, italic, etc... chars.
+        
+        bold  = **bold***  = <b>bold</b> 
+        italics  = _*italics*_  = <i>italics</i> 
+        bold italics  = _**bold italics**_  = <b><i>bold italics</i></b> 
+        strikeout = ~~strikeout~~~ = <s>strikeout</s>
+        underline = __underline___ = <u>underline</u>
+
     """
     ret_val = def_val
     s = get_first_param(request, name)
     if s:
         if len(s) <= max_len:
             s = s[0:max_len]
-        ret_val = s.replace("<", "").replace(">", "").replace("lt", "").replace("rt", "")
-    return ret_val
+        ret_val = s.replace("<", "").replace(">", "").replace("lt", "").replace("rt", "") \
+            .replace("_**", "<b><i>").replace("**_", "</i></b>") \
+            .replace("_*", "<i>").replace("*_", "</i>")  \
+            .replace("***", "</b>").replace("**", "<b>") \
+            .replace("___", "</u>").replace("__", "<u>") \
+            .replace("~~~", "</s>").replace("~~", "<s>")
+
+        return ret_val
 
 
 def get_first_param(request, name, def_val=None):
