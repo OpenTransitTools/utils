@@ -204,6 +204,18 @@ def get_first_param_as_str(request, name, def_val=None):
     return get_first_param(request, name, def_val)
 
 
+
+def get_first_param_safe_str(request, name, max_len=60, def_val=None):
+    ret_val = def_val
+    s = get_first_param(request, name)
+    if s:
+        if len(s) <= max_len:
+            s = s[0:max_len]
+        ret_val = s.replace("<", "").replace(">", "").replace("lt", "").replace("rt", "")
+    return ret_val
+
+
+
 def get_first_param(request, name, def_val=None):
     """
         utility function
