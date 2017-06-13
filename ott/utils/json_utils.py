@@ -22,20 +22,20 @@ def stream_json(u, args=None, extra_path=None):
     return ret_val
 
 
-def get_json(file, path='ott/utils/tests/json'):
+def get_json(file_name, path='ott/utils/tests/json'):
     """ utility class to load a static .json file for mock'ing a service
     """
     ret_val = {}
     try:
-        with open(file) as f:
+        with open(file_name) as f:
             ret_val = json.load(f)
     except:
         try:
-            path=os.path.join(path, file)
+            path = os.path.join(path, file_name)
             with open(path) as f:
                 ret_val = json.load(f)
         except:
-            log.info("Couldn't open file : {0} (or {1})".format(file, path))
+            log.info("Couldn't open file : {0} (or {1})".format(file_name, path))
 
     return ret_val
 
@@ -102,4 +102,3 @@ def json_repr(obj, pretty_print=False):
 
     ## step 2: dump serialized object into json string
     return dict_to_json_str(data, pretty_print)
-
