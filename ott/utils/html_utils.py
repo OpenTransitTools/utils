@@ -9,8 +9,6 @@ from ott.utils import num_utils
 def planner_form_params(request):
     """ TODO ... move to  view are refactored/updated)
     """
-    #import pdb; pdb.set_trace()
-
     # step 0: default values for the trip planner form 
     dt = date_utils.get_day_info()
     tm = date_utils.get_time_info()
@@ -204,7 +202,7 @@ def get_first_param_as_str(request, name, def_val=None):
     return get_first_param(request, name, def_val)
 
 
-def get_first_param_safe_str(request, name, max_len=60, def_val=None):
+def get_first_param_safe_str(request, name, max_len=60, strip_url=False, def_val=None):
     """ return a string, of which check the lenght and also strip out <> chars to prevent 
         xss vulnerabilities.  Further, there's a psudo-markdown markup language added to 
         replace certain strings with bold, italic, etc... chars.
@@ -214,19 +212,40 @@ def get_first_param_safe_str(request, name, max_len=60, def_val=None):
         bold italics  = _**bold italics**_  = <b><i>bold italics</i></b> 
         strikeout = ~~strikeout~~~ = <s>strikeout</s>
         underline = __underline___ = <u>underline</u>
-
+        url link = "mm[bbb](/link.html)" becomes "mm<a href='/link.html>bbb</a>" (only 1 link allowed)
     """
     ret_val = def_val
     s = get_first_param(request, name)
     if s:
-        if len(s) <= max_len:
+        # first, trim down the url
+        if max_len > 0 and len(s) <= max_len:
             s = s[0:max_len]
+
+        # next, replace special chars with html markup
         ret_val = s.replace("<", "").replace(">", "").replace("lt", "").replace("rt", "") \
             .replace("_**", "<b><i>").replace("**_", "</i></b>") \
             .replace("_*", "<i>").replace("*_", "</i>")  \
             .replace("***", "</b>").replace("**", "<b>") \
             .replace("___", "</u>").replace("__", "<u>") \
             .replace("~~~", "</s>").replace("~~", "<s>")
+
+        #
+        # markup link parse
+        # will turn "mm[bbb](/link.html)" into "mm<a href='/link.html>bbb</a>"
+        #
+        #import pdb; pdb.set_trace()
+        cs = ret_val.find("[")
+        br = ret_val.find("](")
+        ue = ret_val.find(")")
+        if cs < br < ue:
+            pre = ret_val[:cs]
+            ctn = ret_val[cs+1:br]
+            url = ret_val[br+2:ue]
+            post = ret_val[ue+1:]
+            if strip_url:
+                ret_val = "{}{}{}".format(pre, ctn, post)
+            else:
+                ret_val = "{}<a href='{}' target='#'>{}</a>{}".format(pre, url, ctn, post)
 
         return ret_val
 
