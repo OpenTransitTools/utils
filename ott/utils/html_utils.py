@@ -234,18 +234,19 @@ def get_first_param_safe_str(request, name, max_len=60, strip_url=False, def_val
         # will turn "mm[bbb](/link.html)" into "mm<a href='/link.html>bbb</a>"
         #
         #import pdb; pdb.set_trace()
-        cs = ret_val.find("[")
         br = ret_val.find("](")
-        ue = ret_val.find(")")
-        if cs < br < ue:
-            pre = ret_val[:cs]
-            ctn = ret_val[cs+1:br]
-            url = ret_val[br+2:ue]
-            post = ret_val[ue+1:]
-            if strip_url:
-                ret_val = "{}{}{}".format(pre, ctn, post)
-            else:
-                ret_val = "{}<a href='{}' target='#'>{}</a>{}".format(pre, url, ctn, post)
+        if br > 0:
+            cs = ret_val.find("[")
+            ue = ret_val.find(")")
+            if cs < br < ue:
+                pre = ret_val[:cs]
+                ctn = ret_val[cs+1:br]
+                url = ret_val[br+2:ue]
+                post = ret_val[ue+1:]
+                if strip_url:
+                    ret_val = "{}{}{}".format(pre, ctn, post)
+                else:
+                    ret_val = "{}<a href='{}' target='#'>{}</a>{}".format(pre, url, ctn, post)
 
         return ret_val
 
