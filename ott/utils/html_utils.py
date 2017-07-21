@@ -222,7 +222,7 @@ def get_first_param_safe_str(request, name, max_len=60, strip_url=False, def_val
             s = s[0:max_len]
 
         # next, replace special chars with html markup
-        ret_val = s.replace("<", "").replace(">", "").replace("lt", "").replace("rt", "") \
+        ret_val = s.replace("<", "").replace(">", "").replace("&lt;", "").replace("&rt;", "") \
             .replace("_**", "<b><i>").replace("**_", "</i></b>") \
             .replace("_*", "<i>").replace("*_", "</i>")  \
             .replace("***", "</b>").replace("**", "<b>") \
