@@ -3,7 +3,7 @@ import socket
 import urlparse
 import urllib2
 import httplib
-import wget as wget_wget
+import requests
 import smtplib
 import SimpleHTTPServer
 import SocketServer
@@ -66,8 +66,16 @@ def wget(url, file_path, delete_first=True):
     is_success = True
     if delete_first:
         file_utils.rm(file_path)
-    wget_wget.download(url, file_path)
+
     log.info("wget: downloaded {} into file {}".format(url, file_path))
+    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.107 Safari/537.36',
+               'Upgrade-Insecure-Requests': '1',
+               'x-runtime': '148ms'}
+    r = requests.get(url, headers=headers, allow_redirects=True, stream=True)
+    with open(file_path, 'wb') as f:
+        for chunk in r.iter_content(chunk_size=1024):
+            if chunk:
+                f.write(chunk)
     return is_success
 
 
