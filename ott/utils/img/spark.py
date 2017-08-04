@@ -110,5 +110,4 @@ if __name__ == "__main__":
     d = [12, 18, 22, 29, 34, 46, 54, 56, 34, 44]
     sparkline_smooth(results=d, bg_color='#FF0000', fill_color='#0000FF').show()
     #sparkline_discrete(d,'/tmp/discrete.png')
-    #print " Take a look at /tmp/smooth.png and /tmp/discrete.png"
 
