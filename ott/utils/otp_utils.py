@@ -18,8 +18,8 @@ GRAPH_NAME = "Graph.obj"
 OTP_NAME = "otp.jar"
 VLOG_NAME = "otp.v"
 
-DEF_NAME   = "prod"
-DEF_PORT   = "55555"
+DEF_NAME = "prod"
+DEF_PORT = "55555"
 DEF_SSL_PORT = "55551"
 OTP_DOWNLOAD_URL = "http://maven.conveyal.com.s3.amazonaws.com/org/opentripplanner/otp/0.20.0/otp-0.20.0-shaded.jar"
 
@@ -59,12 +59,14 @@ def get_test_urls_from_config(section='otp', hostname=None, ws_path=None, ws_por
     if not hostname:
         hostname = config.get('host', def_val=web_utils.get_hostname())
 
-    if ws_port is None:  ws_port = DEF_PORT
+    if ws_port is None:
+        ws_port = DEF_PORT
     if ws_path is None:
         ws_path = config.get('ws_url_path', def_val="/otp/routers/default/plan")
     ws_url = "http://{}:{}{}".format(hostname, ws_port, ws_path)
 
-    if app_port is None: app_port = "80"
+    if app_port is None:
+        app_port = "80"
     if app_path is None:
         app_path = config.get('app_path', def_val="")
     app_url = "http://{}:{}{}".format(hostname, app_port, app_path)
@@ -79,7 +81,7 @@ def call_planner_svc(url, accept='application/xml'):
     try:
         socket.setdefaulttimeout(2000)
         log.debug("call_otp: OTP output for " + url)
-        req = urllib2.Request(url, None, {'Accept':accept})
+        req = urllib2.Request(url, None, {'Accept': accept})
         res = urllib2.urlopen(req)
         log.debug("call_otp: OTP output for " + url)
         ret_val = res.read()
