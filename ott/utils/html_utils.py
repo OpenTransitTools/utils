@@ -6,9 +6,16 @@ from ott.utils import date_utils
 from ott.utils import num_utils
 
 
-def get_domain_port(request):
-    ret_val = request
-    return ret_val
+def get_svr_port(request):
+    """ OTT pyramid-server port (important for proxy for this to be set in .ini config)
+        default to request's server port if not available
+    """
+    import pdb; pdb.set_trace()
+    port = get_ini_param(request, 'ott.svr_port')
+    if port is None or len(port) < 2:
+        port = request.server_port
+    return port
+
 
 def planner_form_params(request):
     """ TODO ... move to  view are refactored/updated)
@@ -53,7 +60,6 @@ def planner_form_params(request):
 
     # step 2: blanket assignment
     for k,v in params.items():
-        #import pdb; pdb.set_trace()
         if k in ret_val and v is not None and len(v) > 0:
             if type(ret_val[k]) == bool:
                 ret_val[k] = (v == 'True')
@@ -237,7 +243,6 @@ def get_first_param_safe_str(request, name, max_len=60, strip_url=False, def_val
         # markup link parse
         # will turn "mm[bbb](/link.html)" into "mm<a href='/link.html>bbb</a>"
         #
-        #import pdb; pdb.set_trace()
         br = ret_val.find("](")
         if br > 0:
             cs = ret_val.find("[")
