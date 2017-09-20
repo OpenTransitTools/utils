@@ -10,7 +10,7 @@ def get_svr_port(request):
     """ OTT pyramid-server port (important for proxy for this to be set in .ini config)
         default to request's server port if not available
     """
-    import pdb; pdb.set_trace()
+    #import pdb; pdb.set_trace()
     port = get_ini_param(request, 'ott.svr_port')
     if port is None or len(port) < 2:
         port = request.server_port
