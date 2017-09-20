@@ -6,6 +6,10 @@ from ott.utils import date_utils
 from ott.utils import num_utils
 
 
+def get_domain_port(request):
+    ret_val = request
+    return ret_val
+
 def planner_form_params(request):
     """ TODO ... move to  view are refactored/updated)
     """
