@@ -1,4 +1,5 @@
 import os
+import sys
 import re
 import csv
 import datetime
@@ -532,4 +533,19 @@ def get_module_dir(clazz):
     file = inspect.getsourcefile(clazz)
     dir = os.path.dirname(os.path.abspath(file))
     return dir
+
+
+def get_bin_dir():
+    """ :return the path to where python binary is running (e.g., <project>/bin/ for buildout projects)
+    """
+    python_path = os.path.dirname(sys.modules['__main__'].__file__)
+    return python_path
+
+
+def get_project_root_dir():
+    """ :return the project root dir (assumes your python is in <project>/bin/python.exe)
+    """
+    python_path = get_bin_dir()
+    project_path = os.path.abspath(os.path.join(python_path, '..'))
+    return project_path
 

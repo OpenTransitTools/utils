@@ -16,6 +16,11 @@ RUN_DIR = None
 PARSER = None
 
 
+def set_run_dir(dir=None):
+    global RUN_DIR
+    RUN_DIR = dir
+
+
 class ConfigUtil(object):
     section = SECTION
     log_ini = 'log.ini'
@@ -23,9 +28,17 @@ class ConfigUtil(object):
     _parser = None
     _found_ini = None
 
-    def __init__(self, ini=None, section=None):
-        if ini:     self.ini = ini
-        if section: self.section = section
+    def __init__(self, ini=None, section=None, run_dir=None):
+        if ini:
+            if isinstance(ini, basestring):
+                v = [ini]
+                self.ini = v
+            else:
+                self.ini = ini
+        if section:
+            self.section = section
+        if run_dir:
+            set_run_dir(run_dir)
 
     @property
     def parser(self):
