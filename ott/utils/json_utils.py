@@ -67,7 +67,7 @@ def obj_to_dict(obj):
             obj[key.lower()] = obj_to_dict(obj[key])
         return obj
     elif isinstance(obj, list):
-        return [serialize(item) for item in obj]
+        return [obj_to_dict(item) for item in obj]
     elif isinstance(obj, tuple):
         return tuple(obj_to_dict([item for item in obj]))
     elif hasattr(obj, '__dict__'):
