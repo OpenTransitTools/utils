@@ -542,10 +542,26 @@ def get_bin_dir():
     return python_path
 
 
-def get_project_root_dir():
+def get_project_root_dir(path=None):
     """ :return the project root dir (assumes your python is in <project>/bin/python.exe)
     """
-    python_path = get_bin_dir()
-    project_path = os.path.abspath(os.path.join(python_path, '..'))
-    return project_path
+    # step 1: get current dir
+    if path is None:
+        path = os.path.abspath('.')
+
+    # step 2: get home dir based on some known elements
+    found = False
+    home_dirs = ['ott', 'parts', 'bin', 'eggs']
+    for d in home_dirs:
+        dir = os.sep + d + os.sep
+        if dir in path:
+            x = path.split(dir)
+            if len(x) >= 2:
+                path = x[0]
+                break
+        dir = os.sep + d
+        if path.endswith(dir):
+            path = os.path.join(path, '..')
+            break
+    return path
 

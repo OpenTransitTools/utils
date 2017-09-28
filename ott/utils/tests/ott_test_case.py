@@ -15,7 +15,6 @@ class OttTestCase(unittest.TestCase):
     url_file = None
 
     def get_url(self, svc_name, params=None, lang=None):
-        # import pdb; pdb.set_trace()
         if self.path:
             ret_val = "http://{}:{}/{}/{}".format(self.domain, self.port, self.path, svc_name)
         else:
@@ -37,6 +36,7 @@ class OttTestCase(unittest.TestCase):
         return ret_json
 
     def setUp(self):
+        #import pdb; pdb.set_trace()
         dir = file_utils.get_project_root_dir()
         ini = config_util.ConfigUtil('development.ini', run_dir=dir)
 
@@ -59,8 +59,8 @@ class OttTestCase(unittest.TestCase):
 
     def tearDown(self):
         if self.url_file:
-            url_file.flush()
-            url_file.close()
+            self.url_file.flush()
+            self.url_file.close()
 
     def call_url_match_list(self, url, list):
         u = self.call_url(url)
