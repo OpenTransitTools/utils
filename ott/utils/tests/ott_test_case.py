@@ -13,7 +13,6 @@ class OttTestCase(unittest.TestCase):
     port = "33333"
     path = None
     url_file = None
-    ini = None
 
     def get_url(self, svc_name, params=None, lang=None):
         if self.path:
@@ -32,7 +31,7 @@ class OttTestCase(unittest.TestCase):
 
     def call_url(self, url):
         ret_json = None
-        print u"TEST THIS URL CALL: " + url
+        print u"{} test -- URL: {}".format(self.__class__.__name__, url)
         with contextlib.closing(urllib.urlopen(url)) as f:
             ret_json = f.read()
         return ret_json
@@ -41,7 +40,6 @@ class OttTestCase(unittest.TestCase):
         #import pdb; pdb.set_trace()
         dir = file_utils.get_project_root_dir()
         ini = config_util.ConfigUtil('development.ini', run_dir=dir)
-        self.ini = ini
 
         port = ini.get('ott.test_port', 'app:main')
         if not port:
