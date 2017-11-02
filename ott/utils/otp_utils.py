@@ -24,7 +24,7 @@ DEF_SSL_PORT = "55551"
 OTP_DOWNLOAD_URL = "http://maven.conveyal.com.s3.amazonaws.com/org/opentripplanner/otp/0.20.0/otp-0.20.0-shaded.jar"
 
 
-def restart_call(self, call_db_path="call_center/db/call_db.tar.gz", call_runner="call_center/run.sh"):
+def restart_call(call_db_path="call_center/db/call_db.tar.gz", call_runner="call_center/run.sh"):
     """ retstart call-center app
         basically, if we see 'call' a database export (backup) in the call_center folder, we'll assume that call runs
         here and we'll restart the call server from a shell script (all pretty TriMet specific)

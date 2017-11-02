@@ -24,7 +24,7 @@ def main():
     parser.add_argument('--auth_token',  '-u', help='Twillo Auth Token (e.g., )')
     parser.add_argument('--from_number', '-f', help='Number you are texting')
     parser.add_argument('--to_number',   '-t', help='Number you are texting from', default=DEF_FROM_NUM)
-    parser.add_argument('msg', help='message you want to send', default='Hello from OTT')
+    parser.add_argument('msg', help='message you want to send', nargs='?', default='Hello from OTT')
     args = parser.parse_args()
     twillo_sms_send(args.account_id, args.auth_token, args.to_number, args.msg, args.from_number)
 

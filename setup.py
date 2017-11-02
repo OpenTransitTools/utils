@@ -8,7 +8,8 @@ CHANGES = open(os.path.join(here, 'CHANGES.txt')).read()
 
 requires = [
     'simplejson',
-    'requests',
+    #'requests',
+    #'twilio',
 ]
 
 extras_require = dict(

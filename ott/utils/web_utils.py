@@ -3,7 +3,6 @@ import socket
 import urlparse
 import urllib2
 import httplib
-import requests
 import smtplib
 import SimpleHTTPServer
 import SocketServer
@@ -62,7 +61,10 @@ def my_wget(url, file_path, delete_first=True):
 def wget(url, file_path, delete_first=True):
     """ wget a file from url
         IMPORTANT NOTE: this will *not* work if the URL is a redirect, etc...
+        IMPORTANT NOTE 2: you need to have requests package installed ...
     """
+    import requests
+
     is_success = True
     if delete_first:
         file_utils.rm(file_path)
