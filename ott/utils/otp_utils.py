@@ -4,14 +4,14 @@ import subprocess
 import urllib2
 import filecmp
 import datetime
-import logging
-log = logging.getLogger(__file__)
 
 from ott.utils.config_util import ConfigUtil
 from ott.utils import exe_utils
 from ott.utils import file_utils
 from ott.utils import web_utils
 
+import logging
+log = logging.getLogger(__file__)
 
 # constants
 GRAPH_NAME = "Graph.obj"

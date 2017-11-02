@@ -1,12 +1,11 @@
 """ SMS Utils
 """
 
+DEF_FROM_NUM = "+16888726748"  # ott.tra.nsit bogus number
 
-def twillo_sms_send(account_id, auth_token, to_number, message, from_number="+16888726748"):
+
+def twillo_sms_send(account_id, auth_token, to_number, message, from_number=DEF_FROM_NUM):
     """ @note: to use this routine, you need to install the Twillo Py API
-
-        :return both t/f for a match, and the index of the word where the match occurred
-         depends upon the textblob NLP library for 'spellcheck suggestions and words'
     """
     from twilio.rest import Client
 
@@ -16,3 +15,18 @@ def twillo_sms_send(account_id, auth_token, to_number, message, from_number="+16
                            from_=from_number,
                            body=message)
 
+
+def main():
+    import argparse
+
+    parser = argparse.ArgumentParser(prog='twillo-sms', formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    parser.add_argument('--account_id',  '-a', help='Twillo Account (e.g., )')
+    parser.add_argument('--auth_token',  '-u', help='Twillo Auth Token (e.g., )')
+    parser.add_argument('--from_number', '-f', help='Number you are texting')
+    parser.add_argument('--to_number',   '-t', help='Number you are texting from', default=DEF_FROM_NUM)
+    parser.add_argument('msg', help='message you want to send', default='Hello from OTT')
+    args = parser.parse_args()
+    twillo_sms_send(args.account_id, args.auth_token, args.to_number, args.msg, args.from_number)
+
+if __name__ == "__main__":
+    main()
