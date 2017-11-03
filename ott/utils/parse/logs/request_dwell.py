@@ -19,8 +19,8 @@ class LogInfo(object):
         self.delay = delay
 
     def do_print(self, total_lines):
-        print "\n longest delay: {} seconds ({} minutes) \n\n line 1: {} \n line 2: {} \n line {} of {}\n\n".\
-            format(self.delay, self.delay / 60, self.pre_line, self.lg_line, self.lg_line_no, total_lines)
+        print "\n longest delay: {} seconds ({} minutes) at line {} of {} \n\n line {}: {} \n line {}: {} \n".\
+            format(self.delay, self.delay / 60, self.lg_line_no, total_lines, self.lg_line_no-1, self.pre_line, self.lg_line_no, self.lg_line)
 
 
 class RequestDwell(object):
