@@ -40,7 +40,7 @@ class RequestDwell(object):
         import argparse
         parser = argparse.ArgumentParser(prog='log-dwell', formatter_class=argparse.ArgumentDefaultsHelpFormatter)
         parser.add_argument('--file_name',  '-f',  help='Log file', default="app.log")
-        parser.add_argument('--distance',   '-d',  help='Number of seconds to capture', default=60)
+        parser.add_argument('--distance',   '-d',  help='Number of seconds to capture', type=int, default=60)
         args = parser.parse_args()
         return args
 
