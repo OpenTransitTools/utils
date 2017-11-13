@@ -47,5 +47,7 @@ setup(
     tests_require=requires,
     test_suite="ott.utils.tests",
     entry_points="""\
+        [console_scripts]
+        find_pauses_view_log = ott.utils.parse.logs.request_dwell:main
     """,
 )
