@@ -6,6 +6,8 @@ COMMIT_EDITMSG
 .git/
 .git/*
 *.old
+*.log
+*.log.*
 .*#
 .#*
 *#

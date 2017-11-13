@@ -1,5 +1,6 @@
 """ read a log file and summarize the number of requests within a time window
 """
+from base import LogParseBase
 
 
 class LogInfo(object):
@@ -21,7 +22,7 @@ class LogInfo(object):
         print "\n\n"
 
 
-class RequestCount(object):
+class RequestCount(LogParseBase):
     """ parse an app.log file
         line should start with a time stamp "hh:mm:ss"
     """
@@ -36,8 +37,8 @@ class RequestCount(object):
     def get_args(cls):
         import argparse
         parser = argparse.ArgumentParser(prog='request-count', formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-        parser.add_argument('--file_name',  '-f',  help='Log file', default="app.log")
-        parser.add_argument('--distance',   '-d',  help='Number of seconds to capture', type=int, default=60)
+        parser.add_argument('--file_name', '-f',  help='Log file', default="app.log")
+        parser.add_argument('--span', '-s',  help='Number of seconds to bracket', type=int, default=60)
         args = parser.parse_args()
         return args
 
@@ -67,29 +68,6 @@ class RequestCount(object):
                     last_line = line
 
             self.line_count = i
-
-    def do_print(self):
-        print "\n total number of delays that exceeded {} seconds:  {}".format(self.min_distance, self.number_of_delays)
-        self.info.do_print(self.line_count)
-
-    @classmethod
-    def timestamp_to_seconds(cls, time_str):
-        """ take in a h:m:s string, ala 11:22:30 and return total seconds """
-        ret_val = None
-        try:
-            h, m, s = time_str.split(':')
-            ret_val = int(h) * 3600 + int(m) * 60 + int(s)
-        except:
-            pass
-        return ret_val
-
-    @classmethod
-    def factory(cls):
-        args = cls.get_args()
-        inst = cls(args)
-        return inst
-
-
 
 
 def main():

@@ -49,5 +49,6 @@ setup(
     entry_points="""\
         [console_scripts]
         find_pauses_view_log = ott.utils.parse.logs.request_dwell:main
+        count_requests_log = ott.utils.parse.logs.request_count:main
     """,
 )

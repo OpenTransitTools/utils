@@ -1,5 +1,7 @@
 """ read a log file and find the spot in the file with the longest pause between two subsequent timestamps
 """
+from base import LogParseBase
+
 
 class LogInfo(object):
     pre_line = None
@@ -21,7 +23,7 @@ class LogInfo(object):
             format(self.delay, self.delay / 60, self.lg_line_no, total_lines, self.lg_line_no-1, self.pre_line, self.lg_line_no, self.lg_line)
 
 
-class RequestDwell(object):
+class RequestDwell(LogParseBase):
     """ parse an app.log file
         line should start with a time stamp "hh:mm:ss"
     """
@@ -71,26 +73,7 @@ class RequestDwell(object):
 
     def do_print(self):
         print "\n total number of delays that exceeded {} seconds:  {}".format(self.min_distance, self.number_of_delays)
-        self.info.do_print(self.line_count)
-
-    @classmethod
-    def timestamp_to_seconds(cls, time_str):
-        """ take in a h:m:s string, ala 11:22:30 and return total seconds """
-        ret_val = None
-        try:
-            h, m, s = time_str.split(':')
-            ret_val = int(h) * 3600 + int(m) * 60 + int(s)
-        except:
-            pass
-        return ret_val
-
-    @classmethod
-    def factory(cls):
-        args = cls.get_args()
-        inst = cls(args)
-        return inst
-
-
+        super(self.__class__, self).do_print()
 
 
 def main():
