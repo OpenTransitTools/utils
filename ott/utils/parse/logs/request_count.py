@@ -1,33 +1,32 @@
-""" read a log file and find the spot in the file with the longest pause between two subsequent timestamps
+""" read a log file and summarize the number of requests within a time window
 """
 
+
 class LogInfo(object):
-    pre_line = None
-    lg_line = None
-    lg_line_no = 0
-    delay = 0
+    line = []
 
     def __init__(self):
         pass
 
-    def set(self, pre_line, lg_line, lg_line_no, delay):
-        self.pre_line = pre_line
-        self.lg_line = lg_line
-        self.lg_line_no = lg_line_no
-        self.delay = delay
+    def put(self, name, count):
+        self.line.append({name: name, count: count})
 
-    def do_print(self, total_lines):
-        print "\n longest delay: {} seconds ({} minutes) at line {} of {} \n\n line {}: {} \n line {}: {} \n".\
-            format(self.delay, self.delay / 60, self.lg_line_no, total_lines, self.lg_line_no-1, self.pre_line, self.lg_line_no, self.lg_line)
+    def do_print(self, span, search_term=None):
+        t = ""
+        if search_term:
+            t = "(searching for term '{}')".format(search_term)
+        print "\n\nnumber of requests {} for each {} minutes:\n".format(t, span)
+        for l in self.line:
+            print "  --> name: {} == {}\n".format(l.name, l.count)
+        print "\n\n"
 
 
-class RequestDwell(object):
+class RequestCount(object):
     """ parse an app.log file
         line should start with a time stamp "hh:mm:ss"
     """
     info = LogInfo()
-    line_count = 0
-    number_of_delays = 0
+    span = 60
 
     def __init__(self, args):
         self.log_file = args.file_name
@@ -36,7 +35,7 @@ class RequestDwell(object):
     @classmethod
     def get_args(cls):
         import argparse
-        parser = argparse.ArgumentParser(prog='request-dwell', formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+        parser = argparse.ArgumentParser(prog='request-count', formatter_class=argparse.ArgumentDefaultsHelpFormatter)
         parser.add_argument('--file_name',  '-f',  help='Log file', default="app.log")
         parser.add_argument('--distance',   '-d',  help='Number of seconds to capture', type=int, default=60)
         args = parser.parse_args()
