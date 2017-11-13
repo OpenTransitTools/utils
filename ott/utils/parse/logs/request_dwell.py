@@ -73,7 +73,7 @@ class RequestDwell(LogParseBase):
 
     def do_print(self):
         print "\n total number of delays that exceeded {} seconds:  {}".format(self.min_distance, self.number_of_delays)
-        super(self.__class__, self).do_print()
+        self.info.do_print(self.line_count)
 
 
 def main():

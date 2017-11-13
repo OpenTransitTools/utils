@@ -1,9 +1,4 @@
 class LogParseBase(object):
-    info = None
-
-    def do_print(self):
-        if self.info:
-            self.info.do_print(self.line_count)
 
     @classmethod
     def timestamp_to_seconds(cls, time_str):
