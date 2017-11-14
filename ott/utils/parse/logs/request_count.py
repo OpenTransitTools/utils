@@ -31,14 +31,19 @@ class RequestCount(LogParseBase):
 
     def __init__(self, args):
         self.log_file = args.file_name
-        self.min_distance = args.distance
+        if args.span:
+            self.span = 60
+        else:
+            self.span = 10
 
     @classmethod
     def get_args(cls):
         import argparse
         parser = argparse.ArgumentParser(prog='request-count', formatter_class=argparse.ArgumentDefaultsHelpFormatter)
         parser.add_argument('--file_name', '-f',  help='Log file', default="app.log")
-        parser.add_argument('--span', '-s',  help='Number of seconds to bracket', type=int, default=60)
+        parser.add_argument('--one_hour', '-h', dest='span', action='store_true')
+        parser.add_argument('--ten_min',  '-m', dest='span', action='store_false')
+        parser.set_defaults(span=True)
         args = parser.parse_args()
         return args
 
@@ -71,7 +76,7 @@ class RequestCount(LogParseBase):
 
 
 def main():
-    rd = RequestDwell.factory()
+    rd = RequestCount.factory()
     rd.process()
     rd.do_print()
 
