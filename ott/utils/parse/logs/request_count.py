@@ -18,7 +18,7 @@ class LogInfo(object):
             t = "(searching for term '{}')".format(search_term)
         print "\n\nnumber of requests {} for each {} minutes:\n".format(t, span)
         for l in self.line:
-            print "name: {} == {}".format(l['name'], l['count'])
+            print "time: {} == {} requests".format(l['name'], l['count'])
         print "\n\n"
 
 
@@ -29,9 +29,12 @@ class RequestCount(LogParseBase):
     info = LogInfo()
     increment = 0
     inc_name = "hourly"
+    search = None
 
     def __init__(self, args):
         self.log_file = args.file_name
+        if args.search_term and args.search_term is not 'None':
+            self.search = args.search_term
         if args.span:
             self.increment = 60 * 60
         else:
@@ -42,15 +45,16 @@ class RequestCount(LogParseBase):
     def get_args(cls):
         import argparse
         parser = argparse.ArgumentParser(prog='request-count', formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-        parser.add_argument('--file_name', '-f',  help='Log file', default="app.log")
+        parser.add_argument('--file_name', '-f', help='Log file', default="app.log")
+        parser.add_argument('--search_term', '-s', help='Option search term (line contains search_term)', default="None")
         parser.add_argument('--one_hour', '-o', dest='span', action='store_true')
-        parser.add_argument('--ten_min',  '-m', dest='span', action='store_false')
+        parser.add_argument('--ten_min', '-m', dest='span', action='store_false')
         parser.set_defaults(span=True)
         args = parser.parse_args()
         return args
 
     def process(self):
-        #import pdb; pdb.set_trace()
+        """ """
 
         count = 0
         tens = 0
@@ -64,6 +68,9 @@ class RequestCount(LogParseBase):
                 else:
                     continue
                 if new_time < inc:
+                    if self.search and self.search not in line:
+                        #import pdb; pdb.set_trace()
+                        continue
                     count += 1
                 else:
                     ninc = inc + self.increment
@@ -82,11 +89,14 @@ class RequestCount(LogParseBase):
 
                     self.info.put(name, count)
 
-                    count = 1
                     inc = ninc
+                    if self.search and self.search not in line:
+                        count = 0
+                    else:
+                        count = 1
 
     def do_print(self):
-        self.info.do_print(self.inc_name)
+        self.info.do_print(self.inc_name, self.search)
 
 
 def main():
