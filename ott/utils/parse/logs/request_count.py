@@ -12,14 +12,18 @@ class LogInfo(object):
     def put(self, name, count):
         self.line.append({'name': name, 'count': count})
 
-    def do_print(self, span, search_term=None):
+    def do_print(self, span, search_term=None, filter=None):
         t = ""
         if search_term:
             t = "(searching for term '{}')".format(search_term)
         print "\n\nnumber of requests {} for each {} minutes:\n".format(t, span)
+        total = 0
         for l in self.line:
+            if filter and not l['name'].startswith(filter):
+                continue
             print "time: {} == {} requests".format(l['name'], l['count'])
-        print "\n\n"
+            total += l['count']
+        print "\ntotal requests: {}\n\n".format(total)
 
 
 class RequestCount(LogParseBase):
@@ -30,11 +34,12 @@ class RequestCount(LogParseBase):
     increment = 0
     inc_name = "hourly"
     search = None
+    filter = None
 
     def __init__(self, args):
         self.log_file = args.file_name
         self.search = args.search_term
-        self.search = args.search_term
+        self.filter = args.filter
         if args.span:
             self.increment = 60 * 60
         else:
@@ -46,7 +51,8 @@ class RequestCount(LogParseBase):
         import argparse
         parser = argparse.ArgumentParser(prog='request-count', formatter_class=argparse.ArgumentDefaultsHelpFormatter)
         parser.add_argument('--file_name', '-f', help='Log file', default="app.log")
-        parser.add_argument('--search_term', '-s', help='Option search term (line contains search_term)', default=None)
+        parser.add_argument('--search_term', '-s', help='Optional search term (line contains search_term)', default=None)
+        parser.add_argument('--filter', '-z', help='Optional time filter (00 to 23) to only print that time window', default=None)
         parser.add_argument('--one_hour', '-o', dest='span', action='store_true')
         parser.add_argument('--ten_min', '-m', dest='span', action='store_false')
         parser.set_defaults(span=True)
@@ -96,7 +102,7 @@ class RequestCount(LogParseBase):
                         count = 1
 
     def do_print(self):
-        self.info.do_print(self.inc_name, self.search)
+        self.info.do_print(self.inc_name, self.search, self.filter)
 
 
 def main():
