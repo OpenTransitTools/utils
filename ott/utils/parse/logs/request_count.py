@@ -10,7 +10,7 @@ class LogInfo(object):
         pass
 
     def put(self, name, count):
-        self.line.append({name: name, count: count})
+        self.line.append({'name': name, 'count': count})
 
     def do_print(self, span, search_term=None):
         t = ""
@@ -18,7 +18,7 @@ class LogInfo(object):
             t = "(searching for term '{}')".format(search_term)
         print "\n\nnumber of requests {} for each {} minutes:\n".format(t, span)
         for l in self.line:
-            print "  --> name: {} == {}\n".format(l.name, l.count)
+            print "name: {} == {}".format(l['name'], l['count'])
         print "\n\n"
 
 
@@ -28,6 +28,7 @@ class RequestCount(LogParseBase):
     """
     info = LogInfo()
     increment = 0
+    inc_name = "hourly"
 
     def __init__(self, args):
         self.log_file = args.file_name
@@ -35,6 +36,7 @@ class RequestCount(LogParseBase):
             self.increment = 60 * 60
         else:
             self.increment = 10 * 60
+            inc_name = "10 min"
 
     @classmethod
     def get_args(cls):
@@ -78,9 +80,13 @@ class RequestCount(LogParseBase):
                         h2 = ninc / self.increment - 1
                         name = "{:02d}:00 to {:02d}:00".format(h1, h2)
 
-                    print "{}: {}".format(name, count)
+                    self.info.put(name, count)
+
                     count = 1
                     inc = ninc
+
+    def do_print(self):
+        self.info.do_print(self.inc_name)
 
 
 def main():
