@@ -33,8 +33,8 @@ class RequestCount(LogParseBase):
 
     def __init__(self, args):
         self.log_file = args.file_name
-        if args.search_term and args.search_term is not 'None':
-            self.search = args.search_term
+        self.search = args.search_term
+        self.search = args.search_term
         if args.span:
             self.increment = 60 * 60
         else:
@@ -46,7 +46,7 @@ class RequestCount(LogParseBase):
         import argparse
         parser = argparse.ArgumentParser(prog='request-count', formatter_class=argparse.ArgumentDefaultsHelpFormatter)
         parser.add_argument('--file_name', '-f', help='Log file', default="app.log")
-        parser.add_argument('--search_term', '-s', help='Option search term (line contains search_term)', default="None")
+        parser.add_argument('--search_term', '-s', help='Option search term (line contains search_term)', default=None)
         parser.add_argument('--one_hour', '-o', dest='span', action='store_true')
         parser.add_argument('--ten_min', '-m', dest='span', action='store_false')
         parser.set_defaults(span=True)
