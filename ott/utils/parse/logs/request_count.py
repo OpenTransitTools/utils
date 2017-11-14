@@ -27,21 +27,21 @@ class RequestCount(LogParseBase):
         line should start with a time stamp "hh:mm:ss"
     """
     info = LogInfo()
-    span = 60
+    increment = 0
 
     def __init__(self, args):
         self.log_file = args.file_name
         if args.span:
-            self.span = 60
+            self.increment = 60 * 60
         else:
-            self.span = 10
+            self.increment = 10 * 60
 
     @classmethod
     def get_args(cls):
         import argparse
         parser = argparse.ArgumentParser(prog='request-count', formatter_class=argparse.ArgumentDefaultsHelpFormatter)
         parser.add_argument('--file_name', '-f',  help='Log file', default="app.log")
-        parser.add_argument('--one_hour', '-h', dest='span', action='store_true')
+        parser.add_argument('--one_hour', '-o', dest='span', action='store_true')
         parser.add_argument('--ten_min',  '-m', dest='span', action='store_false')
         parser.set_defaults(span=True)
         args = parser.parse_args()
@@ -50,29 +50,37 @@ class RequestCount(LogParseBase):
     def process(self):
         #import pdb; pdb.set_trace()
 
-        largest = 0
-        old_time = 0
-
+        count = 0
+        tens = 0
+        hours = 0
+        inc = self.increment
         with open(self.log_file) as f:
-            last_line = None
             for i, line in enumerate(f):
                 if len(line) >= 8:
                     time_str = line[:8]
                     new_time = self.timestamp_to_seconds(time_str)
-                    if new_time is None:
-                        continue
-                    dist = new_time - old_time
-                    if dist > self.min_distance:
-                        self.number_of_delays += 1
-                    if dist > largest:
-                        #import pdb; pdb.set_trace()
-                        largest = dist
-                        self.info.set(last_line, line, i, dist)
+                else:
+                    continue
+                if new_time < inc:
+                    count += 1
+                else:
+                    ninc = inc + self.increment
+                    if self.increment <= 600:
+                        if tens > 5:
+                            tens = 0
+                            hours += 1
+                        m1 = tens * 10
+                        m2 = (tens + 1) * 10
+                        tens += 1
+                        name = "{:02d}:{:02d} to {:02d}:{:02d}".format(hours, m1, hours, m2)
+                    else:
+                        h1 = inc / self.increment - 1
+                        h2 = ninc / self.increment - 1
+                        name = "{:02d}:00 to {:02d}:00".format(h1, h2)
 
-                    old_time = new_time
-                    last_line = line
-
-            self.line_count = i
+                    print "{}: {}".format(name, count)
+                    count = 1
+                    inc = ninc
 
 
 def main():
