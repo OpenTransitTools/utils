@@ -79,6 +79,7 @@ class RequestCount(LogParseBase):
                         continue
                     count += 1
                 else:
+                    # info logger
                     ninc = inc + self.increment
                     if self.increment <= 600:
                         if tens > 5:
@@ -100,6 +101,23 @@ class RequestCount(LogParseBase):
                         count = 0
                     else:
                         count = 1
+
+        # info logger - here to pick up last run of the loop (hate to cut-n-paste, but...)
+        ninc = inc + self.increment
+        if self.increment <= 600:
+            if tens > 5:
+                tens = 0
+                hours += 1
+            m1 = tens * 10
+            m2 = (tens + 1) * 10
+            tens += 1
+            name = "{:02d}:{:02d} to {:02d}:{:02d}".format(hours, m1, hours, m2)
+        else:
+            h1 = inc / self.increment - 1
+            h2 = ninc / self.increment - 1
+            name = "{:02d}:00 to {:02d}:00".format(h1, h2)
+
+        self.info.put(name, count)
 
     def do_print(self):
         self.info.do_print(self.inc_name, self.search, self.filter)
