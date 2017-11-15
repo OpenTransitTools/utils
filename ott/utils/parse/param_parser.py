@@ -109,7 +109,7 @@ class ParamParser(object):
             else:
                 log.info("{} doesn't look like a date string".format(self.date))
         except Exception, e:
-            log.warning(e)
+            log.debug(e)
 
     def date_offset(self, day_offset):
         """ change the date by x number of days, either +/-
@@ -122,7 +122,7 @@ class ParamParser(object):
             self.date = d
             self._normalize_date_parts()
         else:
-            log.warning("couldn't change the date with offset {}".format(day_offset))
+            log.debug("couldn't change the date with offset {}".format(day_offset))
 
     def _parse_time(self):
         """ parse out a date from either the 'date' param, or separate month/day/year params
@@ -169,7 +169,7 @@ class ParamParser(object):
             else:
                 log.info("{} doesn't look like a time string".format(self.time))
         except Exception, e:
-            log.warning(e)
+            log.debug(e)
 
     @classmethod
     def make_time_object(cls, time_str, fmt="%h:%M%a"):
@@ -282,7 +282,7 @@ class ParamParser(object):
             parts = place.split("::")
             ret_val = parts[0]
         except Exception as ex:
-            log.warning(ex)
+            log.debug(ex)
         return ret_val
 
     @classmethod
@@ -303,7 +303,7 @@ class ParamParser(object):
                 if regex:
                     ret_val = True
         except Exception as ex:
-            log.warning(ex)
+            log.debug(ex)
 
         return ret_val
 

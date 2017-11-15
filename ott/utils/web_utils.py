@@ -53,7 +53,7 @@ def my_wget(url, file_path, delete_first=True):
 
         log.info("wget: downloaded {} into file {}".format(url, file_path))
     except Exception, e:
-        log.warn(e)
+        log.info(e)
         is_success = False
     return is_success
 
@@ -210,7 +210,7 @@ def simple_email(msg, to, from_email="mail@opentriptools.com", subject="loader e
     recipients = []
     for r in to.split(","):
         if "@" not in r:
-            log.warn("email: {} doesn't look like an email address, so skipping".format(r))
+            log.info("email: {} doesn't look like an email address, so skipping".format(r))
             continue
         recipients.append(r)
 

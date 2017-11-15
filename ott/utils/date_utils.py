@@ -138,7 +138,7 @@ def pretty_time(dt, fmt=" %I:%M%p", def_val=None):
     try:
         ret_val = dt.strftime(fmt).lower().replace(' 0','').strip()  # "3:40pm"
     except Exception, e:
-        log.warn(e)
+        log.debug(e)
     return ret_val
 
 def pretty_date(dt=None, fmt=None):
@@ -282,7 +282,7 @@ def str_to_date(str_date, fmt_list=['%Y-%m-%d', '%m/%d/%Y', '%m-%d-%Y'], def_val
                 ret_val = d
                 break
         except Exception, e:
-            log.warn(e)
+            log.debug(e)
     return ret_val
 
 def today_str(fmt='%m-%d-%Y'):
@@ -304,7 +304,7 @@ def make_date_from_timestamp(num, def_val=None):
     try:
         ret_val = datetime.datetime.fromtimestamp(num)
     except Exception, e:
-        log.warn(e)
+        log.debug(e)
     return ret_val
 
 def is_date_between(start, end, now=None):
@@ -333,7 +333,7 @@ def is_date_between(start, end, now=None):
             if now < end:
                 ret_val = True
     except Exception, e:
-        log.warn(e)
+        log.debug(e)
     return ret_val
 
 def split_time(time):
@@ -346,7 +346,7 @@ def split_time(time):
         h = int(t[0])
         m = int(t[1])
     except Exception, e:
-        log.warn(e)
+        log.debug(e)
     return h, m
 
 def now_time_code(time, now=None, tolerance_minutes=30):
