@@ -50,5 +50,6 @@ setup(
         [console_scripts]
         find_pauses_view_log = ott.utils.parse.logs.request_dwell:main
         count_requests_log = ott.utils.parse.logs.request_count:main
+        grep_urls_from_log = ott.utils.parse.logs.grep_urls:main
     """,
 )

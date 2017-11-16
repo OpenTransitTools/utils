@@ -75,7 +75,7 @@ class RequestCount(LogParseBase):
                     continue
                 if new_time < inc:
                     if self.search and self.search not in line:
-                        #import pdb; pdb.set_trace()
+                        # import pdb; pdb.set_trace()
                         continue
                     count += 1
                 else:
