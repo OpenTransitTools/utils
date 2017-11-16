@@ -1,5 +1,6 @@
 """ read a log file and summarize the number of requests within a time window
 """
+import random
 from base import LogParseBase
 
 HTTP = 'http://'
@@ -11,10 +12,16 @@ class GrepUrls(LogParseBase):
     """
     cache = {}
     filter = None
+    limit = 0
+    just_args = False
+    append_url = None
 
     def __init__(self, args):
         self.log_file = args.file_name
         self.filter = args.filter
+        self.limit = args.num_results
+        self.just_args = args.just_args
+        self.append_url = args.append_url
 
     @classmethod
     def get_args(cls):
@@ -22,11 +29,13 @@ class GrepUrls(LogParseBase):
         parser = argparse.ArgumentParser(prog='request-count', formatter_class=argparse.ArgumentDefaultsHelpFormatter)
         parser.add_argument('--file_name', '-f', help='Log file', default="app.log")
         parser.add_argument('--filter', '-z', help='Optionally find urls based on search', default=None)
+        parser.add_argument('--num_results', '-n', help='Return N random urls', default=0, type=int)
+        parser.add_argument('--just_args', '-j', help='Return just the url args', action='store_true')
+        parser.add_argument('--append_url', '-u', help='Append this url to the args', default=None)
         args = parser.parse_args()
         return args
 
     def cache_url(self, line, key):
-        #import pdb; pdb.set_trace()
         try:
             s = line.split(key)
             url = "{}{}".format(key, s[1].strip())
@@ -46,12 +55,46 @@ class GrepUrls(LogParseBase):
                 if HTTPS in line:
                     self.cache_url(line, HTTPS)
 
+    def printer(self, url):
+        count = self.cache[url]
+        if self.just_args:
+            u = ""
+            if self.append_url:
+                u = "{}?".format(self.append_url)
+            args = url.split('?')[1]
+            print "{}{}".format(u, args)
+        else:
+            print "url: {} == {} hit(s)".format(url, count)
+
     def do_print(self):
+        #import pdb; pdb.set_trace()
+
+        # step 1: if we want to limit the results, then we'll find a random skip number
+        skips = tskips = hits = 0
+        if self.limit:
+            skips = tskips = random.randint(11, 111)
+
+
         from collections import OrderedDict
         sorted_keys = sorted(self.cache, key=self.cache.get)
-        for u in sorted_keys:
-            print "url: {} == {} hit(s)".format(u, self.cache[u])
+        for i, k in enumerate(sorted_keys):
 
+            # step 2: if we're looking for a certain url, let's filter other than those
+            if self.filter and self.filter not in k:
+                continue
+
+            # step 3a: going to limit results
+            if self.limit:
+                # step 3b: so let's skip ahead a random amount
+                if i < tskips:
+                    continue
+                tskips = tskips + skips * hits
+
+                hits += 1
+                if hits > self.limit:
+                    break
+
+            self.printer(k)
 
 def main():
     rd = GrepUrls.factory()
