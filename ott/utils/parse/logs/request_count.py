@@ -1,4 +1,8 @@
 """ read a log file and summarize the number of requests within a time window
+    example:
+        bin/log_count_requests -f ../app.log -m -z 13 -s header.html
+        bin/log_count_requests -f ../app.log    -z 1  -s plan_trip
+        bin/log_count_requests -f ../app.log
 """
 from base import LogParseBase
 

@@ -1,4 +1,13 @@
-""" read a log file and summarize the number of requests within a time window
+""" read a log file and pull out random urls
+
+  examples:
+    bin/log_grep_urls -f ../app.log -n 100 -j -u http://maps9.trimet.org/ride/planner.html -z plan_trip
+    bin/log_grep_urls -f ../app.log -n 100 -j -u http://maps9.trimet.org/ride/header.html -z header
+    bin/log_grep_urls -f ../app.log -n 100 -j -u http://maps9.trimet.org/ride/stop_schedule.html -z "stop_sch"
+    bin/log_grep_urls -f ../app.log -n 100 -j -u http://maps9.trimet.org/ride/stop.html -z "stop?"
+    bin/log_grep_urls -f ../app.log -n 100 -j -u http://maps9.trimet.org/ride/stops_near.html -z "stops_near"
+    bin/log_grep_urls -f ../app.log -j -u http://maps9.trimet.org/ride/stops_near.html -z "stops_near"
+    bin/log_grep_urls -f ../app.log
 """
 import random
 from base import LogParseBase
