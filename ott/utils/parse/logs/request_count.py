@@ -4,7 +4,7 @@
         bin/log_count_requests -f ../app.log    -z 1  -s plan_trip
         bin/log_count_requests -f ../app.log
 """
-from base import LogParseBase
+from base import Base
 
 
 class LogInfo(object):
@@ -30,7 +30,7 @@ class LogInfo(object):
         print "\ntotal requests: {}\n\n".format(total)
 
 
-class RequestCount(LogParseBase):
+class RequestCount(Base):
     """ parse an app.log file
         line should start with a time stamp "hh:mm:ss"
     """
@@ -128,9 +128,8 @@ class RequestCount(LogParseBase):
 
 
 def main():
-    rd = RequestCount.factory()
-    rd.process()
-    rd.do_print()
+    RequestCount.run()
+
 
 if __name__ == "__main__":
     main()

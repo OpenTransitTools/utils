@@ -51,5 +51,6 @@ setup(
         log_find_pauses = ott.utils.parse.logs.request_dwell:main
         log_count_requests = ott.utils.parse.logs.request_count:main
         log_grep_urls = ott.utils.parse.logs.grep_urls:main
+        log_call_urls = ott.utils.parse.logs.call_urls:main
     """,
 )

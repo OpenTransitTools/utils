@@ -10,12 +10,13 @@
     bin/log_grep_urls -f ../app.log
 """
 import random
-from base import LogParseBase
+from base import Base
 
 HTTP = 'http://'
 HTTPS = 'https://'
 
-class GrepUrls(LogParseBase):
+
+class GrepUrls(Base):
     """ parse an app.log file
         line should start with a time stamp "hh:mm:ss"
     """
@@ -35,7 +36,7 @@ class GrepUrls(LogParseBase):
     @classmethod
     def get_args(cls):
         import argparse
-        parser = argparse.ArgumentParser(prog='request-count', formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+        parser = argparse.ArgumentParser(prog='grep-urls', formatter_class=argparse.ArgumentDefaultsHelpFormatter)
         parser.add_argument('--file_name', '-f', help='Log file', default="app.log")
         parser.add_argument('--filter', '-z', help='Optionally find urls based on search', default=None)
         parser.add_argument('--num_results', '-n', help='Return N random urls', default=0, type=int)
@@ -105,10 +106,10 @@ class GrepUrls(LogParseBase):
 
             self.printer(k)
 
+
 def main():
-    rd = GrepUrls.factory()
-    rd.process()
-    rd.do_print()
+    GrepUrls.run()
+
 
 if __name__ == "__main__":
     main()

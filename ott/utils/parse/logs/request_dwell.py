@@ -2,7 +2,7 @@
     example:
       bin/log_find_pauses -f ../app.log
 """
-from base import LogParseBase
+from base import Base
 
 
 class LogInfo(object):
@@ -25,7 +25,7 @@ class LogInfo(object):
             format(self.delay, self.delay / 60, self.lg_line_no, total_lines, self.lg_line_no-1, self.pre_line, self.lg_line_no, self.lg_line)
 
 
-class RequestDwell(LogParseBase):
+class RequestDwell(Base):
     """ parse an app.log file
         line should start with a time stamp "hh:mm:ss"
     """
@@ -79,9 +79,8 @@ class RequestDwell(LogParseBase):
 
 
 def main():
-    rd = RequestDwell.factory()
-    rd.process()
-    rd.do_print()
+    RequestDwell.run()
+
 
 if __name__ == "__main__":
     main()

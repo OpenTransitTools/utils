@@ -5,9 +5,6 @@
 COMMIT_EDITMSG
 .git/
 .git/*
-*.old
-*.log
-*.log.*
 .*#
 .#*
 *#
@@ -17,9 +14,15 @@ tests/
 cache/
 .idea
 .idea/
+
 *.iml
 *.tmp
 *.mp3
+*.urls
+*.out
+*.old
+*.log
+*.log.*
 
 # C extensions
 *.so

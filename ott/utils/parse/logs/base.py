@@ -1,4 +1,10 @@
-class LogParseBase(object):
+class Base(object):
+
+    def process(self):
+        pass
+
+    def do_print(self):
+        pass
 
     @classmethod
     def timestamp_to_seconds(cls, time_str):
@@ -19,4 +25,11 @@ class LogParseBase(object):
     def factory(cls):
         args = cls.get_args()
         inst = cls(args)
+        return inst
+
+    @classmethod
+    def run(cls):
+        inst = cls.factory()
+        inst.process()
+        inst.do_print()
         return inst
