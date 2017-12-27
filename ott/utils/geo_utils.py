@@ -123,6 +123,7 @@ def get_address_from_dict(address, def_val=None):
 def get_coord_from_request(request, param_name='placeCoord', def_val=None):
     """ return lat,lon based on either a coord name, or lat/lon parametres
     """
+    # import pdb; pdb.set_trace()
     ret_val = def_val
     try:
         c = html_utils.get_first_param(request, param_name)

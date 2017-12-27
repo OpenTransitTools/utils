@@ -197,7 +197,7 @@ def is_a_newer_than_b(file_a, file_b, offset_minutes=0):
 def dir_has_newer_files(cmp_file, dir_path, offset_minutes=0, include_filter=None, exclude_filter=None):
     """ determine if any files in the directory have a newer update date than target file
     """
-    #import pdb; pdb.set_trace()
+    # import pdb; pdb.set_trace()
     ret_val = False
     if not os.path.exists(cmp_file):
         log.info("{} doesn't exist ".format(cmp_file))
