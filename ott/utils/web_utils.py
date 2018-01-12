@@ -18,6 +18,15 @@ def get_hostname():
     return socket.gethostname()
 
 
+def get_name_from_url(url, def_name=None):
+    ret_val = def_name
+    try:
+        urlparse.urlsplit(url).path.split('/')[-1]
+    except Exception, e:
+        log.info(e)
+    return ret_val
+
+
 def basic_web_server(port="50080"):
     Handler = SimpleHTTPServer.SimpleHTTPRequestHandler
     httpd = SocketServer.TCPServer(("", port), Handler)
