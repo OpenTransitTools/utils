@@ -135,8 +135,10 @@ class ConfigUtil(object):
         return top,bottom,left,right
 
     def get_json(self, id, section=None):
+        ret_val = None
         str_val = self.get(id, section=section)
-        ret_val = json_utils.str_to_json(str_val, str_val)
+        if str_val:
+            ret_val = json_utils.str_to_json(str_val, str_val)
         return ret_val
 
     @classmethod

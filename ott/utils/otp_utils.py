@@ -195,9 +195,10 @@ def get_graphs_from_config(config=None, graph_root_dir='.'):
         config = ConfigUtil(section='otp')
 
     graphs = config.get_json('graphs')
-    for g in graphs:
-        graph_dir = os.path.join(graph_root_dir, g['name'])
-        g['dir'] = graph_dir
+    if graphs:
+        for g in graphs:
+            graph_dir = os.path.join(graph_root_dir, g['name'])
+            g['dir'] = graph_dir
     return graphs
 
 
