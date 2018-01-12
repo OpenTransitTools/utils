@@ -21,7 +21,7 @@ def get_hostname():
 def get_name_from_url(url, def_name=None):
     ret_val = def_name
     try:
-        urlparse.urlsplit(url).path.split('/')[-1]
+        ret_val = urlparse.urlsplit(url).path.split('/')[-1]
     except Exception, e:
         log.info(e)
     return ret_val

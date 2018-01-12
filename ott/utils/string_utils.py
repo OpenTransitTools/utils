@@ -1,6 +1,25 @@
+import os
 import string
 import logging
 log = logging.getLogger(__file__)
+
+
+def safe_append(str1, str2, def_val=None):
+    ret_val = def_val
+    try:
+        ret_val = str1 + str2
+    except Exception, e:
+        log.debug(e)
+    return ret_val
+
+
+def safe_path_join(str1, str2, def_val=None):
+    ret_val = def_val
+    try:
+        ret_val = os.path.join(str1, str2)
+    except Exception, e:
+        log.debug(e)
+    return ret_val
 
 
 def is_in_string(in_str, targets):
