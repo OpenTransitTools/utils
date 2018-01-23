@@ -36,7 +36,7 @@ def get_realtime_feed_from_config(config=None):
 
     feeds = config.get_json('feeds')
     for f in feeds:
-        if 'name' in f and len(f['name']) > 0:
+        if 'agency_id' in f and len(f['agency_id']) > 0:
             ret_val.append(f)
 
     return ret_val
