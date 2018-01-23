@@ -29,11 +29,17 @@ def get_schema_name_from_feed(feed, def_name="OTT"):
 def get_realtime_feed_from_config(config=None):
     """ return the GTFS feed info from config
     """
+    #import pdb; pdb.set_trace()
+    ret_val = []
     if config is None:
         config = ConfigUtil(section='gtfs_realtime')
 
     feeds = config.get_json('feeds')
-    return feeds
+    for f in feeds:
+        if 'name' in f and len(f['name']) > 0:
+            ret_val.append(f)
+
+    return ret_val
 
 
 def get_realtime_url(name, feed, def_val):
@@ -50,7 +56,7 @@ def get_realtime_url(name, feed, def_val):
 
 
 def get_realtime_trips_url(feed, def_val=None):
-    return get_realtime_url('trip', feed, def_val)
+    return get_realtime_url('trips', feed, def_val)
 
 
 def get_realtime_alerts_url(feed, def_val=None):
