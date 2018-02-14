@@ -36,7 +36,20 @@ registry = SerializerRegistry()
 
 
 @registry.add
-class BaseDao(object):
+class MinimalDao(object):
+    def to_dict(self):
+        return self.__dict__
+
+    def to_json(self, pretty=False):
+        return self.obj_to_json(self, pretty)
+
+    def from_json(self, str):
+        return json.loads(str, object_hook=registry.object_hook)
+
+
+@registry.add
+class BaseDao(MinimalDao):
+
     def __init__(self):
         # TODO: should we call a method to set these variables, so that it's done in a single place, rather than return this multiple times?
         #       self.set_date()
@@ -56,15 +69,6 @@ class BaseDao(object):
             date = datetime.date.today()
         self.date_info['month'] = date.month
         self.date_info['day'] = date.day
-
-    def to_dict(self):
-        return self.__dict__
-
-    def to_json(self, pretty=False):
-        return self.obj_to_json(self, pretty)
-
-    def from_json(self, str):
-        return json.loads(str, object_hook=registry.object_hook)
 
     def set_alerts(self, alerts):
         self.alerts = alerts
