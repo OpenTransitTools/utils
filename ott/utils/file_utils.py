@@ -360,6 +360,11 @@ def append_to_path(path, append, end_with_sep=True):
     return ret_val
 
 
+def path_join(dir, file):
+    file_path = os.path.join(dir, file)
+    return file_path
+
+
 def make_new_path(dir_path, file_name=None, new_suffix=NEW_SUFFIX):
     if file_name:
         new_path = os.path.join(dir_path, file_name + new_suffix)
@@ -527,11 +532,16 @@ def make_csv_writer(fp, fieldnames=None):
     return writer
 
 
+def get_file_dir(file):
+    dir = os.path.dirname(os.path.abspath(file))
+    return dir
+
+
 def get_module_dir(clazz):
     """ send me a __class__, and I'll return the path to the directory where it lives
     """
     file = inspect.getsourcefile(clazz)
-    dir = os.path.dirname(os.path.abspath(file))
+    dir = get_file_dir(file)
     return dir
 
 
