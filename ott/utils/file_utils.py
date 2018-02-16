@@ -363,6 +363,8 @@ def append_to_path(path, append, end_with_sep=True):
 def path_join(dir, file):
     if file.startswith('/'):
         file = file[1:]
+    if file.startswith('./'):
+        file = file[2:]
     file_path = os.path.join(dir, file)
     return file_path
 
