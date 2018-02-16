@@ -20,14 +20,15 @@ class CacheBase(object):
 
     @property
     def config(self):
-        #import pdb; pdb.set_trace()
+        # import pdb; pdb.set_trace()
         if self._config is None:
             self._config = ConfigUtil.factory(section='cache')
         return self._config
 
     @property
     def this_module_dir(self):
-        """ set object property 'this_module_dir' to the file directory where the 'self' object lives
+        """
+        set object property 'this_module_dir' to the file directory where the 'self' object lives
         """
         file = inspect.getsourcefile(self.__class__)
         dir = os.path.dirname(os.path.abspath(file))
@@ -35,7 +36,8 @@ class CacheBase(object):
 
     @property
     def cache_dir(self):
-        """ returns dir path ... makes the directory if it doesn't exist
+        """
+        returns dir path ... makes the directory if it doesn't exist
         """
         cache_dir = os.path.join(self.this_module_dir, self.cache_dir_name)
         file_utils.mkdir(cache_dir)
@@ -48,13 +50,15 @@ class CacheBase(object):
         return tmp_dir
 
     def sub_dir(self, dir_name):
-        """make path to random named dir
+        """
+        make path to random named dir
         """
         ret_val = os.path.join(self.this_module_dir, dir_name)
         return ret_val
 
     def is_fresh_in_cache(self, file):
-        """ determine if file exists and is newer than the cache expire time
+        """
+        determine if file exists and is newer (in days) than the numer of days to of cache expire
         """
         ret_val = False
         try:
@@ -67,15 +71,17 @@ class CacheBase(object):
         return ret_val
 
     def cp_cached_file(self, file_name, destination_dir):
-        """ copy file from our cache to some other directory
+        """
+        copy file from our cache to some other directory
         """
         file = os.path.join(self.cache_dir, file_name)
         dest = os.path.join(destination_dir, file_name)
         file_utils.cp(file, dest)
 
     def simple_cache_item_update(self, file_name, url, force_update=False):
-        """ check a cache file to see whether it needs updating...if so,
-            then replace cached file with new version via wget on a  url
+        """
+        check a cache file to see whether it needs updating...if so,
+        then replace cached file with new version via wget on a  url
         """
         file_path = os.path.join(self.cache_dir, file_name)
 
