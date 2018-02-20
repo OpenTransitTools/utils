@@ -21,27 +21,44 @@ def stream_json(u, args=None, extra_path=None):
         ret_val = json.loads(otp)
     return ret_val
 
-
-def get_json(file_name, path='ott/utils/tests/json'):
-    """ utility class to load a static .json file for mock'ing a service
+def get_json(file_name, path='ott/utils/tests/json', def_val={}):
     """
-    ret_val = {}
+    utility method to load a static .json file (usually used for testing)
+    """
+    ret_val = def_val
+
+    # try one with just file_name
+    jsn = file_to_json(file_name, None)
+
+    # try two with path prepended to file name
+    if jsn is None:
+        p = os.path.join(path, file_name)
+        jsn = file_to_json(p, None)
+
+    # if we get valid json from either call above, that's the response
+    if jsn:
+        ret_val = jsn
+
+    return ret_val
+
+
+def file_to_json(file_path, def_val={}):
+    """
+    utility method to load a static .json file (usually used in testing)
+    """
+    ret_val = def_val
     try:
-        with open(file_name) as f:
+        with open(file_path) as f:
             ret_val = json.load(f)
-    except:
-        try:
-            path = os.path.join(path, file_name)
-            with open(path) as f:
-                ret_val = json.load(f)
-        except:
-            log.info("Couldn't open file : {0} (or {1})".format(file_name, path))
+    except Exception, e:
+        log.info(e)
 
     return ret_val
 
 
 def str_to_json(str, def_val={}):
-    """ utility class to load a static .json file for mock'ing a service
+    """
+    utility function to load a static .json file for mock'ing a service
     """
     ret_val = def_val
     try:

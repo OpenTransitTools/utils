@@ -241,6 +241,7 @@ Subject: {}
 {}
 
 """.format(from_email, ','.join(recipients), subject, msg)
+
     try:
         smtp_obj = smtplib.SMTP(mail_server)
         smtp_obj.sendmail(from_email, recipients, message)
