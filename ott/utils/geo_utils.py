@@ -10,6 +10,23 @@ ZIP_CODE_RE = re.compile("[,\s]*\d{5}(?:[-\s]\d{4})?$")
 ADDRESS_RE  = re.compile("^[0-9]+[\s\w]+\s(north|south|east|west|n|s|e|w){1,2}(?=\s|$)", re.IGNORECASE)
 
 
+def parse_geojson_point(geojson):
+    coord = geojson.get('coordinates')
+    x = coord[0]
+    y = coord[1]
+    return x, y
+
+
+def parse_geojson(geojson):
+    ret_val = None
+    try:
+        if geojson.get('type') == 'Point':
+            ret_val = parse_geojson_point(geojson)
+    except Exception, e:
+        log.info(e)
+    return ret_val
+
+
 def is_coord(str):
     ret_val = False
     try:

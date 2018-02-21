@@ -1,8 +1,11 @@
-import logging
-log = logging.getLogger(__file__)
+from ott.utils import geo_utils
 
 import simplejson as json
 import datetime
+
+import logging
+log = logging.getLogger(__file__)
+
 
 
 class SerializerRegistry(object):
@@ -48,6 +51,10 @@ class MinimalDao(object):
 
     def parse_json(self, json):
         pass
+
+    @classmethod
+    def parse_geojson(self, geojson):
+        return geo_utils.parse_geojson(geojson)
 
     @classmethod
     def geom_to_geojson(cls, session, geom):
