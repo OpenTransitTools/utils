@@ -46,36 +46,8 @@ class MinimalDao(object):
     def from_json(self, str):
         return json.loads(str, object_hook=registry.object_hook)
 
-
-@registry.add
-class BaseDao(MinimalDao):
-
-    def __init__(self):
-        # TODO: should we call a method to set these variables, so that it's done in a single place, rather than return this multiple times?
-        #       self.set_date()
-        self.status_code = 200
-        self.status_message = None
-        self.has_errors = False
-        self.has_alerts = False
-
-    def __repr__(self):
-        return str(self.__dict__)
-
-    def set_date(self, date=None):
-        #import pdb; pdb.set_trace()
-        if not hasattr(self, 'date_info'):
-            self.date_info = {}
-        if date is None or not hasattr(date, 'month') or not hasattr(date, 'day'):
-            date = datetime.date.today()
-        self.date_info['month'] = date.month
-        self.date_info['day'] = date.day
-
-    def set_alerts(self, alerts):
-        self.alerts = alerts
-        if self.alerts and len(self.alerts) > 0:
-            self.has_alerts = True
-        else:
-            self.has_alerts = False
+    def parse_json(self, json):
+        pass
 
     @classmethod
     def geom_to_geojson(cls, session, geom):
@@ -119,6 +91,37 @@ class BaseDao(MinimalDao):
         except:
             pass
         return ret_val
+
+
+@registry.add
+class BaseDao(MinimalDao):
+
+    def __init__(self):
+        # TODO: should we call a method to set these variables, so that it's done in a single place, rather than return this multiple times?
+        #       self.set_date()
+        self.status_code = 200
+        self.status_message = None
+        self.has_errors = False
+        self.has_alerts = False
+
+    def __repr__(self):
+        return str(self.__dict__)
+
+    def set_date(self, date=None):
+        #import pdb; pdb.set_trace()
+        if not hasattr(self, 'date_info'):
+            self.date_info = {}
+        if date is None or not hasattr(date, 'month') or not hasattr(date, 'day'):
+            date = datetime.date.today()
+        self.date_info['month'] = date.month
+        self.date_info['day'] = date.day
+
+    def set_alerts(self, alerts):
+        self.alerts = alerts
+        if self.alerts and len(self.alerts) > 0:
+            self.has_alerts = True
+        else:
+            self.has_alerts = False
 
 
 class DatabaseNotFound(BaseDao):
