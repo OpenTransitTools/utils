@@ -89,7 +89,7 @@ def planner_form_params(request):
 
 
 def params_to_dict(request):
-    """ turn Pyramid's  MultDict of GET params to a normal dict.  
+    """ turn Pyramid's MultDict of GET params to a normal dict.
         multi-values will only use the first param value (and save off all to special _all param)
     """
     ret_val = {}
@@ -266,14 +266,20 @@ def get_first_param(request, name, def_val=None):
 
         @return the first value of the named http param (remember, http can have multiple values for the same param name), 
         or def_val if that param was not sent via HTTP
+
+        TODO: get rid of 'request here ... rather, take in the 'params' thingy and then do either Stupid Pyramid Dict
+              or just regulart dict
     """
-    ret_val=def_val
+    ret_val = def_val
     try:
         l = request.params.getall(name)
         if l and len(l) > 0:
             ret_val = l[0]
     except:
-        pass
+        try:
+            ret_val = request[name]
+        except:
+            pass
     return ret_val
 
 
@@ -350,3 +356,31 @@ def html_escape_num(num):
     return ret_val
 
 
+def append_parm_to_str(param_str, name, val=None):
+    """
+    append a new param to a string of url params
+    handles both
+
+    :param param_str:
+    :param name:
+    :param val:
+    :return: new url string
+    """
+    ret_val = param_str
+
+    # step 1: there must be a valid value for name
+    if name:
+
+        # step 2: handle whether this is the first parameter ... or a later parram, needeing an & ampersand
+        if param_str:
+            ret_val = "{}&".format(param_str)
+        else:
+            ret_val = ""
+
+        # step 3: value can be a None, indicating that this is a boolean url param (so no equals val)
+        if val:
+            ret_val = "{}{}={}".format(ret_val, name, val)
+        else:
+            ret_val += "".format(ret_val, name)
+
+    return ret_val
