@@ -356,7 +356,7 @@ def html_escape_num(num):
     return ret_val
 
 
-def append_parm_to_str(param_str, name, val=None):
+def append_parm_to_str(param_str, name, val=None, sep="&"):
     """
     append a new param to a string of url params
     handles both
@@ -373,7 +373,7 @@ def append_parm_to_str(param_str, name, val=None):
 
         # step 2: handle whether this is the first parameter ... or a later parram, needeing an & ampersand
         if param_str:
-            ret_val = "{}&".format(param_str)
+            ret_val = "{}{}".format(param_str, sep)
         else:
             ret_val = ""
 
@@ -381,6 +381,14 @@ def append_parm_to_str(param_str, name, val=None):
         if val:
             ret_val = "{}{}={}".format(ret_val, name, val)
         else:
-            ret_val += "".format(ret_val, name)
+            ret_val += "{}{}".format(ret_val, name)
 
+    return ret_val
+
+
+def dict_to_param_str(pelias_params, initial_str="", sep="&"):
+    """ :return string """
+    ret_val = initial_str
+    for key, val in pelias_params.iteritems():
+        ret_val = append_parm_to_str(ret_val, key, val, sep)
     return ret_val
