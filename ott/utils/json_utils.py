@@ -17,8 +17,8 @@ def stream_json(u, args=None, extra_path=None):
     if args:
         url = "{0}?{1}".format(url, args)
     with contextlib.closing(urllib.urlopen(url)) as stream:
-        otp = stream.read()
-        ret_val = json.loads(otp)
+        data = stream.read()
+        ret_val = json.loads(data)
     return ret_val
 
 def get_json(file_name, path='ott/utils/tests/json', def_val={}):
