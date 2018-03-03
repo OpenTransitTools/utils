@@ -1,4 +1,6 @@
 from .param_parser import ParamParser
+from ott.utils import geo_utils
+
 
 NAME_IDS = ['name', 'desc']
 NUM_IDS = ['num',  'count', 'limit']
@@ -26,11 +28,11 @@ class GeoParamParser(ParamParser):
         return ret_val
 
     def to_point(self):
-        point = 'POINT({0} {1})'.format(self.lon, self.lat)
+        point = geo_utils.make_point(self.lon, self.lat)
         return point
 
     def to_point_srid(self, srid=None):
         if srid is None:
             srid = self.srid
-        ret_val = 'SRID={0};{1}'.format(srid, self.to_point())
+        ret_val = geo_utils.make_point_srid(self.lon, self.lat, srid)
         return ret_val

@@ -1,13 +1,24 @@
+from ott.utils import object_utils
+from ott.utils import html_utils
+
 import re
 import math
 import logging
 log = logging.getLogger(__file__)
 
-from ott.utils import object_utils
-from ott.utils import html_utils
 
 ZIP_CODE_RE = re.compile("[,\s]*\d{5}(?:[-\s]\d{4})?$")
 ADDRESS_RE  = re.compile("^[0-9]+[\s\w]+\s(north|south|east|west|n|s|e|w){1,2}(?=\s|$)", re.IGNORECASE)
+
+
+def make_point(lon, lat):
+    point = 'POINT({0} {1})'.format(lon, lat)
+    return point
+
+
+def make_point_srid(lon, lat, srid='4326'):
+    ret_val = 'SRID={0};{1}'.format(srid, make_point(lon, lat))
+    return ret_val
 
 
 def parse_geojson_point(geojson):
