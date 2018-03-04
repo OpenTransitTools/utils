@@ -45,7 +45,7 @@ def point_to_geom_distance(session, point, geom):
     """
     ret_val = -111.111
     try:
-        ret_val = session.scalar(func.ST_distance(func.st_buffer(point, 0.00001), geom))
+        ret_val = session.scalar(func.ST_distance(func.st_buffer(point, 0.000001), geom))
     except Exception as e:
         log.warn(e)
         db_utils.session_flush(session)
