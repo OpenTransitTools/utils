@@ -67,6 +67,12 @@ def db_conn(url):
     return session, engine
 
 
+def gtfsdb_conn(kwargs):
+    from gtfsdb import Database
+    db = Database(**kwargs)
+    return db
+
+
 def db_args():
     """ create a generic database commandline arg PARSER """
     import argparse
@@ -78,19 +84,26 @@ def db_args():
     return parser
 
 
-def db_args_gtfsdb(just_engine=True):
+def db_args_gtfsdb():
     parser = db_args()
     args = parser.parse_args()
-    session, engine = db_conn(args.database_url)
-    if just_engine:
-        return engine
-    else:
-        return session, engine
+    kwargs = dict(
+        url=args.database_url,
+        is_geospatial=args.is_geospatial,
+        schema=args.schema
+    )
+
+    return gtfsdb_conn(kwargs)
 
 
-def db_gtfs_rt(just_engine=False):
-    """ get a command line PARSER and db connection to query gtfsrdb data
-        NOTE: meant as a quick dirty way to grab a connection for test apps
+
+
+
+def db_gtfs_rt():
+    """
+    get a command line PARSER and db connection to query gtfsrdb data
+    :requires ott.data project:
+    NOTE: meant as a quick dirty way to grab a connection for test apps
     """
     parser = db_args()
     parser.add_argument('--route',  '-r', default="12", help='what route?')
@@ -100,10 +113,7 @@ def db_gtfs_rt(just_engine=False):
     from ott.data.gtfsrdb import model
     model.add_schema(args.schema)
     session, engine = db_conn(args.database_url)
-    if just_engine:
-        return engine
-    else:
-        return session, engine
+    return session, engine
 
 
 
