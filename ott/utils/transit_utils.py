@@ -25,7 +25,7 @@ def plan_title(title, frm, sep, to, fmt="{0} - {1} {2} {3}", def_val=''):
     #import pdb; pdb.set_trace()
     try:
         ret_val = fmt.format(object_utils.to_str(title), object_utils.to_str(frm), object_utils.to_str(sep), object_utils.to_str(to))
-    except Exception, e:
+    except Exception as e:
         log.debug(e)
         try:
             ret_val = object_utils.to_str(title)
@@ -57,7 +57,7 @@ def plan_description(plan, title, arr, opt, using_txt, max_walk_txt, fmt="{0}<br
         arr = object_utils.to_str(arr)
         opt = object_utils.to_str(opt)
         
-    except Exception, e:
+    except Exception as e:
         log.debug(e)
 
     ret_val = fmt.format(title, arr, tm, dt, using_txt, mode, opt, max_walk_txt, walk)
@@ -156,7 +156,7 @@ def get_stoptime_alerts(stoptime):
                         if a['alert_id'] not in seen:
                             seen.append(a['alert_id'])
                             ret_val.append(a)
-    except Exception, e:
+    except Exception as e:
         pass
     return ret_val
 

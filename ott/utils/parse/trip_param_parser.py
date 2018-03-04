@@ -73,7 +73,7 @@ class TripParamParser(ParamParser):
                 ret_val = fmt.format(**self.__dict__)
             except:
                 pass
-        except Exception, e:
+        except Exception as e:
             log.debug(e)
         return ret_val
 

@@ -82,7 +82,7 @@ class ConfigUtil(object):
             ret_val = self.parser.get(section, id)
             if ret_val is None:
                ret_val = def_val
-        except Exception, e:
+        except Exception as e:
             log.info("Couldn't find '{0}' in config under section '{1}'\n{2}".format(id, section, e))
         return ret_val
 
@@ -93,7 +93,7 @@ class ConfigUtil(object):
         try:
             if ret_val:
                 ret_val = int(ret_val)
-        except Exception, e:
+        except Exception as e:
             log.info("Couldn't convert '{0}' value into an INT type under section '{1}'\n{2}".format(id, section, e))
         return ret_val
 
@@ -110,7 +110,7 @@ class ConfigUtil(object):
         try:
             if ret_val:
                 ret_val = float(ret_val)
-        except Exception, e:
+        except Exception as e:
             log.info("Couldn't convert '{0}' value into a FLOAT type under section '{1}'\n{2}".format(id, section, e))
         return ret_val
 
@@ -121,7 +121,7 @@ class ConfigUtil(object):
         try:
             if ret_val:
                 ret_val = [v.strip('[] \n\r\t') for v in ret_val.split(',')]
-        except Exception, e:
+        except Exception as e:
             log.info("Couldn't convert '{0}' value into a LIST type under section '{1}'\n{2}".format(id, section, e))
         return ret_val
 
@@ -145,7 +145,7 @@ class ConfigUtil(object):
     def config_logger(cls, ini):
         try:
             logging.config.fileConfig(ini, disable_existing_loggers=False)
-        except Exception, e:
+        except Exception as e:
             pass
 
     @classmethod
@@ -156,7 +156,7 @@ class ConfigUtil(object):
             log_ini = cls.find_candidate("log.ini")
             if log_ini:
                 logging.config.fileConfig(log_ini)
-        except Exception, e:
+        except Exception as e:
             log.info(e)
 
     @classmethod

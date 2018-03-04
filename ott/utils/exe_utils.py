@@ -30,7 +30,7 @@ def run_java(cmd_line, fork=False, big_xmx="-Xmx4096m", small_xmx="-Xmx1536m", j
             big_xmx = "-Xmx4096m"
         cmd_line = "{} {} {}".format(java_cmd, big_xmx, cmd_line)
         ret_val = run_cmd(cmd_line, fork, shell, pid_file, log_file)
-    except Exception, e:
+    except Exception as e:
         # try again with smaller java heap memory request
         # NOTE: 'fork' won't get you to see an exception here (because you fork the exception into another process)
         log.info(e)
@@ -71,7 +71,7 @@ def write_pid_file(pid_file, pid):
             pf.write(str(pid))
             pf.flush()
             pf.close()
-    except Exception, e:
+    except Exception as e:
         log.debug("Couldn't write to the pid file -- {}".format(e))
 
 def run_cmd(cmd_line, fork=False, shell=False, pid_file=None, log_file=None):
@@ -112,7 +112,7 @@ def kill_old_pid(pid_file):
         if pid and len(pid) > 1:
             kill(pid)
             time.sleep(5)
-    except Exception, e:
+    except Exception as e:
         log.debug(e)
 
 def kill(pid):
@@ -122,11 +122,11 @@ def kill(pid):
     try:
         log.debug("trying to kill pid {}".format(pid))
         os.kill(int(pid), signal.SIGKILL)
-    except Exception, e:
+    except Exception as e:
         log.debug(e)
         try:
             win_kill = "taskkill /pid {} /f".format(pid)
             log.debug("WINDOWS? will try to kill via: {}".format(win_kill))
             os.system(win_kill)
-        except Exception, e:
+        except Exception as e:
             log.debug(e)

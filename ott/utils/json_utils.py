@@ -50,7 +50,7 @@ def file_to_json(file_path, def_val={}):
     try:
         with open(file_path) as f:
             ret_val = json.load(f)
-    except Exception, e:
+    except Exception as e:
         log.info(e)
 
     return ret_val
@@ -63,7 +63,7 @@ def str_to_json(str, def_val={}):
     ret_val = def_val
     try:
         ret_val = json.loads(str)
-    except Exception, e:
+    except Exception as e:
         log.info("Couldn't convert {0} to json\n{1}".format(str, e))
     return ret_val
 

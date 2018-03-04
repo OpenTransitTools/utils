@@ -33,7 +33,7 @@ def parse_geojson(geojson):
     try:
         if geojson.get('type') == 'Point':
             ret_val = parse_geojson_point(geojson)
-    except Exception, e:
+    except Exception as e:
         log.info(e)
     return ret_val
 

@@ -137,7 +137,7 @@ def pretty_time(dt, fmt=" %I:%M%p", def_val=None):
     ret_val = def_val
     try:
         ret_val = dt.strftime(fmt).lower().replace(' 0','').strip()  # "3:40pm"
-    except Exception, e:
+    except Exception as e:
         log.debug(e)
     return ret_val
 
@@ -156,7 +156,7 @@ def pretty_date_from_ms(ms, fmt=None):
             if isinstance(ms, (str, unicode)):
                 ms = int(ms)
             dt = datetime.datetime.fromtimestamp(ms/1000.0)
-    except Exception, e:
+    except Exception as e:
         log.info(e)
     ret_val = pretty_date(dt, fmt)
     return ret_val
@@ -281,7 +281,7 @@ def str_to_date(str_date, fmt_list=['%Y-%m-%d', '%m/%d/%Y', '%m-%d-%Y'], def_val
             if d is not None:
                 ret_val = d
                 break
-        except Exception, e:
+        except Exception as e:
             log.debug(e)
     return ret_val
 
@@ -303,7 +303,7 @@ def make_date_from_timestamp(num, def_val=None):
     ret_val = def_val
     try:
         ret_val = datetime.datetime.fromtimestamp(num)
-    except Exception, e:
+    except Exception as e:
         log.debug(e)
     return ret_val
 
@@ -332,7 +332,7 @@ def is_date_between(start, end, now=None):
         elif type(end) is datetime.datetime:
             if now < end:
                 ret_val = True
-    except Exception, e:
+    except Exception as e:
         log.debug(e)
     return ret_val
 
@@ -345,7 +345,7 @@ def split_time(time):
         t = time.split(":")
         h = int(t[0])
         m = int(t[1])
-    except Exception, e:
+    except Exception as e:
         log.debug(e)
     return h, m
 

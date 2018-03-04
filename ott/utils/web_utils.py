@@ -22,7 +22,7 @@ def get_name_from_url(url, def_name=None):
     ret_val = def_name
     try:
         ret_val = urlparse.urlsplit(url).path.split('/')[-1]
-    except Exception, e:
+    except Exception as e:
         log.info(e)
     return ret_val
 
@@ -61,7 +61,7 @@ def my_wget(url, file_path, delete_first=True):
         res.close()
 
         log.info("wget: downloaded {} into file {}".format(url, file_path))
-    except Exception, e:
+    except Exception as e:
         log.info(e)
         is_success = False
     return is_success
@@ -125,7 +125,7 @@ def post(hostname, port, path, data):
         log.info("{} :: {} :: {}".format(statuscode, statusmessage, header ))
         #result = webservice.getfile().read()
         #log.info("{}".format(result))
-    except Exception, e:
+    except Exception as e:
         log.info(e)
     return statuscode
 
@@ -146,7 +146,7 @@ def post_file(url, file_path):
         u = urlparse.urlparse(url)
         statuscode = post(u.hostname, u.port, u.path, data)
         f.close()
-    except Exception, e:
+    except Exception as e:
         statuscode = -111
         log.info(e)
     return statuscode
@@ -159,7 +159,7 @@ def get(url):
     response = None
     try:
         response = urllib2.urlopen(url)
-    except Exception, e:
+    except Exception as e:
         log.info(e)
         success = False
     return success, response
@@ -176,7 +176,7 @@ def get_response(url, show_info=False):
             ret_val = "INFO:\n{}\n\nRESPONSE:\n{}".format(response.info(), response.read())
         else:
             ret_val = "{}\n".format(response.read())
-    except Exception, e:
+    except Exception as e:
         log.info(e)
     finally:
         if response:
@@ -203,7 +203,7 @@ def write_url_response_file(file_path, url, response):
         f.write("\n\n")
         f.write(response)
         f.write("\n")
-    except Exception, e:
+    except Exception as e:
         log.warn(e)
     finally:
         if f is not None:
@@ -247,7 +247,7 @@ Subject: {}
         smtp_obj.sendmail(from_email, recipients, message)
         logging.debug('MAIL: ' + message)
         is_success = True
-    except Exception, e:
+    except Exception as e:
         log.warn("ERROR: could not send email: {}".format(e))
         is_success = False
     return is_success

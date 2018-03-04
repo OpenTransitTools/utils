@@ -50,7 +50,7 @@ def get_realtime_url(name, feed, def_val):
             ret_val = url
         else:
             log.debug("{} ({}) doesn't look like a url".format(url, name))
-    except Exception, e:
+    except Exception as e:
         log.debug(e)
     return ret_val
 

@@ -289,7 +289,7 @@ def get_ini_param(request, name, def_val=None):
     ret_val = def_val
     try:
         ret_val = request.registry.settings[name]
-    except Exception, e:
+    except Exception as e:
         pass
     return ret_val
 

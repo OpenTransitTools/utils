@@ -159,7 +159,7 @@ def is_min_sized(file_path, min_size=1000000, quiet=False):
         size = file_size(file_path)
         if size >= min_size:
             ret_val = True
-    except Exception, e:
+    except Exception as e:
         if not quiet:
             log.warn("{}".format(e))
     return ret_val
@@ -282,7 +282,7 @@ def purge(dir_path, pattern):
         for f in os.listdir(dir_path):
             if re.search(pattern, f):
                 os.remove(os.path.join(dir_path, f))
-    except Exception, e:
+    except Exception as e:
         log.info(e)
 
 
@@ -420,7 +420,7 @@ def diff_files(old_name, new_name):
             log.debug("Files {} and {} are both empty".format(old_name, new_name))
 
         #import pdb; pdb.set_trace()
-    except Exception, e:
+    except Exception as e:
         log.warn("problems comparing {} and {}".format(old_name, new_name))
         ret_val = True
     return ret_val
@@ -446,7 +446,7 @@ def unzip_file(zip_path, file_name, target_file_path=None):
         file.flush()
         file.close()
         zip.close()
-    except Exception, e:
+    except Exception as e:
         log.warn("problems extracting {} from {} into file {} ({})".format(file_name, zip_path, target_file_path, e))
     return ret_val
 
@@ -520,7 +520,7 @@ def replace_strings_in_file(file_path, regex_str, replace_str):
             # step 5: mv tmp file into place for file
             rm(file_path)
             mv(tmp_file_path, file_path)
-    except Exception, e:
+    except Exception as e:
         log.warn("problems editing file {}\n(exception: {})".format(file_path, e))
 
 

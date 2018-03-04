@@ -116,7 +116,7 @@ def get_otp_version(graph_dir=None, otp_name=OTP_NAME):
                 version = s
             if 'commit' in s:
                 commit = s
-    except Exception, e:
+    except Exception as e:
         log.info(e)
     return version,commit
 

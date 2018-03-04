@@ -28,7 +28,7 @@ def make_url(db_url, def_val=None):
         url = make_url(db_url)
         log.debug("{} {} {} {} {}".format(url.username, url.password, url.host, url.port, url.database))
         ret_val = url
-    except Exception, e:
+    except Exception as e:
         log.error("DB URL {} PARSE ERROR : {}".format(db_url, e))
     return ret_val
 
@@ -200,7 +200,7 @@ def postgres_check_db(db_name, db_user, db_table=None):
             cur.execute('SELECT 1 from {}'.format(db_table))
             item = cur.fetchone()
             log.debug("POSTGRES item {} from table {} of db {}".format(item, db_table, db_name))
-    except Exception, e:
+    except Exception as e:
         log.error("POSTGRES DATABASE ERROR : {}".format(e))
         ret_val = False
     finally:
@@ -225,7 +225,7 @@ def postgres_add_postgis(db_name, db_user):
         cur.close()
         con.close()
         con = None
-    except Exception, e:
+    except Exception as e:
         log.error("POSTGRES DATABASE ERROR : {}".format(e))
         ret_val = False
     finally:
@@ -251,7 +251,7 @@ def postgres_create_db(db_name, db_user):
         cur.close()
         con.close()
         con = None
-    except Exception, e:
+    except Exception as e:
         log.error("POSTGRES DATABASE ERROR : {}".format(e))
         ret_val = False
     finally:
@@ -270,7 +270,7 @@ def postgres_check_create_db(db_name, db_user, is_geospatial=False):
             ret_val = postgres_create_db(db_name, db_user)
             if ret_val and is_geospatial:
                 ret_val = postgres_add_postgis(db_name, db_user)
-    except Exception, e:
+    except Exception as e:
         log.error("POSTGRES CREATE DATABASE ERROR : {}".format(e))
         ret_val = False
 
@@ -287,7 +287,7 @@ def postgres_drop_schema(db_url, db_user, move=False):
             ret_val = postgres_add_postgis(db_name, db_user)
         else:
             pass
-    except Exception, e:
+    except Exception as e:
         log.error("POSTGRES DROP (RENAME) DATABASE ERROR : {}".format(e))
         ret_val = False
 

@@ -174,7 +174,7 @@ def list_val(list, index=0, def_val=None):
     ret_val = def_val
     try:
         ret_val = list[index]
-    except Exception, e:
+    except Exception as e:
         log.info(e)
     return ret_val
 

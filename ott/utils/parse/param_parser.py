@@ -108,7 +108,7 @@ class ParamParser(object):
                 self.day   = d[2]
             else:
                 log.info("{} doesn't look like a date string".format(self.date))
-        except Exception, e:
+        except Exception as e:
             log.debug(e)
 
     def date_offset(self, day_offset):
@@ -168,7 +168,7 @@ class ParamParser(object):
                 self.am_pm = t[1][2:].strip()
             else:
                 log.info("{} doesn't look like a time string".format(self.time))
-        except Exception, e:
+        except Exception as e:
             log.debug(e)
 
     @classmethod
