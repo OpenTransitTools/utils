@@ -23,7 +23,7 @@ except ImportError:
     # but on Mac, etc... there isn't a PIL module...
     try:
         import Image, ImageDraw
-    except Exception, e:
+    except Exception as e:
         log.warn(e)
         log.warn("NOTE: missing image manipulation lib, so the sparkline utility probably won't work...")
 

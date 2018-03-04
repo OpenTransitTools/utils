@@ -3,7 +3,7 @@ log = logging.getLogger(__file__)
 
 try:
     import qrcode
-except Exception, e:
+except Exception as e:
     log.warn(e)
     log.warn("NOTE: missing qr dependencies ..  qr codes probably won't work...")
 
