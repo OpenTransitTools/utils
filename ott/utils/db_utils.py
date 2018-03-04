@@ -305,3 +305,16 @@ def postgres_add_shp_file(db_url, db_user, is_geospatial=False):
         @see http://geospatialpython.com/2016/08/pure-python-loading-shapefiles-into.html
     """
     ret_val = True
+
+
+def session_flush(session):
+    """
+    clear out a session with a commit and flush
+    """
+    try:
+        session.commit()
+        session.flush()
+    except Exception as e:
+        log.warn(e)
+
+
