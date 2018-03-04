@@ -92,11 +92,7 @@ def db_args_gtfsdb():
         is_geospatial=args.is_geospatial,
         schema=args.schema
     )
-
     return gtfsdb_conn(kwargs)
-
-
-
 
 
 def db_gtfs_rt():
