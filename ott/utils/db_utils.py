@@ -64,7 +64,7 @@ def db_conn(url):
     engine = create_engine(url)
     session.configure(bind=engine)
 
-    return session,engine
+    return session, engine
 
 
 def db_args():
@@ -78,7 +78,17 @@ def db_args():
     return parser
 
 
-def db_gtfs_rt():
+def db_args_gtfsdb(just_engine=True):
+    parser = db_args()
+    args = parser.parse_args()
+    session, engine = db_conn(args.database_url)
+    if just_engine:
+        return engine
+    else:
+        return session, engine
+
+
+def db_gtfs_rt(just_engine=False):
     """ get a command line PARSER and db connection to query gtfsrdb data
         NOTE: meant as a quick dirty way to grab a connection for test apps
     """
@@ -89,8 +99,12 @@ def db_gtfs_rt():
 
     from ott.data.gtfsrdb import model
     model.add_schema(args.schema)
-    ses, eng = db_conn(args.database_url)
-    return ses,eng
+    session, engine = db_conn(args.database_url)
+    if just_engine:
+        return engine
+    else:
+        return session, engine
+
 
 
 def closest_stops_tuple_to_dict(tup):

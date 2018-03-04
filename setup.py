@@ -10,8 +10,6 @@ requires = [
     'simplejson',
     'requests',
     'validators'
-    #'requests',
-    #'twilio',
 ]
 
 extras_require = dict(
