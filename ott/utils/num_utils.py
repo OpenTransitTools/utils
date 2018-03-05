@@ -67,14 +67,14 @@ def feet_to_meters(feet, inches=0):
 def feet_to_inches(feet, do_round=False):
     inches = feet * 12
     if do_round:
-        inches = math.round(inches)
+        inches = round(inches)
     return inches
 
 
 def inches_to_feet_inches(inches, include_units=True):
-    inches = math.round(inches)
-    feet = inches / 12
-    inches = inches % 12
+    inches = round(inches)
+    feet = int(math.floor(inches / 12))
+    inches = int(inches % 12)
     ret_val = {'feet': feet, 'inches': inches}
 
     if include_units:
@@ -101,7 +101,14 @@ def degrees_to_meters(degrees):
 
 def degrees_to_feet(degrees):
     meters = degrees_to_meters(degrees)
-    feet = num_utils.meters_to_feet(meters)
+    feet = meters_to_feet(meters)
+    ret_val = int(math.floor(feet))
+    return ret_val
+
+
+def degrees_to_feet_inches(degrees):
+    meters = degrees_to_meters(degrees)
+    feet = meters_to_feet(meters)
     ret_val = feet_to_feet_inches(feet)
     return ret_val
 
