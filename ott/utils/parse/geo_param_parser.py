@@ -12,8 +12,9 @@ PLACE = ['place', 'point', 'loc']
 
 class SimpleGeoParamParser(SimpleParamParser):
 
-    def __init__(self, params):
-        super(SimpleGeoParamParser, self).__init__(params)
+    def __init__(self, request):
+        # import pdb; pdb.set_trace()
+        super(SimpleGeoParamParser, self).__init__(request)
         self.lat   = self.get_first_val(LAT_IDS)
         self.lon   = self.get_first_val(LON_IDS)
 
@@ -30,6 +31,7 @@ class SimpleGeoParamParser(SimpleParamParser):
 
 class GeoParamParser(ParamParser, SimpleGeoParamParser):
 
+    # TODO: is params supposed to be 'request'
     def __init__(self, params, def_count=10, def_srid='4326'):
         super(GeoParamParser, self).__init__(params)
         self.limit = self.get_first_val(NUM_IDS, def_count)

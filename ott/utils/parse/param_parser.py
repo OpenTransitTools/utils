@@ -15,6 +15,7 @@ from ott.utils import date_utils
 class SimpleParamParser(object):
 
     def __init__(self, request):
+        # import pdb; pdb.set_trace()
         self.request = request
         self.params = html_utils.params_to_dict(request)
 
@@ -122,6 +123,8 @@ class SimpleParamParser(object):
 class ParamParser(SimpleParamParser):
 
     def __init__(self, request):
+        super(ParamParser, self).__init__(request)
+        # import pdb; pdb.set_trace()
         self.date  = None
         self.day   = None
         self.month = None
@@ -219,7 +222,6 @@ class ParamParser(SimpleParamParser):
     def date_offset(self, day_offset):
         """ change the date by x number of days, either +/-
         """
-        #import pdb; pdb.set_trace()
         d = date_utils.str_to_date(self.date)
         d = d + datetime.timedelta(days=day_offset)
         d = date_utils.date_to_str(d, fmt='%Y-%m-%d')
