@@ -1,4 +1,4 @@
-from .param_parser import ParamParser
+from .param_parser import ParamParser, SimpleParamParser
 from ott.utils import geo_utils
 
 
@@ -10,16 +10,12 @@ SRID_IDS = ['srid']
 PLACE = ['place', 'point', 'loc']
 
 
-class GeoParamParser(ParamParser):
+class SimpleGeoParamParser(SimpleParamParser):
 
-    def __init__(self, params, def_count=10, def_srid='4326'):
-        super(GeoParamParser, self).__init__(params)
-        self.limit = self.get_first_val(NUM_IDS, def_count)
-        self.srid  = self.get_first_val(SRID_IDS, def_srid)
-        self.name  = self.get_first_val(NAME_IDS)
-        self.lat   = self.get_first_val(LAT_IDS) 
+    def __init__(self, params):
+        super(SimpleGeoParamParser, self).__init__(params)
+        self.lat   = self.get_first_val(LAT_IDS)
         self.lon   = self.get_first_val(LON_IDS)
-        # TODO: parse place variable into name/lat/lon/etc...
 
     def has_coords(self):
         ret_val = False
@@ -30,6 +26,16 @@ class GeoParamParser(ParamParser):
     def to_point(self):
         point = geo_utils.make_point(self.lon, self.lat)
         return point
+
+
+class GeoParamParser(ParamParser, SimpleGeoParamParser):
+
+    def __init__(self, params, def_count=10, def_srid='4326'):
+        super(GeoParamParser, self).__init__(params)
+        self.limit = self.get_first_val(NUM_IDS, def_count)
+        self.srid  = self.get_first_val(SRID_IDS, def_srid)
+        self.name  = self.get_first_val(NAME_IDS)
+        # TODO: parse place variable into name/lat/lon/etc...
 
     def to_point_srid(self, srid=None):
         if srid is None:

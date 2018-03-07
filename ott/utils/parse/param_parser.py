@@ -12,7 +12,114 @@ from ott.utils import object_utils
 from ott.utils import date_utils
 
 
-class ParamParser(object):
+class SimpleParamParser(object):
+
+    def __init__(self, request):
+        self.request = request
+        self.params = html_utils.params_to_dict(request)
+
+    def param_exists(self, param):
+        return param in self.params
+
+    def get(self, name, def_val=None):
+        """
+        """
+        ret_val = def_val
+        try:
+            ret_val = self.params[name]
+        except:
+            try:
+                ret_val = self.params[name.lower()]
+            except:
+                pass
+        return ret_val
+
+    def get_first_val(self, names, def_val=None):
+        """ pass in a list of 'names', and return the first name that has a value in self.params
+        """
+        ret_val = def_val
+        for n in names:
+            v = self.get(n)
+            if v is not None and v != 'None':
+                ret_val = v
+                break
+        return ret_val
+
+    def get_first_val_trim(self, names, def_val=None):
+        """ get the first value, but trim back white space and leading ZEROs (good for IDs, etc...)
+        """
+        ret_val = def_val
+        v = self.get_first_val(names, def_val)
+        if v is not None and v != 'None':
+            ret_val = v.strip().lstrip('0')
+        return ret_val
+
+    def get_first_val_as_numeric(self, names, def_val=None):
+        """ pass in a list of 'names', and return the first name that has a value in self.params
+            with the additional requirement that this value is a numeric value
+        """
+        ret_val = None
+        str = def_val
+        try:
+            str = self.get_first_val(names)
+            ret_val = float(str)
+        except:
+            ret_val = str
+        return ret_val
+
+    def get_first_val_as_int(self, names, def_val=None):
+        """ pass in a list of 'names', and return the first name that has a value in self.params
+            with the additional requirement that this value is an int value
+        """
+        ret_val = None
+        str = def_val
+        try:
+            str = self.get_first_val(names)
+            ret_val = int(str)
+        except:
+            ret_val = str
+        return ret_val
+
+    def get_first_val_as_bool(self, names, def_val=False):
+        """ pass in a list of 'names', and return the first name that has a value in self.params
+            with the additional requirement that this value is an int value
+        """
+        ret_val = def_val
+        try:
+            val = self.get_first_val(names)
+            if val == '':
+                val = 'T'
+            if not any(f in val for f in ('false', 'False', 'None')):
+                ret_val = True
+            else:
+                ret_val = False
+        except:
+            pass
+        return ret_val
+
+    @classmethod
+    def query_str_to_params(cls, qs):
+        ret_val = {}
+        params = qs.split('&')
+        for p in params:
+            q = p.split('=')
+            if len(q) == 2:
+                ret_val[q[0]] = q[1]
+            elif len(q) == 1:
+                ret_val[q[0]] = True
+        return ret_val
+
+    @classmethod
+    def to_int(cls, str, def_val=0):
+        ret_val = def_val
+        try:
+            ret_val = int(str)
+        except:
+            pass
+        return ret_val
+
+
+class ParamParser(SimpleParamParser):
 
     def __init__(self, request):
         self.date  = None
@@ -25,8 +132,6 @@ class ParamParser(object):
         self.min   = None
         self.am_pm = None
 
-        self.request = request
-        self.params = html_utils.params_to_dict(request)
         self.agency = self.get_first_val(['agency'], 'TriMet')
         self.detailed = self.get_first_val_as_bool(['detailed', 'full'], False)
         self.show_geo = self.get_first_val_as_bool(['show_geo', 'geo'], False)
@@ -181,96 +286,6 @@ class ParamParser(object):
             ret_val = time.localtime()
         return ret_val
 
-    def param_exists(self, param):
-        return param in self.params
-
-    def get(self, name, def_val=None):
-        """
-        """
-        ret_val = def_val
-        try:
-            ret_val = self.params[name]
-        except:
-            try:
-                ret_val = self.params[name.lower()]
-            except:
-                pass
-        return ret_val
-
-    def get_first_val(self, names, def_val=None):
-        """ pass in a list of 'names', and return the first name that has a value in self.params
-        """
-        ret_val = def_val
-        for n in names:
-            v = self.get(n)
-            if v is not None and v != 'None':
-                ret_val = v
-                break
-        return ret_val
-
-    def get_first_val_trim(self, names, def_val=None):
-        """ get the first value, but trim back white space and leading ZEROs (good for IDs, etc...)
-        """
-        ret_val = def_val
-        v = self.get_first_val(names, def_val)
-        if v is not None and v != 'None':
-            ret_val = v.strip().lstrip('0')
-        return ret_val
-
-    def get_first_val_as_numeric(self, names, def_val=None):
-        """ pass in a list of 'names', and return the first name that has a value in self.params
-            with the additional requirement that this value is a numeric value 
-        """
-        ret_val = None
-        str = def_val
-        try:
-            str = self.get_first_val(names)
-            ret_val = float(str)
-        except:
-            ret_val = str
-        return ret_val
-
-    def get_first_val_as_int(self, names, def_val=None):
-        """ pass in a list of 'names', and return the first name that has a value in self.params
-            with the additional requirement that this value is an int value 
-        """
-        ret_val = None
-        str = def_val
-        try:
-            str = self.get_first_val(names)
-            ret_val = int(str)
-        except:
-            ret_val = str
-        return ret_val
-
-    def get_first_val_as_bool(self, names, def_val=False):
-        """ pass in a list of 'names', and return the first name that has a value in self.params
-            with the additional requirement that this value is an int value 
-        """
-        ret_val = def_val
-        try:
-            val = self.get_first_val(names)
-            if val == '':
-                val = 'T'
-            if not any(f in val for f in ('false', 'False', 'None')):
-                ret_val = True
-            else:
-                ret_val = False
-        except:
-            pass
-        return ret_val
-
-    @classmethod
-    def query_str_to_params(cls, qs):
-        ret_val = {}
-        params = qs.split('&')
-        for p in params:
-            q = p.split('=')
-            if len(q) == 2:
-                ret_val[q[0]] = q[1]
-            elif len(q) == 1:
-                ret_val[q[0]] = True
-        return ret_val
 
     @classmethod
     def strip_coord(cls, place):
@@ -322,13 +337,4 @@ class ParamParser(object):
         elif coord:
             ret_val = coord
 
-        return ret_val
-
-    @classmethod
-    def to_int(cls, str, def_val=0):
-        ret_val = def_val
-        try:
-            ret_val = int(str)
-        except:
-            pass
         return ret_val
