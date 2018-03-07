@@ -125,6 +125,10 @@ def to_lon_lat(x, y):
     return lon,lat
 
 
+def to_lon_lat_tuple(t):
+    return to_lon_lat(t[0], t[1])
+
+
 def get_address_from_dict(address, def_val=None):
     """
         "street": "355 Binney St",
