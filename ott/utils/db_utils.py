@@ -75,6 +75,7 @@ def gtfsdb_conn(kwargs):
 
 def db_args():
     """ create a generic database commandline arg PARSER """
+    ''' TODO: move to parser/cmdline '''
     import argparse
     parser = argparse.ArgumentParser(prog='gtfs data loader', formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('--database_url', '-d',  default='sqlite:///gtfs.db', help='DATABASE URL with appropriate privileges')
