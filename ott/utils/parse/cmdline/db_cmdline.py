@@ -2,7 +2,7 @@ import logging
 log = logging.getLogger(__file__)
 
 
-def db_args(prog_name='db loader'):
+def db_parser(prog_name='bin/load_db'):
     """ create a generic database commandline arg PARSER """
     import argparse
     parser = argparse.ArgumentParser(
@@ -47,7 +47,7 @@ def db_args(prog_name='db loader'):
 
 def gtfs_parser():
     """ create a generic database commandline arg PARSER """
-    parser = db_args()
+    parser = db_parser('bin/load_gtfs')
     parser.add_argument(
         '--agency',
         '-agency',
@@ -60,7 +60,7 @@ def gtfs_parser():
         '-url',
         '-u',
         required='true',
-        help="url to gtfs-realtime data"
+        help="url to gtfs (or gtfs-realtime) data"
     )
     return parser
 
