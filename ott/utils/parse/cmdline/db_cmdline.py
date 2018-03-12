@@ -22,7 +22,7 @@ def db_parser(prog_name='bin/load_db'):
         help="database schema"
     )
     parser.add_argument(
-        '--geo',
+        '--is_geospatial',
         '-geo',
         '-g',
         action="store_true",
