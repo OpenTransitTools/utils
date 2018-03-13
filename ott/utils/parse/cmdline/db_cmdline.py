@@ -2,7 +2,7 @@ import logging
 log = logging.getLogger(__file__)
 
 
-def db_parser(prog_name='bin/load_db'):
+def db_parser(prog_name='bin/load_db', tables=['Could be (Decarative) Base.metadata.sorted_tables']):
     """ create a generic database commandline arg PARSER """
     import argparse
     parser = argparse.ArgumentParser(
@@ -41,6 +41,11 @@ def db_parser(prog_name='bin/load_db'):
         '-cf',
         action="store_true",
         help="clear table(s) before loading"
+    )
+    parser.add_argument(
+        '--tables',
+        choices=tables, default=None, nargs='*',
+        help="Limited list of TABLES to load, if blank, load all tables"
     )
     return parser
 
