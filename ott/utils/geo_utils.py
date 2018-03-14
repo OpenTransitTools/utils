@@ -125,6 +125,19 @@ def to_lon_lat(x, y):
     return lon,lat
 
 
+def read_shp(shp_dir_path):
+    """
+    read an ESRI .shp file
+    :param shp_dir_path is the directory where the .shp and .dbf file live:
+    :return: shapefile.Reader
+    """
+    import shapefile
+    shp = open(base_file_path + ".shp", "rb")
+    dbf = open(base_file_path + ".dbf", "rb")
+    r = shapefile.Reader(shp=shp, dbf=dbf)
+    return r
+
+
 def to_lon_lat_tuple(t):
     return to_lon_lat(t[0], t[1])
 
