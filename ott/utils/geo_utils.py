@@ -132,17 +132,28 @@ def read_shp(shp_dir_path):
     :return: shapefile.Reader
     """
     import shapefile
-    shp = open(base_file_path + ".shp", "rb")
-    dbf = open(base_file_path + ".dbf", "rb")
+    shp = open(shp_dir_path + ".shp", "rb")
+    dbf = open(shp_dir_path + ".dbf", "rb")
     r = shapefile.Reader(shp=shp, dbf=dbf)
     return r
 
 
 def read_shp_zip(shp_zip_file):
     """
-    read an ESRI .shp file
+    read an ESRI .shp file that's packaged in a .zip file
+    :return: shapefile.Reader
     """
-    pass
+    r = read_shp(shp_dir)
+    return r
+
+
+def read_shp_zip_url(shp_zip_url):
+    """
+    download a .zip file from a url, which we assume is an ESRI .shp file
+    :return: shapefile.Reader
+    """
+    r = read_shp_zip(shp_zip_file)
+    return r
 
 
 def to_lon_lat_tuple(t):
