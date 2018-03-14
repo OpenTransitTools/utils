@@ -138,6 +138,13 @@ def read_shp(shp_dir_path):
     return r
 
 
+def read_shp_zip(shp_zip_file):
+    """
+    read an ESRI .shp file
+    """
+    pass
+
+
 def to_lon_lat_tuple(t):
     return to_lon_lat(t[0], t[1])
 
