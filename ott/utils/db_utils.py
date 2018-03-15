@@ -72,6 +72,14 @@ def gtfsdb_conn(kwargs):
     db = Database(**kwargs)
     return db
 
+def gtfsdb_conn_parts(db_url, schema=None, is_geospatial=False):
+    kwargs = dict(
+        url=db_url,
+        schema=schema,
+        is_geospatial=is_geospatial
+    )
+    return gtfsdb_conn(kwargs)
+
 
 def db_args():
     """ create a generic database commandline arg PARSER """
