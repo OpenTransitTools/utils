@@ -5,6 +5,10 @@ import logging
 log = logging.getLogger(__file__)
 
 
+class SimpleObject(object):
+    pass
+
+
 def to_hash(str):
     """ generates nice 0AI3Mk6FErSH4Q== type hashes from strings """
     hasher = hashlib.sha1(str)
