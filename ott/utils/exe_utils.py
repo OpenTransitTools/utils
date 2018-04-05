@@ -2,10 +2,11 @@ import os
 import signal
 import subprocess
 import time
-import logging
-log = logging.getLogger(__file__)
 
 import object_utils
+
+import logging
+log = logging.getLogger(__file__)
 
 
 def run_python(cmd_line, fork=False, py_cmd="python", shell=None, pid_file=None, log_file=None):
@@ -16,6 +17,7 @@ def run_python(cmd_line, fork=False, py_cmd="python", shell=None, pid_file=None,
         shell = does_cmd_need_a_shell(py_cmd, "--version", fork)
     ret_val = run_cmd(cmd_line, fork, shell, pid_file, log_file)
     return ret_val
+
 
 def run_java(cmd_line, fork=False, big_xmx="-Xmx4096m", small_xmx="-Xmx1536m", java_cmd="java", shell=None, pid_file=None, log_file=None):
     """ run java ... if we get an exception, try to run again with lower heap size
@@ -62,6 +64,7 @@ def does_cmd_need_a_shell(cmd, cmd_line="", fork=False):
         ret_val = True
     return ret_val
 
+
 def write_pid_file(pid_file, pid):
     """ write a pid file
     """
@@ -73,6 +76,7 @@ def write_pid_file(pid_file, pid):
             pf.close()
     except Exception as e:
         log.debug("Couldn't write to the pid file -- {}".format(e))
+
 
 def run_cmd(cmd_line, fork=False, shell=False, pid_file=None, log_file=None):
     """ run_cmd("sleep 200") will block for 200 seconds
@@ -103,6 +107,7 @@ def run_cmd(cmd_line, fork=False, shell=False, pid_file=None, log_file=None):
     write_pid_file(pid_file, pid)
     return pid
 
+
 def kill_old_pid(pid_file):
     """ read pid file and then kill process
     """
@@ -114,6 +119,7 @@ def kill_old_pid(pid_file):
             time.sleep(5)
     except Exception as e:
         log.debug(e)
+
 
 def kill(pid):
     """ kill a process

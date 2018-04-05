@@ -17,11 +17,12 @@ log = logging.getLogger(__file__)
 GRAPH_NAME = "Graph.obj"
 OTP_NAME = "otp.jar"
 VLOG_NAME = "otp.v"
+PID_FILE = "pid.txt"
 
 DEF_NAME = "prod"
 DEF_PORT = "55555"
 DEF_SSL_PORT = "55551"
-OTP_DOWNLOAD_URL = "http://maven.conveyal.com.s3.amazonaws.com/org/opentripplanner/otp/0.20.0/otp-0.20.0-shaded.jar"
+OTP_DOWNLOAD_URL = "https://repo1.maven.org/maven2/org/opentripplanner/otp/1.2.0/otp-1.2.0-shaded.jar"
 
 
 def restart_call(call_db_path="call_center/db/call_db.tar.gz", call_runner="call_center/run.sh"):
@@ -96,9 +97,14 @@ def run_otp_server(graph_dir=None, port=DEF_PORT, ssl=DEF_SSL_PORT, otp_name=OTP
     """
     file_utils.cd(graph_dir)
     otp_path = get_otp_path(graph_dir, otp_name)
-    cmd='-server -jar {} --port {} --securePort {} --router "" --graphs {}'.format(otp_path, port, ssl, graph_dir)
-    ret_val = exe_utils.run_java(cmd, fork=True, big_xmx=java_mem, pid_file="pid.txt")
+    cmd = '-server -jar {} --port {} --securePort {} --router "" --graphs {}'.format(otp_path, port, ssl, graph_dir)
+    ret_val = exe_utils.run_java(cmd, fork=True, big_xmx=java_mem, pid_file=PID_FILE)
     return ret_val
+
+
+def kill_otp_server(graph_dir):
+    pid_path = os.path.join(graph_dir, PID_FILE)
+    exe_utils.kill_old_pid(pid_file=pid_path)
 
 
 def get_otp_version(graph_dir=None, otp_name=OTP_NAME):
@@ -129,7 +135,7 @@ def run_graph_builder(graph_dir, graph_name=GRAPH_NAME, otp_name=OTP_NAME, java_
     otp_path = get_otp_path(graph_dir, otp_name)
     file_utils.rm(graph_path)
     file_utils.cd(graph_dir)
-    cmd='-jar {} --build {} --cache {}'.format(otp_path, graph_dir, graph_dir)
+    cmd = '-jar {} --build {} --cache {}'.format(otp_path, graph_dir, graph_dir)
     ret_val = exe_utils.run_java(cmd, big_xmx=java_mem)
     return ret_val
 
@@ -137,7 +143,7 @@ def run_graph_builder(graph_dir, graph_name=GRAPH_NAME, otp_name=OTP_NAME, java_
 def vizualize_graph(graph_dir, java_mem=None, otp_name=OTP_NAME):
     otp_path = os.path.join(graph_dir, otp_name)
     file_utils.cd(graph_dir)
-    cmd='-jar {} --visualize --router "" --graphs {}'.format(otp_path, graph_dir)
+    cmd = '-jar {} --visualize --router "" --graphs {}'.format(otp_path, graph_dir)
     ret_val = exe_utils.run_java(cmd, big_xmx=java_mem)
     return ret_val
 
@@ -300,7 +306,6 @@ def diff_vlog_files(svr, graph_dir, vlog_name=VLOG_NAME):
                     ret_val = True
                     logging.info("{0} != {1} ... will try to grab new OTP from {2} and deploy".format(tmp_vlog_path, vlog_path, svr))
     return ret_val
-
 
 
 def package_new(graph_dir, graph_name=GRAPH_NAME, vlog_name=VLOG_NAME, otp_name=OTP_NAME):
