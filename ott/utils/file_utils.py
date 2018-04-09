@@ -541,6 +541,11 @@ def get_file_dir(file):
     return dir
 
 
+def get_parent_dir(in_dir):
+    dir = os.path.join(in_dir, os.pardir)
+    return dir
+
+
 def get_module_dir(clazz):
     """ send me a __class__, and I'll return the path to the directory where it lives
     """
