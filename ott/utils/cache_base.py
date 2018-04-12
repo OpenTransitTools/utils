@@ -22,8 +22,7 @@ class CacheBase(object):
         # step 1: see if cache dir either passed in or configured someplace ???
         if cache_dir is None:
             cache_dir = self.config.get('cache_dir')
-            if cache_dir:
-                cache_dir = os.path.join(self.this_module_dir, cache_dir[2:])
+            cache_dir = file_utils.relative_to_full_path(cache_dir, self.this_module_dir)
 
         # step 2: try to create any specified / configured cache directory
         if cache_dir:
