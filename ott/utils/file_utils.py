@@ -361,6 +361,9 @@ def append_to_path(path, append, end_with_sep=True):
 
 
 def path_join(dir, file):
+    """ append file (or file path) to a direcory path
+    """
+    # step 1: handle relative paths
     if file.startswith('/'):
         file = file[1:]
     if file.startswith('./'):
@@ -368,6 +371,9 @@ def path_join(dir, file):
     if file.startswith('../'):
         file = file[3:]
         dir = os.path.join(dir, os.pardir)
+
+    # step 2: join dir to a file path
+    # TODO if 'file' is actually a path with fwd slashes (ala ../x/y/z.file, split that path and then join in an os acceptable way
     file_path = os.path.join(dir, file)
     return file_path
 
