@@ -19,10 +19,11 @@ class CacheBase(object):
         self.cache_expire = self.config.get_int('cache_expire', 'cache', self.cache_expire)
 
     def _make_cache_dir(self, cache_dir, def_name="cache"):
-        # step 1: see if cache dir either passed in or configured someplace ???
-        if cache_dir is None:
-            cache_dir = self.config.get('cache_dir')
-            cache_dir = file_utils.relative_to_full_path(cache_dir, self.this_module_dir)
+        # step 1: if cache dir not passed in or configured someplace ???
+        if cache_dir is None and self.config.get('cache_dir'):
+            d = self.config.dir_path()
+            f = self.config.get('cache_dir')
+            cache_dir = file_utils.path_join(d, f)
 
         # step 2: try to create any specified / configured cache directory
         if cache_dir:

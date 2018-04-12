@@ -73,6 +73,18 @@ class ConfigUtil(object):
         self._found_ini = scp.read(candidates)
         return scp
 
+    def file_path(self):
+        """ :return full OS file path to the .ini file
+        TODO:
+        """
+        return "./config"
+
+    def dir_path(self):
+        """ :return directory where the .ini file exists
+        TODO:
+        """
+        return "./config"
+
     def get(self, id, section=None, def_val=None):
         """ get config value
         """

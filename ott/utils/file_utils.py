@@ -365,6 +365,9 @@ def path_join(dir, file):
         file = file[1:]
     if file.startswith('./'):
         file = file[2:]
+    if file.startswith('../'):
+        file = file[3:]
+        dir = os.path.join(dir, os.pardir)
     file_path = os.path.join(dir, file)
     return file_path
 
