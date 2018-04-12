@@ -9,14 +9,32 @@ from ott.utils.config_util import ConfigUtil
 
 
 class CacheBase(object):
-    cache_dir_name = "cache"
+    cache_dir = None
     cache_expire = 31
     _config = None
 
-    def __init__(self, section="cache", cache_dir_name="cache"):
+    def __init__(self, section="cache", cache_dir=None):
         self._config = ConfigUtil.factory(section=section)
+        self._make_cache_dir(cache_dir)
         self.cache_expire = self.config.get_int('cache_expire', 'cache', self.cache_expire)
-        self.cache_dir_name = cache_dir_name
+
+    def _make_cache_dir(self, cache_dir, def_name="cache"):
+        # step 1: see if cache dir either passed in or configured someplace ???
+        if cache_dir is None:
+            cache_dir = self.config.get('cache_dir')
+            if cache_dir:
+                cache_dir = os.path.join(self.this_module_dir, cache_dir[2:])
+
+        # step 2: try to create any specified / configured cache directory
+        if cache_dir:
+            file_utils.mkdir(cache_dir)
+            self.cache_dir = cache_dir
+
+        # step 3: haven't yet gotten a cache dir, so lets try to find and/or create a default cache dir local
+        #         to this module directory
+        if file_utils.exists(self.cache_dir) is False:
+            self.cache_dir = os.path.join(self.this_module_dir, def_name)
+            file_utils.mkdir(cache_dir)
 
     @property
     def config(self):
@@ -36,12 +54,9 @@ class CacheBase(object):
 
     @property
     def cache_dir(self):
+        """ returns dir path ... see constructor above
         """
-        returns dir path ... makes the directory if it doesn't exist
-        """
-        cache_dir = os.path.join(self.this_module_dir, self.cache_dir_name)
-        file_utils.mkdir(cache_dir)
-        return cache_dir
+        return self.cache_dir
 
     @property
     def tmp_dir(self):
