@@ -371,6 +371,8 @@ def path_join(dir, file):
         file = file[2:]
     if file.startswith('../'):
         file = file[3:]
+        # TODO: os.pardir is ".." -- and we cange to full path w.out .. crap?
+        # also would like .join to accpet fwd slash junk and refactor on Win/DOS to backslahses, etc...
         dir = os.path.join(dir, os.pardir)
 
     # step 2: join dir to a file path
@@ -405,7 +407,6 @@ def diff_files(old_name, new_name):
 
         # check #2 : compare two files line by line
         # adapted from http://stackoverflow.com/questions/3043026/comparing-two-text-files-in-python
-        #import pdb; pdb.set_trace()
         of = open(old_name, "r")
         olist = of.readlines()
         of.close()
@@ -428,8 +429,6 @@ def diff_files(old_name, new_name):
                 ret_val = True
         else:
             log.debug("Files {} and {} are both empty".format(old_name, new_name))
-
-        #import pdb; pdb.set_trace()
     except Exception as e:
         log.warn("problems comparing {} and {}".format(old_name, new_name))
         ret_val = True
@@ -552,6 +551,9 @@ def get_file_dir(file):
 
 
 def get_parent_dir(in_dir):
+    """
+    TODO: os.pardir is ".." -- and we cange to full path w.out .. crap?
+    """
     dir = os.path.join(in_dir, os.pardir)
     return dir
 

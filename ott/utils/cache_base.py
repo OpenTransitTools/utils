@@ -23,7 +23,7 @@ class CacheBase(object):
         # step 1 - 3: create some type of cache dir
         # step 1: if cache dir not passed in or configured someplace ???
         if cache_dir is None and self.config.get('cache_dir'):
-            d = self.config.dir_path()
+            d = self.config.ini_dir_path
             f = self.config.get('cache_dir')
             cache_dir = file_utils.path_join(d, f)
 

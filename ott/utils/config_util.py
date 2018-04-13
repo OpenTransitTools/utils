@@ -1,12 +1,13 @@
+from ott.utils import file_utils
+from ott.utils import json_utils
+from ott.utils import object_utils
+
 from ConfigParser import SafeConfigParser
 import os
 import sys
 import logging
 import logging.config
 log = logging.getLogger(__file__)
-
-from ott.utils import json_utils
-from ott.utils import object_utils
 
 SECTION='view'
 INI=['app.ini', 'client.ini', 'services.ini', 'view.ini', 'production.ini']
@@ -26,7 +27,10 @@ class ConfigUtil(object):
     log_ini = 'log.ini'
     ini = INI
     _parser = None
-    _found_ini = None
+
+    found_ini = None
+    ini_dir_path = None
+    ini_file_path = None
 
     def __init__(self, ini=None, section=None, run_dir=None):
         if ini:
@@ -54,7 +58,7 @@ class ConfigUtil(object):
     def _make_parser(self):
         """ make the config PARSER (SafeConfigParser) ... file lookup relative to the directory you run your app from
         """
-        #import pdb; pdb.set_trace()
+        # import pdb; pdb.set_trace()
         # capture the execution directory in a global, as we're likely to cd out of here at some point
         global RUN_DIR
         if RUN_DIR is None:
@@ -69,21 +73,20 @@ class ConfigUtil(object):
             if c:
                 candidates = candidates + c
 
+        # create the config parser and read the .ini files
         scp = SafeConfigParser()
-        self._found_ini = scp.read(candidates)
+        paths = scp.read(candidates)
+
+        # set variables
+        if paths and len(paths):
+            for p in paths:
+                if file_utils.exists(p):
+                    self.found_ini = True
+                    self.ini_file_path = p
+                    self.ini_dir_path = file_utils.get_file_dir(p)
+                    break
+
         return scp
-
-    def file_path(self):
-        """ :return full OS file path to the .ini file
-        TODO:
-        """
-        return "./config"
-
-    def dir_path(self):
-        """ :return directory where the .ini file exists
-        TODO:
-        """
-        return "./config"
 
     def get(self, id, section=None, def_val=None):
         """ get config value
