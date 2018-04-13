@@ -9,9 +9,10 @@ from ott.utils.config_util import ConfigUtil
 
 
 class CacheBase(object):
-    cache_dir = None
     cache_expire = 31
+    _cache_dir = None
     _config = None
+
 
     def __init__(self, section="cache", cache_dir=None):
         self._config = ConfigUtil.factory(section=section)
@@ -28,12 +29,12 @@ class CacheBase(object):
         # step 2: try to create any specified / configured cache directory
         if cache_dir:
             file_utils.mkdir(cache_dir)
-            self.cache_dir = cache_dir
+            self._cache_dir = cache_dir
 
         # step 3: haven't yet gotten a cache dir, so lets try to find and/or create a default
         #         cache dir local to this module directory
         if file_utils.exists(self.cache_dir) is False:
-            self.cache_dir = os.path.join(self.this_module_dir, def_name)
+            self._cache_dir = os.path.join(self.this_module_dir, def_name)
             file_utils.mkdir(cache_dir)
 
     @property
@@ -55,8 +56,8 @@ class CacheBase(object):
     def cache_dir(self):
         """ returns dir path ... see constructor above
         """
-        # import pdb; pdb.set_trace()
-        return self.cache_dir
+        import pdb; pdb.set_trace()
+        return self._cache_dir
 
     @property
     def tmp_dir(self):
