@@ -15,6 +15,7 @@ class CacheBase(object):
 
 
     def __init__(self, section="cache", cache_dir=None):
+        # import pdb; pdb.set_trace()
         # step 0: config junk
         self._config = ConfigUtil.factory(section=section)
         self.cache_expire = self.config.get_int('cache_expire', 'cache', self.cache_expire)
