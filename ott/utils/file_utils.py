@@ -118,13 +118,14 @@ def touch(file_path):
 def exists(dir, file_name=None):
     ret_val = False
 
-    if file_name:
-        file_path = os.path.join(dir, file_name)
-    else:
-        file_path = dir
+    if dir:
+        if file_name:
+            file_path = os.path.join(dir, file_name)
+        else:
+            file_path = dir
 
-    if os.path.exists(file_path):
-        ret_val = True
+        if os.path.exists(file_path):
+            ret_val = True
     return ret_val
 
 

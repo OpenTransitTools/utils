@@ -15,11 +15,11 @@ class CacheBase(object):
 
 
     def __init__(self, section="cache", cache_dir=None):
+        # step 0: config junk
         self._config = ConfigUtil.factory(section=section)
-        self._make_cache_dir(cache_dir)
         self.cache_expire = self.config.get_int('cache_expire', 'cache', self.cache_expire)
 
-    def _make_cache_dir(self, cache_dir, def_name="cache"):
+        # step 1 - 3: create some type of cache dir
         # step 1: if cache dir not passed in or configured someplace ???
         if cache_dir is None and self.config.get('cache_dir'):
             d = self.config.dir_path()
@@ -29,13 +29,16 @@ class CacheBase(object):
         # step 2: try to create any specified / configured cache directory
         if cache_dir:
             file_utils.mkdir(cache_dir)
-            self._cache_dir = cache_dir
 
         # step 3: haven't yet gotten a cache dir, so lets try to find and/or create a default
         #         cache dir local to this module directory
-        if file_utils.exists(self.cache_dir) is False:
-            self._cache_dir = os.path.join(self.this_module_dir, def_name)
+        if file_utils.exists(cache_dir) is False:
+            cache_dir = os.path.join(self.this_module_dir, "cache")
             file_utils.mkdir(cache_dir)
+
+        # step 4: assign internal cache dir variable
+        assert cache_dir is not None
+        self._cache_dir = cache_dir
 
     @property
     def config(self):
@@ -56,7 +59,6 @@ class CacheBase(object):
     def cache_dir(self):
         """ returns dir path ... see constructor above
         """
-        import pdb; pdb.set_trace()
         return self._cache_dir
 
     @property
