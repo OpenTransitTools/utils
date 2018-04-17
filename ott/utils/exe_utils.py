@@ -142,6 +142,9 @@ def find_executable(name):
     ret_val = None
     try:
         ret_val = find_executable_distutils(name)
+        if ret_val == -1:
+            # TODO: might be other ways to search, if distutils comes back uninstalled / unavailable...
+            pass
     except Exception as e:
         pass
     return ret_val
@@ -155,6 +158,6 @@ def find_executable_distutils(name):
         if ret_val is None:
             ret_val = distutils.spawn.find_executable(name + ".exe")
     except Exception as e:
-        pass
+        ret_val = -1
     return ret_val
 
