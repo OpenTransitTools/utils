@@ -138,17 +138,16 @@ def kill(pid):
             log.debug(e)
 
 
-
-def find_binary(name):
+def find_executable(name):
     ret_val = None
     try:
-        ret_val = find_binary_distutils(name)
+        ret_val = find_executable_distutils(name)
     except Exception as e:
         pass
     return ret_val
 
 
-def find_binary_distutils(name):
+def find_executable_distutils(name):
     ret_val = None
     try:
         import distutils.spawn
