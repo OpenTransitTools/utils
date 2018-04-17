@@ -136,3 +136,26 @@ def kill(pid):
             os.system(win_kill)
         except Exception as e:
             log.debug(e)
+
+
+
+def find_binary(name):
+    ret_val = None
+    try:
+        ret_val = find_binary_distutils(name)
+    except Exception as e:
+        pass
+    return ret_val
+
+
+def find_binary_distutils(name):
+    ret_val = None
+    try:
+        import distutils.spawn
+        ret_val = distutils.spawn.find_executable(name)
+        if ret_val is None:
+            ret_val = distutils.spawn.find_executable(name + ".exe")
+    except Exception as e:
+        pass
+    return ret_val
+
