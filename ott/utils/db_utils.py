@@ -20,12 +20,12 @@ def check_create_db(db_url, is_geospatial=False):
 
 
 def make_url(db_url, def_val=None):
-    """ wrapper around sqlalchemy's make_url
+    """ diaper wrapper around sqlalchemy's make_url
     """
     ret_val = def_val
     try:
-        from sqlalchemy.engine.url import make_url
-        url = make_url(db_url)
+        from sqlalchemy.engine.url import make_url as sa_make_url
+        url = sa_make_url(db_url)
         log.debug("{} {} {} {} {}".format(url.username, url.password, url.host, url.port, url.database))
         ret_val = url
     except Exception as e:
@@ -73,6 +73,7 @@ def gtfsdb_conn(kwargs):
     return db
 
 def gtfsdb_conn_parts(db_url, schema=None, is_geospatial=False):
+    """ make Database() from individual url/schemal/geometry flag """
     kwargs = dict(
         url=db_url,
         schema=schema,
