@@ -44,8 +44,8 @@ class ConfigUtil(object):
         if run_dir:
             set_run_dir(run_dir)
 
-        # IMPORTANT: call parser to dot Is and cross Ts ... fills out ini_dir_path & ini_file_path
-        self.parser()
+        # IMPORTANT: call make parser to dot Is and cross Ts ... fills out ini_dir_path & ini_file_path
+        self._make_parser()
 
     @property
     def parser(self):
