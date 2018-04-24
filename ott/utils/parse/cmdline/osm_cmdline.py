@@ -11,12 +11,14 @@ def osm_parser(prog_name='bin/osm_process', **kwargs):
     )
     parser.add_argument(
         '--pbf',
+        '-pbf',
         '-p',
         required=False,
         help=".pbf url or file path"
     )
     parser.add_argument(
         '--osm',
+        '-osm',
         '-o',
         required=kwargs.get('osm_required'),
         help=".osm url or file path"
@@ -25,7 +27,7 @@ def osm_parser(prog_name='bin/osm_process', **kwargs):
         '--output',
         '-out',
         required=kwargs.get('out_required'),
-        help=".osm file name / path to write osm output"
+        help=".osm (or .pbf) file name / path to write osm output"
     )
     return parser
 
