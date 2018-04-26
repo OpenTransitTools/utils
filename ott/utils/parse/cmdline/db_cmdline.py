@@ -50,16 +50,20 @@ def db_parser(prog_name='bin/load_db', tables=['Could be (Decarative) Base.metad
     return parser
 
 
-def gtfs_parser():
-    """ create a generic database commandline arg PARSER """
-    parser = db_parser('bin/load_gtfs')
+def agency_option(parser, def_val='trimet'):
     parser.add_argument(
         '--agency',
         '-agency',
         '-a',
-        default="trimet",
+        default=def_val,
         help="agency name (string)"
     )
+
+
+def gtfs_parser():
+    """ create a generic database commandline arg PARSER """
+    parser = db_parser('bin/load_gtfs')
+    agency_option(parser)
     parser.add_argument(
         '--url',
         '-url',
@@ -69,3 +73,31 @@ def gtfs_parser():
     )
     return parser
 
+
+def gtfs_rt_parser():
+    """ create a generic database commandline arg PARSER """
+    parser = db_parser('bin/load_gtfs_rt')
+    agency_option(parser)
+    parser.add_argument(
+        '--alerts_url',
+        '-aurl',
+        '-al',
+        required='false',
+        help="url to gtfs (or gtfs-realtime) data"
+    )
+    parser.add_argument(
+        '--trips_url',
+        '-turl',
+        '-t',
+        required='false',
+        help="url to gtfs (or gtfs-realtime) data"
+    )
+    parser.add_argument(
+        '--vehcles_url',
+        '-vurl',
+        '-v',
+        required='false',
+        help="url to gtfs (or gtfs-realtime) data"
+    )
+
+    return parser

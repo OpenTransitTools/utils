@@ -13,7 +13,6 @@ class CacheBase(object):
     _cache_dir = None
     _config = None
 
-
     def __init__(self, section="cache", cache_dir=None):
         # import pdb; pdb.set_trace()
         # step 0: config junk
