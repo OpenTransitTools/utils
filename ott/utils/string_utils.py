@@ -4,6 +4,13 @@ import logging
 log = logging.getLogger(__file__)
 
 
+def get_val(val, def_val=None):
+    ret_val = def_val
+    if val and len(val) > 1:
+        ret_val = val
+    return ret_val
+
+
 def safe_append(str1, str2, def_val=None):
     ret_val = def_val
     try:
