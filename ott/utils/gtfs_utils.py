@@ -42,16 +42,29 @@ def get_realtime_feed_from_config(config=None):
     return ret_val
 
 
+def append_app_id(url, feed):
+    """ if the URL ends with an app_id parameter, and the config has app_id value for the feed, this will append that
+        app id to the URL
+    """
+    ret_val = url
+
+    app_id = feed.get('app_id')
+    if app_id and (url.endswith('appId/') or url.endswith('appid/') or url.endswith('app_id/')):
+        ret_val = url + app_id
+    return ret_val
+
+
 def get_realtime_url(name, feed, def_val):
     ret_val = def_val
     try:
         url = feed[name]
+        url = append_app_id(url, feed)
         if validators.url(url):
             ret_val = url
         else:
-            log.debug("{} ({}) doesn't look like a url".format(url, name))
+            log.info("{} ({}) doesn't look like a url".format(url, name))
     except Exception as e:
-        log.debug(e)
+        log.warn(e)
     return ret_val
 
 
