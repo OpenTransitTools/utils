@@ -29,7 +29,7 @@ def get_schema_name_from_feed(feed, def_name="OTT"):
 def get_realtime_feed_from_config(config=None):
     """ return the GTFS feed info from config
     """
-    #import pdb; pdb.set_trace()
+    # import pdb; pdb.set_trace()
     ret_val = []
     if config is None:
         config = ConfigUtil(section='gtfs_realtime')

@@ -24,6 +24,17 @@ def db_parser(prog_name='bin/load_db', tables=['Could be (Decarative) Base.metad
         help="database schema"
     )
     parser.add_argument(
+        '--tables',
+        choices=tables, default=None, nargs='*',
+        help="Limited list of TABLES to load, if blank, load all tables"
+    )
+    create_and_clear(parser)
+    is_spatial(parser)
+    return parser
+
+
+def create_and_clear(parser):
+    parser.add_argument(
         '--create',
         '-create',
         '-c',
@@ -37,13 +48,6 @@ def db_parser(prog_name='bin/load_db', tables=['Could be (Decarative) Base.metad
         action="store_true",
         help="clear table(s) before loading"
     )
-    parser.add_argument(
-        '--tables',
-        choices=tables, default=None, nargs='*',
-        help="Limited list of TABLES to load, if blank, load all tables"
-    )
-    is_spatial(parser)
-    return parser
 
 
 def is_spatial(parser):
