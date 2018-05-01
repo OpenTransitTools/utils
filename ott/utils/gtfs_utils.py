@@ -43,14 +43,13 @@ def get_realtime_feed_from_config(config=None):
 
 
 def append_app_id(url, feed):
-    """ if the URL ends with an app_id parameter, and the config has app_id value for the feed, this will append that
-        app id to the URL
+    """ if the URL contains a {api_key} in the URL, and the config has a api_key value
+        we'll replace that portion of the URL with the api key value
     """
     ret_val = url
-
-    app_id = feed.get('app_id')
-    if app_id and (url.endswith('appId/') or url.endswith('appid/') or url.endswith('app_id/')):
-        ret_val = url + app_id
+    api_key = feed.get('api_key')
+    if api_key and "{api_key}" in url:
+        ret_val = url.format(api_key=api_key)
     return ret_val
 
 
