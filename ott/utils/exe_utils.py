@@ -114,7 +114,7 @@ def kill_old_pid(pid_file):
     try:
         pf = open(pid_file, 'r')
         pid = pf.read().strip()
-        if pid and len(pid) > 1:
+        if pid and len(pid) > 0:
             kill(pid)
             time.sleep(5)
     except Exception as e:

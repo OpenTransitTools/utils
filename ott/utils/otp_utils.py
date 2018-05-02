@@ -259,7 +259,7 @@ def append_vlog_file(graph_dir, feed_msg=None, vlog_name=VLOG_NAME):
     msg = "Updated graph ({}, {}) on {} with GTFS feed(s):\n".format(version, commit, now)
 
     # add any specific feeds messages
-    if feed_msg and len(feed_msg) > 1:
+    if feed_msg and len(feed_msg) > 0:
         msg = "{}{}\n".format(msg, feed_msg)
 
     # write message to vlog file

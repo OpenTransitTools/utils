@@ -6,7 +6,7 @@ log = logging.getLogger(__file__)
 
 def get_val(val, def_val=None):
     ret_val = def_val
-    if val and len(val) > 1:
+    if val and len(val) > 0:
         ret_val = val
     if ret_val == 'None' or ret_val == 'null':
         ret_val = None
