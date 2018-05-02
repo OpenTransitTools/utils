@@ -27,6 +27,17 @@ def agency_option(parser, required=False, def_val='agency_id', help_msg="GTFS ag
     )
 
 
+def route_option(parser, required=False, def_val='1', help_msg="GTFS route id"):
+    parser.add_argument(
+        '--route_id',
+        '-route',
+        '-rt',
+        required=required,
+        default=def_val,
+        help=help_msg
+    )
+
+
 def api_key(parser, required=False, help_msg=None):
     if help_msg is None:
         help_msg = "api key needed to access this data"
