@@ -29,7 +29,6 @@ def get_schema_name_from_feed(feed, def_name="OTT"):
 def get_realtime_feed_from_config(config=None):
     """ return the GTFS feed info from config
     """
-    # import pdb; pdb.set_trace()
     ret_val = []
     if config is None:
         config = ConfigUtil(section='gtfs_realtime')
@@ -46,6 +45,7 @@ def append_app_id(url, feed):
     """ if the URL contains a {api_key} in the URL, and the config has a api_key value
         we'll replace that portion of the URL with the api key value
     """
+    # import pdb; pdb.set_trace()
     ret_val = url
     api_key = feed.get('api_key')
     if api_key and "{api_key}" in url:
