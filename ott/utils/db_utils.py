@@ -4,6 +4,15 @@ import logging
 log = logging.getLogger(__file__)
 
 
+def add_schema(schema, data_classes=[]):
+    """
+    will add the schema meta data to the __table__ element in the data access classes
+    """
+    if schema and len(schema) > 0 and data_classes and len(data_classes) > 0:
+        for c in data_classes:
+            if c and hasattr(c, '__table__'):
+                c.__table__.schema = schema
+
 
 def check_create_db(db_url, is_geospatial=False):
     """ generic check a database ... and create it if it doesn't exist
@@ -72,6 +81,7 @@ def gtfsdb_conn(kwargs):
     db = Database(**kwargs)
     return db
 
+
 def gtfsdb_conn_parts(db_url, schema=None, is_geospatial=False):
     """ make Database() from individual url/schemal/geometry flag """
     kwargs = dict(
@@ -80,47 +90,6 @@ def gtfsdb_conn_parts(db_url, schema=None, is_geospatial=False):
         is_geospatial=is_geospatial
     )
     return gtfsdb_conn(kwargs)
-
-
-def db_args():
-    """ create a generic database commandline arg PARSER """
-    ''' TODO: move to parser/cmdline '''
-    import argparse
-    parser = argparse.ArgumentParser(prog='gtfs data loader', formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument('--database_url', '-d',  default='sqlite:///gtfs.db', help='DATABASE URL with appropriate privileges')
-    parser.add_argument('--is_geospatial', '-g', default=False, action='store_true', help='Database supports GEOSPATIAL functions')
-    parser.add_argument('--schema','-s', default=None, help='Database SCHEMA name')
-    parser.add_argument('--gtfs','-u', default="DATAd", help='URL or local path to GTFS(RT) data')
-    return parser
-
-
-def db_args_gtfsdb():
-    parser = db_args()
-    args = parser.parse_args()
-    kwargs = dict(
-        url=args.database_url,
-        is_geospatial=args.is_geospatial,
-        schema=args.schema
-    )
-    return gtfsdb_conn(kwargs)
-
-
-def db_gtfs_rt():
-    """
-    get a command line PARSER and db connection to query gtfsrdb data
-    :requires ott.data project:
-    NOTE: meant as a quick dirty way to grab a connection for test apps
-    """
-    parser = db_args()
-    parser.add_argument('--route',  '-r', default="12", help='what route?')
-    parser.add_argument('--agency', '-a', default="TriMet", help='what agency?')
-    args = parser.parse_args()
-
-    from ott.data.gtfsrdb import model
-    model.add_schema(args.schema)
-    session, engine = db_conn(args.database_url)
-    return session, engine
-
 
 
 def closest_stops_tuple_to_dict(tup):
