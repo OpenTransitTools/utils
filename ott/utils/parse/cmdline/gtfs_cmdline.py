@@ -27,11 +27,22 @@ def agency_option(parser, required=False, def_val='agency_id', help_msg="GTFS ag
     )
 
 
-def route_option(parser, required=False, def_val='1', help_msg="GTFS route id"):
+def route_option(parser, required=False, def_val=None, help_msg="GTFS route id"):
     parser.add_argument(
         '--route_id',
         '-route',
         '-rt',
+        required=required,
+        default=def_val,
+        help=help_msg
+    )
+
+
+def stop_option(parser, required=False, def_val=None, help_msg="GTFS stop id"):
+    parser.add_argument(
+        '--stop_id',
+        '-stop',
+        '-st',
         required=required,
         default=def_val,
         help=help_msg
