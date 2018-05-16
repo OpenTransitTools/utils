@@ -1,15 +1,15 @@
 import logging
 log = logging.getLogger(__file__)
 
+
 class Modes(object):
     WALK       = 'WALK'
     BICYCLE    = 'BICYCLE'
     BIKE      =  BICYCLE
-    CAR        = 'CAR' 
-
-    BUS        = 'BUS' 
+    CAR        = 'CAR'
+    BUS        = 'BUS'
     BUSISH     = 'BUSISH'
-    CABLE_CAR  = 'CABLE_CAR' 
+    CABLE_CAR  = 'CABLE_CAR'
     FERRY      = 'FERRY'
     FUNICULAR  = 'FUNICULAR'
     GONDOLA    = 'GONDOLA'
@@ -18,6 +18,6 @@ class Modes(object):
     STREETCAR  = 'STREETCAR'
     TRAM       = 'TRAM'
     TRAIN      = 'TRAIN'
-    TRAINISH   = 'TRAINISH' 
+    TRAINISH   = 'TRAINISH'
     TRANSIT    = 'TRANSIT'
     TRANSIT_MODES = (BUS, TRAM, RAIL, TRAIN, GONDOLA, FUNICULAR, FERRY, CABLE_CAR, SUBWAY, STREETCAR, BUSISH, TRAINISH, TRANSIT)

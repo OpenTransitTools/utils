@@ -21,6 +21,7 @@ def stream_json(u, args=None, extra_path=None):
         ret_val = json.loads(data)
     return ret_val
 
+
 def get_json(file_name, path='ott/utils/tests/json', def_val={}):
     """
     utility method to load a static .json file (usually used for testing)
