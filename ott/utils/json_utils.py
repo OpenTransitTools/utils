@@ -7,11 +7,11 @@ import logging
 log = logging.getLogger(__file__)
 
 
-def stream_json(u, args=None, extra_path=None):
-    """ utility class to stream .json
+def stream_json(url, args=None, extra_path=None, def_val={}):
     """
-    ret_val = {}
-    url = u
+    utility class to stream .json
+    """
+    ret_val = def_val
     if extra_path:
         url = "{0}/{1}".format(url, extra_path)
     if args:

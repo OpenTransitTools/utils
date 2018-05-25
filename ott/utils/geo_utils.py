@@ -11,6 +11,12 @@ ZIP_CODE_RE = re.compile("[,\s]*\d{5}(?:[-\s]\d{4})?$")
 ADDRESS_RE  = re.compile("^[0-9]+[\s\w]+\s(north|south|east|west|n|s|e|w){1,2}(?=\s|$)", re.IGNORECASE)
 
 
+def BBox(t, b, l, r):
+    """
+    TODO: make a more flexable class
+    """
+    return "[{}, {}, {}, {}]".format(t, b, l, r)
+
 def make_point(lon, lat):
     point = 'POINT({0} {1})'.format(lon, lat)
     return point
@@ -123,6 +129,33 @@ def to_lon_lat(x, y):
     lon = +((((math.atan(((x*0.3048)-2500000)/(6350713.93-((y*0.3048)-166910.7663))))*180)/(3.14159265359*0.709186016884))-120.5)
     lat = (45.1687259619+((((y*0.3048)-166910.7663)-(((x*0.3048)-2500000)*math.tan((math.atan(((x*0.3048)-2500000)/(6350713.93-((y*0.3048)-166910.7663))))/2)))*(0.000008999007999+(((y*0.3048)-166910.7663)-(((x*0.3048)-2500000)*math.tan((math.atan(((x*0.3048)-2500000)/(6350713.93-((y*0.3048)-166910.7663))))/2)))*(-7.1202E-015+(((y*0.3048)-166910.7663)-(((x*0.3048)-2500000)*math.tan((math.atan(((x*0.3048)-2500000)/(6350713.93-((y*0.3048)-166910.7663))))/2)))*(-3.6863E-020+(((y*0.3048)-166910.7663)-(((x*0.3048)-2500000)*math.tan((math.atan(((x*0.3048)-2500000)/(6350713.93-((y*0.3048)-166910.7663))))/2)))*-1.3188E-027)))))
     return lon,lat
+
+
+def calculate_bounds(x, y, zoom, width, height):
+    """
+    with X (lon), Y (lat), zoom, width & height, calculate and return a bbox for a call to WMS
+    :return: bbox for a call to GeffoServer WMS
+    """
+    resolutions = [256, 128, 64, 32, 16, 8, 4, 2, 1, 0.5, 0.25, 0.125, 0.0625, 0.03125]
+
+    # get zoom to match a resolution
+    if zoom < 0: zoom = 0
+    if zoom > len(resolutions): zoom = len(resolutions)
+    zoom -= 1
+
+    # get the actual resolution
+    res = resolutions[zoom]
+
+    w_deg = width * res
+    h_deg = height * res
+
+    extent = BBox(
+              x - w_deg / 2,
+              y + h_deg / 2,
+              x + w_deg / 2,
+              y - h_deg / 2
+    )
+    return extent
 
 
 def read_shp(shp_dir_path):
