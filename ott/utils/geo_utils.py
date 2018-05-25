@@ -384,5 +384,25 @@ def from_place_str(place):
     return ret_val
 
 
+def sv_url(lat, lon, zoom=17, protocol="//"):
+    """
+    :return: static url to street view from maps.google.com
+    """
+
+    tmpl = "{protocol}maps.google.com/maps?output=svembed&layer=c&cbp=13,,,,&cbll={lat},{lon}&ll={lat},{lon}&z={zoom}"
+    ret_val = tmpl.format(lat=lat, lon=lon, zoom=zoom, protocol=protocol)
+    return ret_val
+
+
+def sv_iframe(lat, lon, zoom=17, protocol="//"):
+    """
+    :return iframe to street view from maps.google.com
+    """
+    tmpl = "<iframe width='100%' height='100%' frameborder='0' scrolling='no' marginheight='0' marginwidth='0' src='{url}'></iframe>"
+    url = sv_url(lat, lon, zoom, protocol)
+    ret_val = tmpl.format(url=url)
+    return ret_val
+
+
 if __name__ == "__main__":
     print to_OSPN(-122.5, 45.5)
