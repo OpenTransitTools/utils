@@ -1,4 +1,5 @@
 from .param_parser import ParamParser, SimpleParamParser
+from .stop_param_parser import StopParamParser
 from ott.utils import geo_utils
 
 
@@ -50,3 +51,7 @@ class GeoParamParser(ParamParser, SimpleGeoParamParser):
             srid = self.srid
         ret_val = geo_utils.make_point_srid(self.lon, self.lat, srid)
         return ret_val
+
+
+class StopGeoParamParser(GeoParamParser, StopParamParser):
+    pass
