@@ -4,22 +4,25 @@ from ott.utils import geo_utils
 
 NAME_IDS = ['name', 'desc']
 NUM_IDS = ['num',  'count', 'limit']
-LON_IDS = ['x',    'lon']
-LAT_IDS = ['y',    'lat']
-ZOOM_IDS = ['y',    'lat']
+LON_IDS = ['x', 'lon']
+LAT_IDS = ['y', 'lat']
+ZOOM_IDS = ['z', 'zoom']
+WIDTH_IDS = ['w', 'width']
+HEIGHT_IDS = ['h', 'height']
 SRID_IDS = ['srid']
 PLACE = ['place', 'point', 'loc']
 
 
 class SimpleGeoParamParser(SimpleParamParser):
 
-    def __init__(self, request):
+    def __init__(self, request, def_zoom=13, def_size=240):
         # import pdb; pdb.set_trace()
         super(SimpleGeoParamParser, self).__init__(request)
-        self.lat   = self.get_first_val(LAT_IDS)
-        self.lon = self.get_first_val(LON_IDS)
-        self.zoom = self.get_first_val(ZOOM_IDS, "13")
-        self.zoom = self.get_first_val(ZOOM_IDS, "13")
+        self.lat   = self.get_first_val_as_numeric(LAT_IDS)
+        self.lon = self.get_first_val_as_numeric(LON_IDS)
+        self.zoom = self.get_first_val_as_int(ZOOM_IDS, def_zoom)
+        self.width = self.get_first_val_as_int(WIDTH_IDS, def_size)
+        self.height = self.get_first_val_as_int(HEIGHT_IDS, def_size)
 
     def has_coords(self):
         ret_val = False
