@@ -6,6 +6,7 @@ NAME_IDS = ['name', 'desc']
 NUM_IDS = ['num',  'count', 'limit']
 LON_IDS = ['x',    'lon']
 LAT_IDS = ['y',    'lat']
+ZOOM_IDS = ['y',    'lat']
 SRID_IDS = ['srid']
 PLACE = ['place', 'point', 'loc']
 
@@ -16,7 +17,9 @@ class SimpleGeoParamParser(SimpleParamParser):
         # import pdb; pdb.set_trace()
         super(SimpleGeoParamParser, self).__init__(request)
         self.lat   = self.get_first_val(LAT_IDS)
-        self.lon   = self.get_first_val(LON_IDS)
+        self.lon = self.get_first_val(LON_IDS)
+        self.zoom = self.get_first_val(ZOOM_IDS, "13")
+        self.zoom = self.get_first_val(ZOOM_IDS, "13")
 
     def has_coords(self):
         ret_val = False
