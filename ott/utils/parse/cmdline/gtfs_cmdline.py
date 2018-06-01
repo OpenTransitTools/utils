@@ -65,6 +65,7 @@ def api_key(parser, required=False, help_msg=None):
 def simple_stop_route_parser():
     """ simple stop & route cmd line parser """
     parser = blank_parser('bin/stop_route')
+    agency_option(parser)
     stop_option(parser)
     route_option(parser)
     return parser
