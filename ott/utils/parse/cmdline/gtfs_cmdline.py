@@ -18,7 +18,7 @@ def blank_parser(prog_name='bin/gtfs'):
 
 def agency_option(parser, required=False, def_val='agency_id', help_msg="GTFS agency id (i.e., might also be a db schema name)"):
     parser.add_argument(
-        '--agency',
+        '--agency_id',
         '-agency',
         '-a',
         required=required,
