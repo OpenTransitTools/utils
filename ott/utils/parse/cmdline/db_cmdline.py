@@ -2,7 +2,7 @@ import logging
 log = logging.getLogger(__file__)
 
 
-def db_parser(prog_name='bin/load_db', tables=['Could be (Decarative) Base.metadata.sorted_tables']):
+def db_parser(prog_name='bin/loader', tables=['Could be (Decarative) Base.metadata.sorted_tables']):
     """
     create a generic database commandline arg PARSER
     """
