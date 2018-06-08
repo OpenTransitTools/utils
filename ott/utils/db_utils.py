@@ -297,3 +297,17 @@ def session_flush(session):
         log.warn(e)
 
 
+def localhost(url=None, def_val="postgresql://ott@localhost:5432/ott"):
+    """
+    short hand for localhost url
+    """
+    ret_val = def_val
+    if url:
+        ret_val = url
+        if url in {'l', 'loc', 'local'}:
+            ret_val = def_val
+    return ret_val
+
+
+def check_localhost(url):
+    return localhost(url)
