@@ -1,3 +1,8 @@
+"""
+TODO: why is this base here in ott/utils vs. in the ott/data (dao / dto -- translate) object lib?
+todo explain why where and where used
+todo explain other stuff...like alerts, etc...
+"""
 from ott.utils import geo_utils
 
 import simplejson as json
