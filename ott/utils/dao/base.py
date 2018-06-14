@@ -109,7 +109,11 @@ class BaseDao(MinimalDao):
         self.status_code = 200
         self.status_message = None
         self.has_errors = False
+
+        # todo: strange that alerts and dates stuff here here (some just added ... but trying to find why alerts are getting 'stuck')
         self.has_alerts = False
+        self.alerts = []
+        self.date_info = {}
 
     def __repr__(self):
         return str(self.__dict__)
