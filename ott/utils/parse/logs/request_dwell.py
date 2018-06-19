@@ -1,6 +1,7 @@
-""" read a log file and find the spot in the file with the longest pause between two subsequent timestamps
-    example:
-      bin/log_find_pauses -f ../app.log
+"""
+read a log file and find the spot in the file with the longest pause between two subsequent timestamps
+example:
+    bin/log_find_pauses -f ../app.log
 """
 from base import Base
 
@@ -21,8 +22,11 @@ class LogInfo(object):
         self.delay = delay
 
     def do_print(self, total_lines):
-        print "\n longest delay: {} seconds ({} minutes) at line {} of {} \n\n line {}: {} \n line {}: {} \n".\
-            format(self.delay, self.delay / 60, self.lg_line_no, total_lines, self.lg_line_no-1, self.pre_line, self.lg_line_no, self.lg_line)
+        msg = "\n longest delay: {} seconds ({} minutes) at line {} of {} \n\n line {}: {} \n line {}: {} \n".format(
+              self.delay, self.delay / 60, self.lg_line_no, total_lines, self.lg_line_no-1, self.pre_line,
+              self.lg_line_no, self.lg_line
+        )
+        print(msg)
 
 
 class RequestDwell(Base):
@@ -74,7 +78,8 @@ class RequestDwell(Base):
             self.line_count = i
 
     def do_print(self):
-        print "\n total number of delays that exceeded {} seconds:  {}".format(self.min_distance, self.number_of_delays)
+        msg = "\n total number of delays that exceeded {} seconds:  {}".format(self.min_distance, self.number_of_delays)
+        print(msg)
         self.info.do_print(self.line_count)
 
 

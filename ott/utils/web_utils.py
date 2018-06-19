@@ -7,11 +7,11 @@ import smtplib
 import SimpleHTTPServer
 import SocketServer
 
-import logging
-log = logging.getLogger(__file__)
-
 import file_utils
 import exe_utils
+
+import logging
+log = logging.getLogger(__file__)
 
 
 def get_hostname():
@@ -30,7 +30,7 @@ def get_name_from_url(url, def_name=None):
 def basic_web_server(port="50080"):
     Handler = SimpleHTTPServer.SimpleHTTPRequestHandler
     httpd = SocketServer.TCPServer(("", port), Handler)
-    print "serving at port", port
+    print("serving at port {}".format(port))
     httpd.serve_forever()
 
 

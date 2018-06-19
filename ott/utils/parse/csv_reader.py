@@ -143,7 +143,7 @@ def main(argv):
     c.open()
     fn = c.reader.fieldnames 
     for row in c.reader:
-        print row;
+        print(row)
 
     c.close()
 

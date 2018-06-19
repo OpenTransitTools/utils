@@ -34,7 +34,7 @@ class CallUrls(Base):
         self.results = test_utils.loop_urls(self.url_file, match=self.search)
 
     def do_print(self):
-        print self.results
+        print(self.results)
 
 
 def main():

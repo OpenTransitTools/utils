@@ -20,14 +20,14 @@ class LogInfo(object):
         t = ""
         if search_term:
             t = "(searching for term '{}')".format(search_term)
-        print "\n\nnumber of requests {} for each {} minutes:\n".format(t, span)
+        print("\n\nnumber of requests {} for each {} minutes:\n".format(t, span))
         total = 0
         for l in self.line:
             if filter and not l['name'].startswith(filter):
                 continue
-            print "time: {} == {} requests".format(l['name'], l['count'])
+            print("time: {} == {} requests".format(l['name'], l['count']))
             total += l['count']
-        print "\ntotal requests: {}\n\n".format(total)
+        print("\ntotal requests: {}\n\n".format(total))
 
 
 class RequestCount(Base):

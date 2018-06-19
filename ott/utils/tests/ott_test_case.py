@@ -32,7 +32,7 @@ class OttTestCase(unittest.TestCase):
 
     def call_url(self, url):
         ret_json = None
-        print u"{} test -- URL: {}".format(self.__class__.__name__, url)
+        print(u"{} test -- URL: {}".format(self.__class__.__name__, url))
         with contextlib.closing(urllib.urlopen(url)) as f:
             ret_json = f.read()
         return ret_json

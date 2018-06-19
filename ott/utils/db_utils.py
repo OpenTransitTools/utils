@@ -111,7 +111,7 @@ def add_math_to_sqllite(conn, conn_record):
         @see:  http://docs.sqlalchemy.org/en/rel_0_8/core/events.html#sqlalchemy.events.PoolEvents
     """
     if 'sqlite' in type(conn).__module__:        
-        print 'in method that adds math to sqllite'
+        print("in method that adds math to sqllite")
         conn.create_function("sin",     1, math.sin)
         conn.create_function("cos",     1, math.cos)
         conn.create_function("acos",    1, math.acos)

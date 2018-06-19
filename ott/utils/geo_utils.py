@@ -405,4 +405,4 @@ def sv_iframe(lat, lon, zoom=17, protocol="//"):
 
 
 if __name__ == "__main__":
-    print to_OSPN(-122.5, 45.5)
+    print(to_OSPN(-122.5, 45.5))
