@@ -2,12 +2,13 @@ import re
 import time
 import datetime
 import calendar
-import logging
-log = logging.getLogger(__file__)
 
 from .param_parser import ParamParser
 from ott.utils.config_util import ConfigUtil
 from ott.utils import object_utils
+
+import logging
+log = logging.getLogger(__file__)
 
 
 class TripParamParser(ParamParser):
@@ -64,11 +65,11 @@ class TripParamParser(ParamParser):
         ret_val = def_val
         try:
             ret_val = fmt.format(**self.__dict__)
-        except UnicodeEncodeError, e:
+        except UnicodeEncodeError as e:
             log.debug(e)
             log.debug('trying to fix the encoding with the frm & to coords')
             self.frm = object_utils.to_str(self.frm)
-            self.to  = object_utils.to_str(self.to)
+            self.to = object_utils.to_str(self.to)
             try:
                 ret_val = fmt.format(**self.__dict__)
             except:

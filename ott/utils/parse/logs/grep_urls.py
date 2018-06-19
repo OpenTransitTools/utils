@@ -53,7 +53,7 @@ class GrepUrls(Base):
             if url in self.cache:
                 cnt = self.cache[url] + 1
             self.cache[url] = cnt
-        except Exception, e:
+        except Exception as e:
             print e
 
     def process(self):
