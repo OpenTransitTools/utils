@@ -1,6 +1,6 @@
-""" read a log file and pull out random urls
-
-  examples:
+"""
+read a log file and pull out random urls
+examples:
     bin/log_grep_urls -f ../app.log -n 100 -j -u http://maps9.trimet.org/ride/planner.html -z plan_trip
     bin/log_grep_urls -f ../app.log -n 100 -j -u http://maps9.trimet.org/ride/header.html -z header
     bin/log_grep_urls -f ../app.log -n 100 -j -u http://maps9.trimet.org/ride/stop_schedule.html -z "stop_sch"
@@ -54,7 +54,7 @@ class GrepUrls(Base):
                 cnt = self.cache[url] + 1
             self.cache[url] = cnt
         except Exception as e:
-            print e
+            print(e)
 
     def process(self):
         """ """
@@ -72,9 +72,9 @@ class GrepUrls(Base):
             if self.append_url:
                 u = "{}?".format(self.append_url)
             args = url.split('?')[1]
-            print "{}{}".format(u, args)
+            print("{}{}".format(u, args))
         else:
-            print "url: {} == {} hit(s)".format(url, count)
+            print("url: {} == {} hit(s)".format(url, count))
 
     def do_print(self):
         #import pdb; pdb.set_trace()
