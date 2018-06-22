@@ -129,10 +129,10 @@ def to_meters(lon, lat):
     lon = float(lon)
     lat = float(lat)
 
-    x = lon * 20037508.34 / 180
-    t = math.tan((90 + lat) * math.pi / 360)
-    y = math.log(t) / (math.pi / 180)
-    y = y * 20037508.34 / 180;
+    x = lon * 20037508.34 / 180.0
+    t = math.tan((90.0 + lat) * math.pi / 360.0)
+    y = math.log(t) / (math.pi / 180.0)
+    y = y * 20037508.34 / 180.0
 
     return x, y
 
