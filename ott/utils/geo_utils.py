@@ -121,19 +121,18 @@ def to_OSPN(lon, lat):
     return x, y
 
 
-def to_900913(lon, lat):
+def to_meters(lon, lat):
+    """
+    convert from long/lat to google mercator (or EPSG:4326 to EPSG:900913 or EPSG:3857 Web Mercator)
+    :see: https://gist.github.com/springmeyer/871897
+    """
     lon = float(lon)
     lat = float(lat)
 
-    x = (lon + 180) / 360 * 256
-    try:
-        m = math.tan(lat * math.pi / 180) + 1 / math.cos(lat * math.pi / 180)
-        lg = m
-        lg = math.log(m)
-    except Exception as e:
-        log.info("{} -- {}".format(e, m))
-
-    y = ((1 - lg / math.pi) / 2 * math.pow(2, 0)) * 256
+    x = lon * 20037508.34 / 180
+    t = math.tan((90 + lat) * math.pi / 360)
+    y = math.log(t) / (math.pi / 180)
+    y = y * 20037508.34 / 180;
 
     return x, y
 
