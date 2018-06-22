@@ -1,4 +1,4 @@
-import db_cmdline
+from . import db_cmdline
 
 import logging
 log = logging.getLogger(__file__)
