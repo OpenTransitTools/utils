@@ -159,6 +159,27 @@ def safe_get_any(obj, keys, def_val=None):
     return ret_val
 
 
+def safe_set_from_dict(obj, key, src={}, always_cpy=True, def_val=None):
+    """
+    will set an object's attribute from a value in a source dict
+    """
+
+    # step 1: handle def_val
+    try:
+        if def_val is None and hasattr(obj, key):
+            def_val = getattr(obj, key)
+    except Exception as e:
+        log.info(e)
+
+    # step 2: copy values from dict to object attribute
+    try:
+        if always_cpy or key in src:
+            val = src.get(key, def_val)
+            setattr(obj, key, val)
+    except Exception as e:
+        log.info(e)
+
+
 def str_to_list(str, def_val=[]):
     """ try to return a list of some sort
     """
