@@ -17,6 +17,12 @@ def BBox(t, b, l, r):
     """
     return "[{}, {}, {}, {}]".format(t, b, l, r)
 
+def bbox(min_lat, max_lat, min_lon, max_lon):
+    """
+    minLat=45.50854243338104&maxLat=45.519789433696744&minLon=-122.6960849761963&maxLon=-122.65591621398927):
+    """
+    return BBox(max_lat, min_lat, max_lon, min_lon)
+
 def make_point(lon, lat):
     point = 'POINT({0} {1})'.format(lon, lat)
     return point
