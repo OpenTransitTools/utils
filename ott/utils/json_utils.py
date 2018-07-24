@@ -120,3 +120,20 @@ def json_repr(obj, pretty_print=False):
 
     ## step 2: dump serialized object into json string
     return dict_to_json_str(data, pretty_print)
+
+
+def proxy_json(url, query_string):
+    """
+    will call a json url and send back response / error string...
+    """
+    ret_val = None
+    try:
+        ret_val = json_utils.stream_json(url, query_string)
+    except Exception as e:
+        log.warn(e)
+        ret_val = system_err_msg.status_message
+    finally:
+        pass
+
+    return ret_val
+
