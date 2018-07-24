@@ -11,7 +11,14 @@ ZOOM_IDS = ['z', 'zoom']
 WIDTH_IDS = ['w', 'width']
 HEIGHT_IDS = ['h', 'height']
 SRID_IDS = ['srid']
+RADIUS_IDS = ['radius']
+DISTANCE_IDS = ['distance']
 PLACE = ['place', 'point', 'loc']
+
+BBOX_MIN_LON_IDS = ['minLon', 'x1', 'e']
+BBOX_MAX_LON_IDS = ['maxLon', 'x2', 'w']
+BBOX_MIN_LAT_IDS = ['minLat', 'y1', 's']
+BBOX_MAX_LAT_IDS = ['maxLat', 'y2', 'n']
 
 
 class SimpleGeoParamParser(SimpleParamParser):
@@ -25,15 +32,50 @@ class SimpleGeoParamParser(SimpleParamParser):
         self.width = self.get_first_val_as_int(WIDTH_IDS, def_size)
         self.height = self.get_first_val_as_int(HEIGHT_IDS, def_size)
 
+        self.radius = None
+        self.top = None
+        self.radius = None
+
     def has_coords(self):
         ret_val = False
         if self.lat and self.lon:
             ret_val = True
         return ret_val
 
+    def has_radius(self):
+        self._get_radius()
+        ret_val = False
+        if self.radius and self.has_coords():
+            ret_val = True
+
+        return ret_val
+
+    def has_bbox(self):
+        self._get_bbox()
+        ret_val = False
+        if self.max_lat and self.min_lat and self.min_lon and self.max_lon:
+            ret_val = True
+        return ret_val
+
     def to_point(self):
         point = geo_utils.make_point(self.lon, self.lat)
         return point
+
+    def _get_radius(self):
+        """ add more param queries here """
+        self.radius = self.get_first_val_as_numeric(RADIUS_IDS)
+        if not self.radius:
+            distance = self.get_first_val_as_numeric(DISTANCE_IDS)
+            if distance:
+                self.radius = distance / 2
+
+    def _get_bbox(self):
+        """ add more param queries here """
+        self.max_lat = self.get_first_val_as_numeric(BBOX_MAX_LAT_IDS)
+        if self.max_lat:
+            self.min_lat = self.get_first_val_as_numeric(BBOX_MIN_LAT_IDS)
+            self.max_lon = self.get_first_val_as_numeric(BBOX_MAX_LON_IDS)
+            self.min_lon = self.get_first_val_as_numeric(BBOX_MIN_LON_IDS)
 
 
 class GeoParamParser(ParamParser, SimpleGeoParamParser):
@@ -44,7 +86,6 @@ class GeoParamParser(ParamParser, SimpleGeoParamParser):
         self.limit = self.get_first_val(NUM_IDS, def_count)
         self.srid  = self.get_first_val(SRID_IDS, def_srid)
         self.name  = self.get_first_val(NAME_IDS)
-        # TODO: parse place variable into name/lat/lon/etc...
 
     def to_point_srid(self, srid=None):
         if srid is None:
