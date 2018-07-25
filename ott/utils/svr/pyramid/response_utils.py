@@ -1,19 +1,14 @@
-from ott.utils.dao.base import DatabaseNotFound
-from ott.utils.dao.base import ServerError
-
+from ott.utils import json_utils
+from globals import *
 
 import logging
 log = logging.getLogger(__file__)
-
-# only need to create these classes once...
-data_not_found_msg = DatabaseNotFound()
-system_error_msg = ServerError()
 
 
 def dao_response(dao):
     """ using a BaseDao object, send the data to a pyramid Reponse """
     if dao is None:
-        dao = data_not_found
+        dao = DATA_NOT_FOUND_MSG
     return json_response(json_data=dao.to_json(), status=dao.status_code)
 
 
@@ -32,13 +27,28 @@ def json_response(json_data, mime='application/json', status=200):
     from pyramid.response import Response
 
     if json_data is None:
-        json_data = data_not_found.to_json()
+        json_data = DATA_NOT_FOUND_MSG.to_json()
     return Response(json_data, content_type=mime, status_int=status)
 
 
+def proxy_json(url, query_string):
+    """
+    will call a json url and send back response / error string...
+    """
+    ret_val = None
+    try:
+        ret_val = json_utils.stream_json(url, query_string)
+    except Exception as e:
+        log.warn(e)
+        ret_val = SYSTEM_ERR_MSG.status_message
+    finally:
+        pass
+    return ret_val
+
+
 def sys_error_response():
-    return dao_response(system_error_msg)
+    return dao_response(SYSTEM_ERROR_MSG)
 
 
 def data_not_found_response():
-    return dao_response(data_not_found_msg)
+    return dao_response(DATA_NOT_FOUND_MSG)
