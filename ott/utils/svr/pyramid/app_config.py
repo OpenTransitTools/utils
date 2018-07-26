@@ -10,25 +10,25 @@ class AppConfig(object):
     create this on the main() entry
     see setup.py entry points + config/*.ini [app:main] ala pserve (e.g., bin/pserve config/development.ini)
     """
-    config = None
+    ini_settings = None
     pyramid = None
     wsgi_app = None
     db = None
 
-    def __init__(self, **config):
+    def __init__(self, **ini_settings):
         # import pdb; pdb.set_trace()
-        self.config = config
+        self.ini_settings = ini_settings  # variables from your project's config/*.ini file
 
         # step 1: enable pyamid config
         from pyramid.config import Configurator
-        self.pyramid = Configurator(settings=config)
+        self.pyramid = Configurator(settings=ini_settings)
 
         # step 2: enable logging from settings
         try:
             # logging config for pserve / wsgi
-            if config and 'logging_config_file' in config:
+            if ini_settings and 'logging_config_file' in ini_settings:
                 from pyramid.paster import setup_logging
-                setup_logging(config['logging_config_file'])
+                setup_logging(ini_settings['logging_config_file'])
         except Exception as e:
             log.warn(e)
 
@@ -63,7 +63,7 @@ class AppConfig(object):
 
     def db_params_from_config(self):
         """ simple utility to pull url, schema and is/not geospatial from config .ini file """
-        u = object_utils.safe_dict_val(self.config, 'sqlalchemy.url')
-        s = object_utils.safe_dict_val(self.config, 'sqlalchemy.schema')
-        g = object_utils.safe_dict_val(self.config, 'sqlalchemy.is_geospatial', False)
+        u = object_utils.safe_dict_val(self.ini_settings, 'sqlalchemy.url')
+        s = object_utils.safe_dict_val(self.ini_settings, 'sqlalchemy.schema')
+        g = object_utils.safe_dict_val(self.ini_settings, 'sqlalchemy.is_geospatial', False)
         return u, s, g
