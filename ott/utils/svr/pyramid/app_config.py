@@ -1,5 +1,3 @@
-from ott.utils import object_utils
-
 import logging
 log = logging.getLogger(__file__)
 
@@ -62,8 +60,5 @@ class AppConfig(object):
         return self.db
 
     def db_params_from_config(self):
-        """ simple utility to pull url, schema and is/not geospatial from config .ini file """
-        u = object_utils.safe_dict_val(self.ini_settings, 'sqlalchemy.url')
-        s = object_utils.safe_dict_val(self.ini_settings, 'sqlalchemy.schema')
-        g = object_utils.safe_dict_val(self.ini_settings, 'sqlalchemy.is_geospatial', False)
-        return u, s, g
+        from ott.utils import db_utils
+        return db_utils.db_params_from_config(self.ini_settings)

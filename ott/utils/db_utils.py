@@ -92,6 +92,19 @@ def gtfsdb_conn_parts(db_url, schema=None, is_geospatial=False):
     return gtfsdb_conn(kwargs)
 
 
+def gtfsdb_conn_from_config(config):
+    u, s, g = db_params_from_config(config)
+    return gtfsdb_conn_parts(u, s, g)
+
+
+def db_params_from_config(config):
+    """ simple utility to pull url, schema and is/not geospatial from config .ini file """
+    u = object_utils.safe_dict_val(config, 'sqlalchemy.url')
+    s = object_utils.safe_dict_val(config, 'sqlalchemy.schema')
+    g = object_utils.safe_dict_val(config, 'sqlalchemy.is_geospatial', False)
+    return u, s, g
+
+
 def closest_stops_tuple_to_dict(tup):
     ret_val = {
         'stop_id'    : tup[1],

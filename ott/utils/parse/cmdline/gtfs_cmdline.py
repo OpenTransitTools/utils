@@ -49,6 +49,17 @@ def stop_option(parser, required=False, def_val=None, help_msg="GTFS stop id"):
     )
 
 
+def misc_option(parser, required=False, limit=111):
+    parser.add_argument(
+        '--limit',
+        '-lim',
+        '-l',
+        required=required,
+        default=limit,
+        help="limit results"
+    )
+
+
 def api_key(parser, required=False, help_msg=None):
     if help_msg is None:
         help_msg = "api key needed to access this data"
@@ -62,12 +73,14 @@ def api_key(parser, required=False, help_msg=None):
     )
 
 
-def simple_stop_route_parser():
+def simple_stop_route_parser(parser=None):
     """ simple stop & route cmd line parser """
-    parser = blank_parser('bin/stop_route')
+    if parser is None:
+        parser = blank_parser('bin/stop_route')
     agency_option(parser)
     stop_option(parser)
     route_option(parser)
+    misc_option(parser)
     return parser
 
 
