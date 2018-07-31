@@ -1,3 +1,5 @@
+from ott.utils import db_utils
+
 import logging
 log = logging.getLogger(__file__)
 
@@ -60,5 +62,7 @@ class AppConfig(object):
         return self.db
 
     def db_params_from_config(self):
-        from ott.utils import db_utils
         return db_utils.db_params_from_config(self.ini_settings)
+
+    def gtfsdb_param_from_config(self):
+        return db_utils.gtfsdb_param_from_config(self.ini_settings)
