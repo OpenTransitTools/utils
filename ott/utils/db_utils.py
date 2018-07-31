@@ -107,7 +107,7 @@ def gtfsdb_param(db_url, schema=None, is_geospatial=False):
     return kwargs
 
 
-def gtfsdb_param_from_configxx(config):
+def gtfsdb_param_from_config(config):
     """ simple utility to pull url, schema and is/not geospatial from config .ini file and format into gtfsdb kv dict"""
     u, s, g = db_params_from_config(config)
     ret_val = gtfsdb_param(u, s, g)
