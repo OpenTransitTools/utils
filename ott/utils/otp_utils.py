@@ -35,14 +35,14 @@ def get_agency_stop_ids(otp_stop_id, agency_id=None):
     return agency_id, stop_id
 
 
-def make_otp_route_id(route_id, agency_id=None):
+def make_otp_id(id, agency_id=None):
     """
-    OTP TI formats route id as <AGENCY_ID>:<ROUTE_ID>
-    NOTE: TI also doesn't seem to use AGENCY_IDs from GTFS (e.g., no PSC / TRAM in route ids - just TRIMET for all routes)
+    OTP TI formats route and stop id as <AGENCY_ID>:<ROUTE_ID> and <AGENCY_ID>:<STOP_ID>
+    NOTE: TI also doesn't seem to use proper AGENCY_IDs from GTFS (e.g., no PSC / TRAM in route ids - just TRIMET for all routes)
     """
-    ret_val = route_id
+    ret_val = id
     if agency_id:
-        ret_val = "{}:{}".format(agency_id, route_id)
+        ret_val = "{}:{}".format(agency_id, id)
     return ret_val
 
 
