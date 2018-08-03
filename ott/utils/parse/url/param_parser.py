@@ -47,7 +47,8 @@ class SimpleParamParser(object):
         return ret_val
 
     def get_first_val_trim(self, names, def_val=None):
-        """ get the first value, but trim back white space and leading ZEROs (good for IDs, etc...)
+        """
+        get the first value, but trim back white space and leading ZEROs (good for IDs, etc...)
         """
         ret_val = def_val
         v = self.get_first_val(names, def_val)
