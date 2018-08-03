@@ -27,11 +27,14 @@ def make_point(lon, lat):
     point = 'POINT({0} {1})'.format(lon, lat)
     return point
 
+def make_geojson_point(x, y):
+    # TODO rename make_point* to make_geojson_point* (above / below)
+    # note: x=lon, y=lat
+    return make_point(x, y)
 
 def make_point_srid(lon, lat, srid='4326'):
     ret_val = 'SRID={0};{1}'.format(srid, make_point(lon, lat))
     return ret_val
-
 
 def parse_geojson_point(geojson):
     coord = geojson.get('coordinates')
