@@ -25,6 +25,27 @@ DEF_SSL_PORT = "55551"
 OTP_DOWNLOAD_URL = "https://repo1.maven.org/maven2/org/opentripplanner/otp/1.2.0/otp-1.2.0-shaded.jar"
 
 
+def get_agency_stop_ids(otp_stop_id, agency_id=None):
+    """ sometimes OTP has <AGENCY_ID>:<STOP_ID> """
+    stop_id = otp_stop_id
+    try:
+        agency_id, stop_id = otp_stop_id.split(':')
+    except Exception as e:
+        log.debug(e)
+    return agency_id, stop_id
+
+
+def make_otp_route_id(route_id, agency_id=None):
+    """
+    OTP TI formats route id as <AGENCY_ID>:<ROUTE_ID>
+    NOTE: TI also doesn't seem to use AGENCY_IDs from GTFS (e.g., no PSC / TRAM in route ids - just TRIMET for all routes)
+    """
+    ret_val = route_id
+    if agency_id:
+        ret_val = "{}:{}".format(agency_id, route_id)
+    return ret_val
+
+
 def restart_call(call_db_path="call_center/db/call_db.tar.gz", call_runner="call_center/run.sh"):
     """ retstart call-center app
         basically, if we see 'call' a database export (backup) in the call_center folder, we'll assume that call runs

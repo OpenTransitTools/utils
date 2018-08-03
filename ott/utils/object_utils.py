@@ -175,7 +175,8 @@ def safe_set_from_dict(obj, key, src={}, always_cpy=True, def_val=None):
     try:
         if always_cpy or key in src:
             val = src.get(key, def_val)
-            setattr(obj, key, val)
+            if val or always_cpy:
+                setattr(obj, key, val)
     except Exception as e:
         log.info(e)
 
