@@ -173,6 +173,28 @@ def secs_since_epoch(t=None):
     secs = time.mktime(t.timetuple())
     return secs 
 
+def test_for_date(date, def_val=None):
+    """ make sure this is a date object """
+    ret_val = date
+    try:
+        x = date.day
+        x = date.month
+        x = date.year
+        ret_val = date
+    except:
+        try:
+            # opps, was a datetime object ... return the date portion
+            x = date.date.day
+            x = date.date.month
+            x = date.date.year
+            ret_val = date.date
+        except:
+            if def_val == "NOW":
+                ret_val = get_local_date()
+            else:
+                ret_val = def_val
+    return ret_val
+
 def is_distant(dt, days=35):
     """ test whether date time is in 'distant' past compared to today
     """

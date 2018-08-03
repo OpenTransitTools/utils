@@ -136,7 +136,7 @@ class ParamParser(SimpleParamParser):
         self.min   = None
         self.am_pm = None
 
-        self.agency = self.get_first_val(['agency'], 'TriMet')
+        self.agency = self.get_first_val(['agency'], 'TRIMET')
         self.detailed = self.get_first_val_as_bool(['detailed', 'full'], False)
         self.show_geo = self.get_first_val_as_bool(['show_geo', 'geo'], False)
         self.alerts = self.get_first_val_as_bool(['alerts', 'full'], False)
@@ -172,11 +172,18 @@ class ParamParser(SimpleParamParser):
 
         return p
 
+    def get_date(self):
+        if self.date is None:
+            date_param = self.get_first_val(['Date'])
+            date = date_utils.str_to_date(date_param, def_val='JUNK')
+            if date != 'JUNK':
+                self.date = date
+        return self.date
+
     def _parse_date(self):
         """ parse out a date from either the 'date' param, or separate month/day/year params
             &month={month}&day={day}&year={year}
         """
-        self.date = self.get_first_val(['Date'])
         self.date = self._make_date_from_parts()
         return self.date
 

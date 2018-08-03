@@ -12,7 +12,7 @@ class Point(object):
         return self.x and self.y
 
     def has_radius(self):
-        return is_instance(self.radius, float)
+        return isinstance(self.radius, float)
 
     def to_geojson_point(self):
         return geo_utils.make_point_srid(self.x, self.y)
