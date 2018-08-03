@@ -45,6 +45,15 @@ def to_int(val, def_val):
     return ret_val
 
 
+def to_float(val, def_val=None):
+    ret_val = def_val
+    try:
+        ret_val = float(val)
+    except:
+        pass
+    return ret_val
+
+
 def array_item_to_int(list, index, def_val=None):
     ret_val = def_val
     try:

@@ -26,7 +26,7 @@ class SimpleGeoParamParser(SimpleParamParser):
     def __init__(self, request, def_zoom=13, def_size=240):
         # import pdb; pdb.set_trace()
         super(SimpleGeoParamParser, self).__init__(request)
-        self.lat   = self.get_first_val_as_numeric(LAT_IDS)
+        self.lat = self.get_first_val_as_numeric(LAT_IDS)
         self.lon = self.get_first_val_as_numeric(LON_IDS)
         self.zoom = self.get_first_val_as_int(ZOOM_IDS, def_zoom)
         self.width = self.get_first_val_as_int(WIDTH_IDS, def_size)
@@ -35,6 +35,9 @@ class SimpleGeoParamParser(SimpleParamParser):
         self.radius = None
         self.top = None
         self.radius = None
+
+        self.point = None
+        self.bbox = None
 
     def has_coords(self):
         ret_val = False
@@ -52,10 +55,14 @@ class SimpleGeoParamParser(SimpleParamParser):
 
     def has_bbox(self):
         self._get_bbox()
-        ret_val = False
-        if self.max_lat and self.min_lat and self.min_lon and self.max_lon:
-            ret_val = True
+        ret_val = self.bbox is not None
         return ret_val
+
+    def get_bbox(self):
+
+    def make_bbox(self):
+        from ott.utils.geo.bbox import BBox
+        return BBox(self.min_lat, self.max_lat, self.min_lon, self.max_lon)
 
     def to_point(self):
         point = geo_utils.make_point(self.lon, self.lat)
@@ -70,12 +77,15 @@ class SimpleGeoParamParser(SimpleParamParser):
                 self.radius = distance / 2
 
     def _get_bbox(self):
-        """ add more param queries here """
-        self.max_lat = self.get_first_val_as_numeric(BBOX_MAX_LAT_IDS)
-        if self.max_lat:
-            self.min_lat = self.get_first_val_as_numeric(BBOX_MIN_LAT_IDS)
-            self.max_lon = self.get_first_val_as_numeric(BBOX_MAX_LON_IDS)
-            self.min_lon = self.get_first_val_as_numeric(BBOX_MIN_LON_IDS)
+        if self.bbox is None:
+            max_lat = self.get_first_val_as_numeric(BBOX_MAX_LAT_IDS)
+            if max_lat:
+                min_lat = self.get_first_val_as_numeric(BBOX_MIN_LAT_IDS)
+                max_lon = self.get_first_val_as_numeric(BBOX_MAX_LON_IDS)
+                min_lon = self.get_first_val_as_numeric(BBOX_MIN_LON_IDS)
+
+                from ott.utils.geo.bbox import BBox
+                self.bbox = BBox.make(min_lat, max_lat, min_lon, max_lon)
 
 
 class GeoParamParser(ParamParser, SimpleGeoParamParser):

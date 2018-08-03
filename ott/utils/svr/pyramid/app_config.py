@@ -13,7 +13,7 @@ class AppConfig(object):
     ini_settings = None
     pyramid = None
     wsgi_app = None
-    db = None
+    _db = None
 
     def __init__(self, **ini_settings):
         # import pdb; pdb.set_trace()
@@ -54,12 +54,13 @@ class AppConfig(object):
         # step 3: finally, scan this view class for attributes to config view endpoints
         self.pyramid.scan(clazz.__name__)
 
+    @property
+    def db(self):
+        return self._db
+
     def set_db(self, db):
         """ ability to pass around db connection variable to view, etc... """
-        self.db = db
-
-    def get_db(self):
-        return self.db
+        self._db = db
 
     def db_params_from_config(self):
         return db_utils.db_params_from_config(self.ini_settings)
