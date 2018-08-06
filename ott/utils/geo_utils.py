@@ -27,6 +27,14 @@ def make_point(lon, lat):
     point = 'POINT({0} {1})'.format(lon, lat)
     return point
 
+def make_bbox(min_lat, max_lat, min_lon, max_lon):
+    """
+    see: https://gis.stackexchange.com/questions/25797/select-bounding-box-using-postgis
+    note: 5-pt POLYGON ulx uly, urx ury, lrx lry, llx llr, ulx uly
+    """
+    polygon = 'POLYGON({3} {2}, {4} {2}, {4} {1}, {3} {1}, {3} {2})'.format(min_lat, max_lat, min_lon, max_lon)
+    return polygon
+
 def make_geojson_point(x, y):
     # TODO rename make_point* to make_geojson_point* (above / below)
     # note: x=lon, y=lat
