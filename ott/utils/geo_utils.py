@@ -25,12 +25,12 @@ def bbox(min_lat, max_lat, min_lon, max_lon):
     return BBox(max_lat, min_lat, max_lon, min_lon)
 
 
-def make_geojson_bbox(min_lat, max_lat, min_lon, max_lon, srid=None):
+def make_geojson_bbox(min_lat, max_lat, min_lon, max_lon, srid='4326'):
     """
     see: https://gis.stackexchange.com/questions/25797/select-bounding-box-using-postgis
     note: 5-pt POLYGON ulx uly, urx ury, lrx lry, llx llr, ulx uly
     """
-    polygon = 'POLYGON({2} {1}, {3} {1}, {3} {0}, {2} {0}, {2} {1})'.format(min_lat, max_lat, min_lon, max_lon)
+    polygon = 'POLYGON(({2} {1}, {3} {1}, {3} {0}, {2} {0}, {2} {1}))'.format(min_lat, max_lat, min_lon, max_lon)
     if srid:
         polygon = 'SRID={0};{1}'.format(srid, polygon)
     return polygon
