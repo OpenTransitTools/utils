@@ -17,32 +17,39 @@ def BBox(t, b, l, r):
     """
     return "[{}, {}, {}, {}]".format(t, b, l, r)
 
+
 def bbox(min_lat, max_lat, min_lon, max_lon):
     """
     minLat=45.50854243338104&maxLat=45.519789433696744&minLon=-122.6960849761963&maxLon=-122.65591621398927):
     """
     return BBox(max_lat, min_lat, max_lon, min_lon)
 
-def make_point(lon, lat):
-    point = 'POINT({0} {1})'.format(lon, lat)
-    return point
 
-def make_bbox(min_lat, max_lat, min_lon, max_lon):
+def make_geojson_bbox(min_lat, max_lat, min_lon, max_lon, srid=None):
     """
     see: https://gis.stackexchange.com/questions/25797/select-bounding-box-using-postgis
     note: 5-pt POLYGON ulx uly, urx ury, lrx lry, llx llr, ulx uly
     """
-    polygon = 'POLYGON({3} {2}, {4} {2}, {4} {1}, {3} {1}, {3} {2})'.format(min_lat, max_lat, min_lon, max_lon)
+    polygon = 'POLYGON({2} {1}, {3} {1}, {3} {0}, {2} {0}, {2} {1})'.format(min_lat, max_lat, min_lon, max_lon)
+    if srid:
+        polygon = 'SRID={0};{1}'.format(srid, polygon)
     return polygon
 
-def make_geojson_point(x, y):
-    # TODO rename make_point* to make_geojson_point* (above / below)
-    # note: x=lon, y=lat
-    return make_point(x, y)
+
+def make_geojson_point(x, y, srid=None):
+    point = 'POINT({0} {1})'.format(x, y)
+    if srid:
+        point = 'SRID={0};{1}'.format(srid, point)
+    return point
+
+
+# TODO - rename these older make_point methods?
+def make_point(lon, lat, srid=None):
+    return make_geojson_point(lon, lat, srid)
 
 def make_point_srid(lon, lat, srid='4326'):
-    ret_val = 'SRID={0};{1}'.format(srid, make_point(lon, lat))
-    return ret_val
+    return make_geojson_point(lon, lat, srid)
+
 
 def parse_geojson_point(geojson):
     coord = geojson.get('coordinates')
@@ -395,6 +402,38 @@ def is_nearby(latA, lonA, latB, lonB, decimal_diff=0.0015):
     except:
         pass
     return ret_val
+
+
+def distance(latA, lonA, latB, lonB, R=6371e3):
+    """
+    gives d in metres
+    :see https://www.movable-type.co.uk/scripts/latlong.html:
+    """
+    #import pdb; pdb.set_trace()
+    y1 = math.radians(float(latA))
+    y2 = math.radians(float(latB))
+    deltaX = math.radians(float(float(lonB) - float(lonA)))
+    d = math.acos(math.sin(y1)*math.sin(y2) + math.cos(y1)*math.cos(y2) * math.cos(deltaX) ) * R
+    ret_val = round(d, 2)
+    return ret_val
+# todo duplicate to above --
+# todo dist = num_utils.distance_mi(s.stop_lat, s.stop_lon, geo_params.lat, geo_params.lon)
+
+
+def list_sort(obj_list, sort_on_attrib='distance', reverse_order=False, assign_order=False):
+    """
+    sort a python list [] by attribute, and assign order
+    """
+
+    # step 1: sort the list
+    obj_list.sort(key=lambda x: object_utils.safe_get(sort_on_attrib), reverse=reverse_order)
+
+    # step 2: assign order
+    if assign_order:
+        for i, s in enumerate(obj_list):
+            s.order = i + 1
+
+    return obj_list
 
 
 def make_place(name, lat, lon, city=None, place=None):

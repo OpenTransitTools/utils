@@ -8,6 +8,12 @@ class Point(object):
         self.y = num_utils.to_float(y)
         self.radius = num_utils.to_float(radius) # distance from the point
 
+    @property
+    def lat(self): return self.y
+
+    @property
+    def lon(self): return self.x
+
     def to_geojson(self):
         return geo_utils.make_geojson_point(self.x, self.y)
 

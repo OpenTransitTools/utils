@@ -92,8 +92,8 @@ class SimpleGeoParamParser(SimpleParamParser):
                 max_lon = self.get_first_val_as_numeric(BBOX_MAX_LON_IDS)
                 min_lon = self.get_first_val_as_numeric(BBOX_MIN_LON_IDS)
 
-            from ott.utils.geo.bbox import BBox
-            self._bbox = BBox(min_lat, max_lat, min_lon, max_lon)
+                from ott.utils.geo.bbox import BBox
+                self._bbox = BBox(min_lat, max_lat, min_lon, max_lon)
         return self._bbox
 
 
