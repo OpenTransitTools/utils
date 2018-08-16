@@ -40,7 +40,7 @@ class SimpleParamParser(object):
         pass in a list of 'names', and return the first name that has a value in self.params
         """
         ret_val = def_val
-        if isinstance(s, str):
+        if isinstance(names, str):
             names = [names]
         for n in names:
             v = self.get(n)
