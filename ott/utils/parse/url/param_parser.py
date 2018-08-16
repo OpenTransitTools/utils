@@ -36,9 +36,12 @@ class SimpleParamParser(object):
         return ret_val
 
     def get_first_val(self, names, def_val=None):
-        """ pass in a list of 'names', and return the first name that has a value in self.params
+        """
+        pass in a list of 'names', and return the first name that has a value in self.params
         """
         ret_val = def_val
+        if isinstance(s, str):
+            names = [names]
         for n in names:
             v = self.get(n)
             if v is not None and v != 'None':
@@ -60,26 +63,24 @@ class SimpleParamParser(object):
         """ pass in a list of 'names', and return the first name that has a value in self.params
             with the additional requirement that this value is a numeric value
         """
-        ret_val = None
-        str = def_val
+        ret_val = def_val
         try:
             str = self.get_first_val(names)
             ret_val = float(str)
         except:
-            ret_val = str
+            pass
         return ret_val
 
     def get_first_val_as_int(self, names, def_val=None):
         """ pass in a list of 'names', and return the first name that has a value in self.params
             with the additional requirement that this value is an int value
         """
-        ret_val = None
-        str = def_val
+        ret_val = def_val
         try:
             str = self.get_first_val(names)
             ret_val = int(str)
         except:
-            ret_val = str
+            pass
         return ret_val
 
     def get_first_val_as_bool(self, names, def_val=False):
