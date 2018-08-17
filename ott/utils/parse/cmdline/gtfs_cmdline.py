@@ -6,7 +6,7 @@ log = logging.getLogger(__file__)
 
 def blank_parser(prog_name='bin/gtfs'):
     """
-    create a generic database commandline arg PARSER
+    create a generic GTFS commandline arg PARSER
     """
     import argparse
     parser = argparse.ArgumentParser(

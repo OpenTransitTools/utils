@@ -3,7 +3,7 @@ log = logging.getLogger(__file__)
 
 
 def osm_parser(prog_name='bin/osm_process', **kwargs):
-    """ create a generic database commandline arg PARSER """
+    """ create a generic OSM processor commandline arg PARSER """
     import argparse
     parser = argparse.ArgumentParser(
         prog=prog_name,

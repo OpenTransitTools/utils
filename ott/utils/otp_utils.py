@@ -199,18 +199,19 @@ def config_graph_dir(graph_config, base_dir, overwrite=False):
 
 
 def get_initial_arg_parser(name='otp'):
-    """ make the initial cli argparse for OTP graph building and other fun things
     """
-    import argparse
-    parser = argparse.ArgumentParser(prog=name, formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument('name', default="all", nargs='?', help="Name of OTP graph folder in the 'cache' build (e.g., 'all', 'prod', 'test' or 'call')")
-    parser.add_argument('--test_suite', '-ts', help="regex name of test suites to run (e.g., 'rail', 'bus|rail', etc...)")
+    make the initial cli argparse for OTP graph building and other fun things
+    """
+    from ott.utils.parse.cmdline import otp_cmdline
+    parser = otp_cmdline.base_parser(prog_name=name)
+    otp_cmdline.test_option(parser)
     return parser
 
 
 def get_graphs(cache):
-    """ routine that both returns the list of graphs, but also (the main
-        purpose) add the 'dir' for each graph folder based on graph name
+    """
+    routine that both returns the list of graphs, but also (the main
+    purpose) add the 'dir' for each graph folder based on graph name
     """
     return get_graphs_from_config(cache.config, cache.this_module_dir)
 

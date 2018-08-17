@@ -86,6 +86,21 @@ def fix_url(url):
     return ret_val
 
 
+def is_match(param_val, match_val, none_is_match=True, all_is_match=True, def_val=False):
+    ret_val = def_val
+    try:
+        if param_val:
+            if param_val.lower() == 'all' :
+                ret_val = all_is_match
+            elif param_val in match_val:
+                ret_val = True
+        else:
+            ret_val = none_is_match
+    except:
+        ret_val = def_val
+    return ret_val
+
+
 def has_content(obj):
     ret_val = False
     if obj:
