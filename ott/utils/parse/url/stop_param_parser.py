@@ -4,8 +4,8 @@ from .route_param_parser import ROUTE_IDS, DIR_IDS
 
 STOP_IDS = ['stop_id', 'stopID',  'stopId', 'stop', 'Loc', 'locID', 'loc1'] 
 
-class StopParamParser(ParamParser):
 
+class StopParamParser(ParamParser):
     def __init__(self, request):
         super(StopParamParser, self).__init__(request)
         self.date_str = self._parse_date()

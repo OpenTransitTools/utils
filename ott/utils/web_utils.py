@@ -1,4 +1,3 @@
-import os
 import socket
 import urlparse
 import urllib2
@@ -7,8 +6,8 @@ import smtplib
 import SimpleHTTPServer
 import SocketServer
 
-import file_utils
-import exe_utils
+from . import file_utils
+from . import exe_utils
 
 import logging
 log = logging.getLogger(__file__)

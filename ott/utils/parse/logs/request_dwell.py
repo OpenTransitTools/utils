@@ -3,7 +3,7 @@ read a log file and find the spot in the file with the longest pause between two
 example:
     bin/log_find_pauses -f ../app.log
 """
-from base import Base
+from .base import Base
 
 
 class LogInfo(object):

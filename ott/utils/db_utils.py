@@ -1,4 +1,4 @@
-import object_utils
+from . import object_utils
 
 import os
 import math

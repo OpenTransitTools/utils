@@ -10,7 +10,7 @@ examples:
     bin/log_grep_urls -f ../app.log
 """
 import random
-from base import Base
+from .base import Base
 
 HTTP = 'http://'
 HTTPS = 'https://'

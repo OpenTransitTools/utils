@@ -4,7 +4,7 @@
     bin/log_grep_urls -f ../app.log -s "Return trip"
     bin/log_grep_urls -f ../app.log -s "No transit times available"
 """
-from base import Base
+from .base import Base
 from ott.utils import test_utils
 
 

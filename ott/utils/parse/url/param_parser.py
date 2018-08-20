@@ -1,15 +1,15 @@
 """
 """
+from ott.utils import html_utils
+from ott.utils import object_utils
+from ott.utils import date_utils
+
 import re
 import time
 import datetime
 import calendar
 import logging
 log = logging.getLogger(__file__)
-
-from ott.utils import html_utils
-from ott.utils import object_utils
-from ott.utils import date_utils
 
 
 class SimpleParamParser(object):

@@ -1,4 +1,4 @@
-import db_utils
+from . import db_utils
 import logging
 log = logging.getLogger(__file__)
 

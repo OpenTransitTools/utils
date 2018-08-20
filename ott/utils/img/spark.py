@@ -12,7 +12,6 @@ __history__ =
 
 20070510 abstracted functions away from cgi-specific arg objects (MTP)
 """
-
 import logging
 log = logging.getLogger(__file__)
 

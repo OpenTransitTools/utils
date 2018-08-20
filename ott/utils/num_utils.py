@@ -1,8 +1,8 @@
+from ott.utils import object_utils
+
 import math
 import logging
 log = logging.getLogger(__file__)
-
-from ott.utils import object_utils
 
 
 def distance_km(lat1, lon1, lat2, lon2):

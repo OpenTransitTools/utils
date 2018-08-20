@@ -3,6 +3,7 @@
     @see http://www.nltk.org/
 """
 
+
 def is_keyword(text_blob, keyword, n=1, s=0):
     """ see if keyword is in the first word (or first n words of the blob)
         :return both t/f for a match, and the index of the word where the match occurred

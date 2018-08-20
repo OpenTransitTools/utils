@@ -1,8 +1,8 @@
-import logging
-log = logging.getLogger(__file__)
-
 from ott.utils import object_utils
 from ott.utils.modes import Modes
+
+import logging
+log = logging.getLogger(__file__)
 
 
 def is_valid_route(route):

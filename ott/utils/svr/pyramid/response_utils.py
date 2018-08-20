@@ -1,5 +1,5 @@
 from ott.utils import json_utils
-from globals import *
+from .globals import *
 
 import logging
 log = logging.getLogger(__file__)

@@ -4,7 +4,7 @@
         bin/log_count_requests -f ../app.log    -z 1  -s plan_trip
         bin/log_count_requests -f ../app.log
 """
-from base import Base
+from .base import Base
 
 
 class LogInfo(object):

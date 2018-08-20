@@ -12,7 +12,6 @@ import logging
 log = logging.getLogger(__file__)
 
 
-
 class SerializerRegistry(object):
     """ @see: http://stackoverflow.com/questions/4821940/how-to-make-simplejson-serializable-class
         this class will help serialize abitrary python objects into JSON (along with date / datetime handelling)
@@ -39,6 +38,7 @@ class SerializerRegistry(object):
             dct = obj.to_dict()
             dct['__type__'] = [type(obj).__module__, type(obj).__name__]
             return dct
+
 
 registry = SerializerRegistry()
 

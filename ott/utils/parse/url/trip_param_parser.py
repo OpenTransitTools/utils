@@ -1,8 +1,3 @@
-import re
-import time
-import datetime
-import calendar
-
 from .param_parser import ParamParser
 from ott.utils.config_util import ConfigUtil
 from ott.utils import object_utils
@@ -12,7 +7,6 @@ log = logging.getLogger(__file__)
 
 
 class TripParamParser(ParamParser):
-
     def __init__(self, request):
         super(TripParamParser, self).__init__(request)
 

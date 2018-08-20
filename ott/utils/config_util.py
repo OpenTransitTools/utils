@@ -9,8 +9,8 @@ import logging
 import logging.config
 log = logging.getLogger(__file__)
 
-SECTION='view'
-INI=['app.ini', 'client.ini', 'services.ini', 'view.ini', 'production.ini']
+SECTION = 'view'
+INI = ['app.ini', 'client.ini', 'services.ini', 'view.ini', 'production.ini']
 
 # global vars
 RUN_DIR = None

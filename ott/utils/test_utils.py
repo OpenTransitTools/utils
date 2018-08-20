@@ -2,7 +2,6 @@
 """
 
 
-
 def loop_urls(url_file, match=None, batch_size=5, pause=None):
     """ run thru URLs, calling those urls in parallel batch sizes (stress and speed of processing)
     """
