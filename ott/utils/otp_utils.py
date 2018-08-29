@@ -1,7 +1,7 @@
 import os
 import socket
 import subprocess
-import urllib2
+import urllib
 import filecmp
 import datetime
 
@@ -22,7 +22,7 @@ PID_FILE = "pid.txt"
 DEF_NAME = "prod"
 DEF_PORT = "55555"
 DEF_SSL_PORT = "55551"
-OTP_DOWNLOAD_URL = "https://repo1.maven.org/maven2/org/opentripplanner/otp/1.2.0/otp-1.2.0-shaded.jar"
+OTP_DOWNLOAD_URL = "https://repo1.maven.org/maven2/org/opentripplanner/otp/1.3.0/otp-1.3.0-shaded.jar"
 
 
 def get_agency_stop_ids(otp_stop_id, agency_id=None):
@@ -103,8 +103,8 @@ def call_planner_svc(url, accept='application/xml'):
     try:
         socket.setdefaulttimeout(2000)
         log.debug("call_otp: OTP output for " + url)
-        req = urllib2.Request(url, None, {'Accept': accept})
-        res = urllib2.urlopen(req)
+        req = urllib.Request(url, None, {'Accept': accept})
+        res = urllib.urlopen(req)
         log.debug("call_otp: OTP output for " + url)
         ret_val = res.read()
         res.close()

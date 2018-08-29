@@ -90,7 +90,7 @@ def is_match(param_val, match_val, none_is_match=True, all_is_match=True, def_va
     ret_val = def_val
     try:
         if param_val:
-            if param_val.lower() == 'all' :
+            if param_val.lower() == 'all':
                 ret_val = all_is_match
             elif param_val in match_val:
                 ret_val = True
@@ -99,6 +99,10 @@ def is_match(param_val, match_val, none_is_match=True, all_is_match=True, def_va
     except:
         ret_val = def_val
     return ret_val
+
+
+def is_not_match(param_val, match_val, none_is_match=True, all_is_match=True, def_val=False):
+    return not is_match(param_val, match_val, none_is_match, all_is_match, def_val)
 
 
 def has_content(obj):
