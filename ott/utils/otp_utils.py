@@ -1,9 +1,12 @@
 import os
 import socket
 import subprocess
-import urllib
 import filecmp
 import datetime
+
+# Python 2 and 3
+from future.standard_library import install_aliases; install_aliases()
+import urllib
 
 from ott.utils.config_util import ConfigUtil
 from ott.utils import exe_utils
@@ -101,14 +104,15 @@ def call_planner_svc(url, accept='application/xml'):
     """
     ret_val = None
     try:
+        import pdb; pdb.set_trace()
         socket.setdefaulttimeout(2000)
         log.debug("call_otp: OTP output for " + url)
-        req = urllib.Request(url, None, {'Accept': accept})
-        res = urllib.urlopen(req)
+        req = urllib.request.Request(url, None, {'Accept': accept})
+        res = urllib.request.urlopen(req)
         log.debug("call_otp: OTP output for " + url)
         ret_val = res.read()
         res.close()
-    except:
+    except Exception, e:
         log.warn('ERROR: could not get data from url (timeout?): {0}'.format(url))
     return ret_val
 
