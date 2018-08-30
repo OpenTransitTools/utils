@@ -1,8 +1,9 @@
 import os
-import sys
 import unittest
-import urllib
 import contextlib
+
+from future.standard_library import install_aliases; install_aliases() # for py 2 and 3 compat w/urllib
+import urllib
 
 from ott.utils import config_util
 from ott.utils import file_utils
@@ -33,7 +34,7 @@ class OttTestCase(unittest.TestCase):
     def call_url(self, url):
         ret_json = None
         print(u"{} test -- URL: {}".format(self.__class__.__name__, url))
-        with contextlib.closing(urllib.urlopen(url)) as f:
+        with contextlib.closing(urllib.request.urlopen(url)) as f:
             ret_json = f.read()
         return ret_json
 

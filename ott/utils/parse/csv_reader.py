@@ -3,8 +3,10 @@ import sys
 import csv
 import datetime
 import time
-import urllib
 from threading import Thread
+
+from future.standard_library import install_aliases; install_aliases() # for py 2 and 3 compat w/urllib
+import urllib
 
 import logging
 log = logging.getLogger(__file__)
@@ -63,11 +65,11 @@ class Csv(object):
         if 'http' in self.csv_uri:
             """
             TODO: this ....
-            with contextlib.closing(urllib.urlopen(url)) as stream:
+            with contextlib.closing(urllib.request.urlopen(url)) as stream:
                 otp = stream.read()
                 ret_val = json.loads(otp)
             """
-            data = urllib.urlopen(self.csv_uri)
+            data = urllib.request.urlopen(self.csv_uri)
 
         else:
             data = open(self.csv_uri, 'rb')

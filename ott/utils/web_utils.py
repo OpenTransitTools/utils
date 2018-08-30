@@ -1,10 +1,12 @@
 import socket
 import urlparse
-import urllib2
 import httplib
 import smtplib
 import SimpleHTTPServer
 import SocketServer
+
+from future.standard_library import install_aliases; install_aliases() # for py 2 and 3 compat w/urllib
+import urllib
 
 from . import file_utils
 from . import exe_utils
@@ -46,8 +48,8 @@ def my_wget(url, file_path, delete_first=True):
     is_success = True
     try:
         # get gtfs file from url
-        req = urllib2.Request(url)
-        res = urllib2.urlopen(req)
+        req = urllib.request.Request(url)
+        res = urllib.request.urlopen(req)
 
         if delete_first:
             file_utils.rm(file_path)
@@ -157,7 +159,7 @@ def get(url):
     success = True
     response = None
     try:
-        response = urllib2.urlopen(url)
+        response = urllib.request.urlopen(url)
     except Exception as e:
         log.info(e)
         success = False

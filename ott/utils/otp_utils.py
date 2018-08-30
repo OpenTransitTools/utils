@@ -4,8 +4,7 @@ import subprocess
 import filecmp
 import datetime
 
-# Python 2 and 3
-from future.standard_library import install_aliases; install_aliases()
+from future.standard_library import install_aliases; install_aliases() # for py 2 and 3 compat w/urllib
 import urllib
 
 from ott.utils.config_util import ConfigUtil
@@ -102,9 +101,9 @@ def get_test_urls_from_config(section='otp', hostname=None, ws_path=None, ws_por
 def call_planner_svc(url, accept='application/xml'):
     """ make a call to the OTP web service
     """
+    # import pdb; pdb.set_trace()
     ret_val = None
     try:
-        import pdb; pdb.set_trace()
         socket.setdefaulttimeout(2000)
         log.debug("call_otp: OTP output for " + url)
         req = urllib.request.Request(url, None, {'Accept': accept})
@@ -112,7 +111,7 @@ def call_planner_svc(url, accept='application/xml'):
         log.debug("call_otp: OTP output for " + url)
         ret_val = res.read()
         res.close()
-    except Exception, e:
+    except Exception as e:
         log.warn('ERROR: could not get data from url (timeout?): {0}'.format(url))
     return ret_val
 

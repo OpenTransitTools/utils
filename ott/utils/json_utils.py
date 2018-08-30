@@ -1,7 +1,9 @@
 import os
 import simplejson as json
-import urllib
 import contextlib
+
+from future.standard_library import install_aliases; install_aliases() # for py 2 and 3 compat w/urllib
+import urllib
 
 import logging
 log = logging.getLogger(__file__)
@@ -16,7 +18,7 @@ def stream_json(url, args=None, extra_path=None, def_val={}):
         url = "{0}/{1}".format(url, extra_path)
     if args:
         url = "{0}?{1}".format(url, args)
-    with contextlib.closing(urllib.urlopen(url)) as stream:
+    with contextlib.closing(urllib.request.urlopen(url)) as stream:
         data = stream.read()
         ret_val = json.loads(data)
     return ret_val
