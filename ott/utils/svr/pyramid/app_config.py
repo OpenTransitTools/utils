@@ -67,3 +67,4 @@ class AppConfig(object):
 
     def gtfsdb_param_from_config(self):
         return db_utils.gtfsdb_param_from_config(self.ini_settings)
+
