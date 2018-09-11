@@ -1,12 +1,13 @@
-import socket
-import urlparse
-import httplib
-import smtplib
-import SimpleHTTPServer
-import SocketServer
-
 from future.standard_library import install_aliases; install_aliases() # for py 2 and 3 compat w/urllib
+
+import socket
 import urllib
+import smtplib
+
+try:
+    import urlparse
+except:
+    from urllib.parse import urlparse
 
 from . import file_utils
 from . import exe_utils
@@ -29,6 +30,9 @@ def get_name_from_url(url, def_name=None):
 
 
 def basic_web_server(port="50080"):
+    print("NOTE: TODO - THIS WON'T WORK ON PY 3.x")
+    import SimpleHTTPServer
+    import SocketServer
     Handler = SimpleHTTPServer.SimpleHTTPRequestHandler
     httpd = SocketServer.TCPServer(("", port), Handler)
     print("serving at port {}".format(port))
@@ -115,6 +119,7 @@ def post(hostname, port, path, data):
     """
     statuscode = -111
     try:
+        import httplib  # TODO ... this won't work on py 3
         webservice = httplib.HTTP("{}:{}".format(hostname, port))
         webservice.putrequest("POST", path)
         webservice.putheader("Host", hostname)
@@ -128,6 +133,7 @@ def post(hostname, port, path, data):
         #log.info("{}".format(result))
     except Exception as e:
         log.info(e)
+        log.info("FIX ME -- py 3.x -- httplib")
     return statuscode
 
 
