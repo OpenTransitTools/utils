@@ -1,5 +1,5 @@
-from ott.utils import object_utils
-from ott.utils import html_utils
+from . import object_utils
+from . import html_utils
 
 import re
 import math

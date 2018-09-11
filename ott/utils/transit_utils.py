@@ -56,7 +56,6 @@ def plan_description(plan, title, arr, opt, using_txt, max_walk_txt, fmt="{0}<br
         title = object_utils.to_str(title)
         arr = object_utils.to_str(arr)
         opt = object_utils.to_str(opt)
-        
     except Exception as e:
         log.debug(e)
 

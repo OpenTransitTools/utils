@@ -3,7 +3,7 @@ import signal
 import subprocess
 import time
 
-import object_utils
+from . import object_utils
 
 import logging
 log = logging.getLogger(__file__)

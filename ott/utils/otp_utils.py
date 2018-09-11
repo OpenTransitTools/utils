@@ -112,7 +112,7 @@ def call_planner_svc(url, accept='application/xml'):
         ret_val = res.read()
         res.close()
     except Exception as e:
-        log.warn('ERROR: could not get data from url (timeout?): {0}'.format(url))
+        log.warning('ERROR: could not get data from url (timeout?): {0}'.format(url))
     return ret_val
 
 
@@ -254,11 +254,11 @@ def get_graph_details(graphs, index=0):
     ret_val = None
     if graphs is None or len(graphs) < 1:
         ret_val = {"name":DEF_NAME, "port":DEF_PORT, "ssl":DEF_SSL_PORT}
-        log.warn("graphs config was NIL, using default 'prod' graph info")
+        log.warning("graphs config was NIL, using default 'prod' graph info")
     else:
         if index >= len(graphs):
             index = 0
-            log.warn("graph index of {} exceeds list length, so defaulting to index 0".format(index))
+            log.warning("graph index of {} exceeds list length, so defaulting to index 0".format(index))
         ret_val = graphs[index]
     return ret_val
 

@@ -34,7 +34,7 @@ def does_point_intersect_geom(session, point, geom, buffer=0.0):
     try:
         ret_val = session.scalar(geom.ST_Intersects(point))
     except Exception as e:
-        log.warn(e)
+        log.warning(e)
         db_utils.session_flush(session)
     return ret_val
 
@@ -47,6 +47,6 @@ def point_to_geom_distance(session, point, geom):
     try:
         ret_val = session.scalar(func.ST_distance(func.st_buffer(point, 0.000001), geom))
     except Exception as e:
-        log.warn(e)
+        log.warning(e)
         db_utils.session_flush(session)
     return ret_val

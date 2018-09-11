@@ -7,7 +7,8 @@ def loop_urls(url_file, match=None, batch_size=5, pause=None):
     """
     t = m = f = 0
 
-    import web_utils
+    from . import web_utils
+
     def process_batch(url, t, m, f):
         """ process batch of urls
             TODO threads .... how to make multiple calls in parallel???

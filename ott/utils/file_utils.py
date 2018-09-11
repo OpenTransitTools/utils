@@ -162,7 +162,7 @@ def is_min_sized(file_path, min_size=1000000, quiet=False):
             ret_val = True
     except Exception as e:
         if not quiet:
-            log.warn("{}".format(e))
+            log.warning("{}".format(e))
     return ret_val
 
 
@@ -430,7 +430,7 @@ def diff_files(old_name, new_name):
         else:
             log.debug("Files {} and {} are both empty".format(old_name, new_name))
     except Exception as e:
-        log.warn("problems comparing {} and {}".format(old_name, new_name))
+        log.warning("problems comparing {} and {}".format(old_name, new_name))
         ret_val = True
     return ret_val
 
@@ -456,7 +456,7 @@ def unzip_file(zip_path, file_name, target_file_path=None):
         file.close()
         zip.close()
     except Exception as e:
-        log.warn("problems extracting {} from {} into file {} ({})".format(file_name, zip_path, target_file_path, e))
+        log.warning("problems extracting {} from {} into file {} ({})".format(file_name, zip_path, target_file_path, e))
     return ret_val
 
 
@@ -530,7 +530,7 @@ def replace_strings_in_file(file_path, regex_str, replace_str):
             rm(file_path)
             mv(tmp_file_path, file_path)
     except Exception as e:
-        log.warn("problems editing file {}\n(exception: {})".format(file_path, e))
+        log.warning("problems editing file {}\n(exception: {})".format(file_path, e))
 
 
 def make_csv_writer(fp, fieldnames=None):
@@ -595,4 +595,3 @@ def get_project_root_dir(path=None):
             path = os.path.join(path, '..')
             break
     return path
-

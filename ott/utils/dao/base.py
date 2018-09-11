@@ -69,7 +69,7 @@ class MinimalDao(object):
             import geoalchemy2.functions as func
             geojson = session.scalar(func.ST_AsGeoJSON(geom))
         except:
-            log.warn("couldn't get geojson data from geom column")
+            log.warning("couldn't get geojson data from geom column")
         return geojson
 
     @classmethod
@@ -80,7 +80,7 @@ class MinimalDao(object):
         try:
             geojson = cls.geom_to_geojson(orm.session, orm.geom)
         except:
-            log.warn("couldn't get geojson data from orm object")
+            log.warning("couldn't get geojson data from orm object")
         return geojson
 
     @classmethod

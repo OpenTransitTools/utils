@@ -205,7 +205,7 @@ def write_url_response_file(file_path, url, response):
         f.write(response)
         f.write("\n")
     except Exception as e:
-        log.warn(e)
+        log.warning(e)
     finally:
         if f is not None:
             f.close()
@@ -249,6 +249,6 @@ Subject: {}
         logging.debug('MAIL: ' + message)
         is_success = True
     except Exception as e:
-        log.warn("ERROR: could not send email: {}".format(e))
+        log.warning("ERROR: could not send email: {}".format(e))
         is_success = False
     return is_success

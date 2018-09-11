@@ -1,11 +1,12 @@
 import logging
 log = logging.getLogger(__file__)
 
+
 try:
     import qrcode
 except Exception as e:
-    log.warn(e)
-    log.warn("NOTE: missing qr dependencies ..  qr codes probably won't work...")
+    log.warning(e)
+    log.warning("NOTE: missing qr dependencies ..  qr codes probably won't work...")
 
 
 def qr_to_file(content, path='', name='qr', ext='png'): 
@@ -26,4 +27,3 @@ def qr_to_stream(content, ext='png'):
 
 if __name__ == "__main__":
     qr_to_file('http://maps.trimet.org?from=PDX&to=ZOO')
-

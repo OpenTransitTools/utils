@@ -32,8 +32,6 @@ def safe_path_join(str1, str2, def_val=None):
 
 
 def is_in_string(in_str, targets):
-    """
-    """
     ret_val = False
 
     if targets:

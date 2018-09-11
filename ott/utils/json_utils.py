@@ -77,7 +77,7 @@ def obj_to_dict(obj):
         @from: http://stackoverflow.com/a/4682553/2125598
         NOTE: reecursively walks object's hierarchy, creating a nested dict representing the elements of the class
     """
-    if(obj is None):
+    if obj is None:
         return None
     if isinstance(obj, (bool, int, long, float, basestring)):
         return obj
@@ -117,10 +117,10 @@ def object_to_json_file(file_path, obj, pretty_print=False):
 
 
 def json_repr(obj, pretty_print=False):
-    ## step 1: call serializer, which walks object tree and returns a cleaned up dict representation of the object
+    # step 1: call serializer, which walks object tree and returns a cleaned up dict representation of the object
     data = obj_to_dict(obj)
 
-    ## step 2: dump serialized object into json string
+    # step 2: dump serialized object into json string
     return dict_to_json_str(data, pretty_print)
 
 
@@ -130,12 +130,10 @@ def proxy_json(url, query_string):
     """
     ret_val = None
     try:
-        ret_val = json_utils.stream_json(url, query_string)
+        ret_val = stream_json(url, query_string)
     except Exception as e:
-        log.warn(e)
+        log.warning(e)
         ret_val = system_err_msg.status_message
     finally:
         pass
-
     return ret_val
-

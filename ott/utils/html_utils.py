@@ -1,9 +1,9 @@
+from . import date_utils
+from . import num_utils
+
 import datetime
 import logging
 log = logging.getLogger(__file__)
-
-from ott.utils import date_utils
-from ott.utils import num_utils
 
 
 def get_svr_port(request):
@@ -30,29 +30,27 @@ def planner_form_params(request):
     def_optimize = "QUICK"
 
     # TODO: make this work...
-    # TODO: make 
     if 'Bike' in 'request':
         def_max_dist = bike_max_def
         def_optimize = "SAFE"
 
-
     ret_val = {
-        "fromPlace" : None,
-        "fromCoord" : None,
-        "toPlace"   : None,
-        "toCoord"   : None,
-        "Hour"      : tm['hour'],
-        "Minute"    : tm['minute'],
-        "AmPm"      : "am" if tm['is_am'] else "pm",
-        "is_am"     : tm['is_am'],
-        "month"     : dt['month'],
-        "day"       : dt['day'],
-        "year"      : dt['year'],
-        "numdays"   : dt['numdays'],
-        "Arr"       : False,
-        "Walk"      : def_max_dist,
-        "optimize"  : def_optimize,
-        "mode"      : "TRANSIT,WALK"
+        "fromPlace": None,
+        "fromCoord": None,
+        "toPlace":   None,
+        "toCoord":   None,
+        "Hour":      tm['hour'],
+        "Minute":    tm['minute'],
+        "AmPm":      "am" if tm['is_am'] else "pm",
+        "is_am":     tm['is_am'],
+        "month":     dt['month'],
+        "day":       dt['day'],
+        "year":      dt['year'],
+        "numdays":   dt['numdays'],
+        "Arr":       False,
+        "Walk":      def_max_dist,
+        "optimize":  def_optimize,
+        "mode":      "TRANSIT,WALK"
     }
 
     # step 1: get params dict
@@ -124,7 +122,7 @@ def get_param_as_list(request, name, prim=str):
         l = p.split(',')                    # split the list on commas
         ret_val = map(prim, l)              # cast the values to a certain built-in (or 'primitive' in java) type
     except:
-        log.warn('uh oh...')
+        log.warning('uh oh...')
 
     return ret_val
 
@@ -169,8 +167,8 @@ def get_first_param_as_coord(request, name, def_val=None, to_float=False):
     """
     from ott.utils import geo_utils
     val = get_first_param(request, name, def_val)
-    lat,lon = geo_utils.ll_from_str(val, def_val, to_float)
-    return lat,lon
+    lat, lon = geo_utils.ll_from_str(val, def_val, to_float)
+    return lat, lon
 
 
 def get_first_param_as_boolean(request, name, def_val=False):
@@ -178,7 +176,7 @@ def get_first_param_as_boolean(request, name, def_val=False):
     """
     ret_val = def_val
 
-    val=get_first_param(request, name, def_val)
+    val = get_first_param(request, name, def_val)
     try:
         if isinstance(val, bool):
             ret_val = val
@@ -370,7 +368,6 @@ def append_parm_to_str(param_str, name, val=None, sep="&"):
 
     # step 1: there must be a valid value for name
     if name:
-
         # step 2: handle whether this is the first parameter ... or a later parram, needeing an & ampersand
         if param_str:
             ret_val = "{}{}".format(param_str, sep)
@@ -382,7 +379,6 @@ def append_parm_to_str(param_str, name, val=None, sep="&"):
             ret_val = "{}{}={}".format(ret_val, name, val)
         else:
             ret_val += "{}{}".format(ret_val, name)
-
     return ret_val
 
 

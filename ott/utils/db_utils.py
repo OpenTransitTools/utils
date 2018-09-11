@@ -324,7 +324,7 @@ def session_flush(session):
         session.commit()
         session.flush()
     except Exception as e:
-        log.warn(e)
+        log.warning(e)
 
 
 def localhost(url=None, def_val="postgresql://ott@localhost:5432/ott"):

@@ -30,7 +30,7 @@ class AppConfig(object):
                 from pyramid.paster import setup_logging
                 setup_logging(ini_settings['logging_config_file'])
         except Exception as e:
-            log.warn(e)
+            log.warning(e)
 
     def make_wsgi_app(self):
         """

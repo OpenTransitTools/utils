@@ -58,9 +58,9 @@ def get_striped_dict_val(dict, name, def_val=None, strip_all_spaces=False, warn_
                 if strip_all_spaces:
                     ret_val = ret_val.replace(' ', '')
         elif warn_not_avail:
-            log.warn("'{0}' was not found as an index in record {1}".format(name, dict))
+            log.warning("'{0}' was not found as an index in record {1}".format(name, dict))
     except:
-        log.warn("'{0}' was not found as an index in record {1}".format(name, dict))
+        log.warning("'{0}' was not found as an index in record {1}".format(name, dict))
     return ret_val
 
 

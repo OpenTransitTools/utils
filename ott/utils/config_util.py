@@ -2,7 +2,11 @@ from ott.utils import file_utils
 from ott.utils import json_utils
 from ott.utils import object_utils
 
-from ConfigParser import SafeConfigParser
+try:
+    import configparser
+except ImportError:
+    import ConfigParser as configparser
+
 import os
 import sys
 import logging

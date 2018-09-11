@@ -1,11 +1,11 @@
+from . import file_utils
+from . import web_utils
+from .config_util import ConfigUtil
+
 import os
 import inspect
 import logging
 log = logging.getLogger(__file__)
-
-from ott.utils import file_utils
-from ott.utils import web_utils
-from ott.utils.config_util import ConfigUtil
 
 
 class CacheBase(object):

@@ -15,6 +15,7 @@ __history__ =
 import logging
 log = logging.getLogger(__file__)
 
+
 try:
     # on PC, you need to do from PIL (else you get an error when running under Pyramid)
     from PIL import Image, ImageDraw
@@ -23,15 +24,18 @@ except ImportError:
     try:
         import Image, ImageDraw
     except Exception as e:
-        log.warn(e)
-        log.warn("NOTE: missing image manipulation lib, so the sparkline utility probably won't work...")
+        log.warning(e)
+        log.warning("NOTE: missing image manipulation lib, so the sparkline utility probably won't work...")
 
-def sparkline_discrete(results, output=None, dmin=None, dmax=None, upper=None, width=2, height=14, \
-                            below_color='gray', above_color='red', longlines=False):
-    """The source data is a list of values between
+
+def sparkline_discrete(results, output=None, dmin=None, dmax=None, upper=None, width=2, height=14,
+                       below_color='gray', above_color='red', longlines=False):
+    """
+      The source data is a list of values between
       0 and 100 (or 'limits' if given). Values greater than 95 
       (or 'upper' if given) are displayed in red, otherwise 
-      they are displayed in green"""
+      they are displayed in green
+    """
     gap = 4
     if longlines:
         gap = 0
@@ -69,8 +73,8 @@ def sparkline_discrete(results, output=None, dmin=None, dmax=None, upper=None, w
         return im
 
 
-def sparkline_smooth(results, output=None, dmin=None, dmax=None, step=2, height=20, \
-                          min_color='#0000FF',max_color='#00FF00', last_color='#FF0000', \
+def sparkline_smooth(results, output=None, dmin=None, dmax=None, step=2, height=20,
+                          min_color='#0000FF',max_color='#00FF00', last_color='#FF0000',
                           has_min=False, has_max=False, has_last=False,
                           bg_color='white', fill_color="#888888"):
     if dmin is None:
@@ -109,4 +113,3 @@ if __name__ == "__main__":
     d = [12, 18, 22, 29, 34, 46, 54, 56, 34, 44]
     sparkline_smooth(results=d, bg_color='#FF0000', fill_color='#0000FF').show()
     #sparkline_discrete(d,'/tmp/discrete.png')
-

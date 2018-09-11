@@ -39,7 +39,7 @@ def proxy_json(url, query_string):
     try:
         ret_val = json_utils.stream_json(url, query_string)
     except Exception as e:
-        log.warn(e)
+        log.warning(e)
         ret_val = SYSTEM_ERR_MSG.status_message
     finally:
         pass

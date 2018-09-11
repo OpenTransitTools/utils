@@ -1,5 +1,4 @@
 from ott.utils.config_util import ConfigUtil
-import validators
 import logging
 log = logging.getLogger(__file__)
 
@@ -58,12 +57,13 @@ def get_realtime_url(name, feed, def_val):
     try:
         url = feed[name]
         url = append_app_id(url, feed)
+        import validators
         if validators.url(url):
             ret_val = url
         else:
             log.info("{} ({}) doesn't look like a url".format(url, name))
     except Exception as e:
-        log.warn(e)
+        log.warning(e)
     return ret_val
 
 
@@ -77,4 +77,3 @@ def get_realtime_alerts_url(feed, def_val=None):
 
 def get_realtime_vehicles_url(feed, def_val=None):
     return get_realtime_url('vehicles', feed, def_val)
-

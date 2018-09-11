@@ -1,26 +1,32 @@
+import time
+import datetime
+from datetime import timedelta
+from calendar import monthrange
+
+from . import num_utils
+from . import object_utils
+
 import logging
 log = logging.getLogger(__file__)
 
-import datetime
-from datetime import timedelta
-import time
-from calendar import monthrange
-
-from ott.utils import num_utils
-from ott.utils import object_utils
 
 def ret_me(s):
     return s
+
+
 _ = ret_me
 
-MORE=_('more')
-TODAY=_('Today')
+MORE = _('more')
+TODAY = _('Today')
+
 
 def get_local_time():
     return time.localtime()
 
+
 def get_local_date():
     return datetime.date.today()
+
 
 def get_hour(tm=None):
     """ return hour from input time as int
@@ -28,6 +34,7 @@ def get_hour(tm=None):
     if tm is None:
         tm = get_local_time()
     return tm.tm_hour
+
 
 def get_day_before(year=None, month=None, day=None, num_days=1):
     """ return a datetime.date for the day before specified date
@@ -40,6 +47,7 @@ def get_day_before(year=None, month=None, day=None, num_days=1):
     day = datetime.date(y, m, d)
     before = day - datetime.timedelta(days=num_days)
     return before
+
 
 def is_today(month, day, def_val=False):
     """ return True if month and day are same as today, else return False
@@ -54,6 +62,7 @@ def is_today(month, day, def_val=False):
             ret_val = False
     return ret_val
 
+
 def get_time_info(tm=None):
     """ gets a dict with a few params based on input date-time object
     """
@@ -65,6 +74,7 @@ def get_time_info(tm=None):
         'is_am'   : time.strftime('%p', tm) == 'AM'
     }
     return ret_val
+
 
 def get_day_info(dt=None):
     """ gets a dict with a few params based on input date-time object
@@ -83,6 +93,7 @@ def get_day_info(dt=None):
     }
     return ret_val
 
+
 def parse_month_day_year_string(mdy_str, sep='/'):
     """ convert MM/DD/YYYY string into parts
     """
@@ -93,6 +104,7 @@ def parse_month_day_year_string(mdy_str, sep='/'):
         'year'  : object_utils.list_val(p, 2)
     }
     return ret_val
+
 
 def normalize_year(input_month, input_year=None):
     """ This routine is used when we only have month parameters (text planner / stop schedule lookup) and the
@@ -117,6 +129,7 @@ def normalize_year(input_month, input_year=None):
             ret_val = input_year + 1
     return ret_val
 
+
 def set_date(dt=None, month=None, day=None, year=None):
     """ return a datetime object, setting new month & day ranges
     """
@@ -133,6 +146,7 @@ def set_date(dt=None, month=None, day=None, year=None):
         pass
     return ret_val
 
+
 def pretty_time(dt, fmt=" %I:%M%p", def_val=None):
     ret_val = def_val
     try:
@@ -141,6 +155,7 @@ def pretty_time(dt, fmt=" %I:%M%p", def_val=None):
         log.debug(e)
     return ret_val
 
+
 def pretty_date(dt=None, fmt=None):
     if fmt is None:
         fmt = '%A, %B %d, %Y'
@@ -148,6 +163,7 @@ def pretty_date(dt=None, fmt=None):
         dt = get_local_date()
     ret_val =  dt.strftime(fmt).replace(' 0',' ')  # "Monday, March 4, 2013"
     return ret_val
+
 
 def pretty_date_from_ms(ms, fmt=None):
     dt = None
@@ -161,17 +177,21 @@ def pretty_date_from_ms(ms, fmt=None):
     ret_val = pretty_date(dt, fmt)
     return ret_val
 
+
 def dow(dt=None, fmt='%A'):
     return pretty_date(dt, fmt)
 
+
 def dow_abbrv(dt=None, fmt='%a'):
     return dow(dt, fmt)
+
 
 def secs_since_epoch(t=None):
     if not t:
         t = get_local_date()
     secs = time.mktime(t.timetuple())
     return secs 
+
 
 def test_for_date(date, def_val=None):
     """ make sure this is a date object """
@@ -195,6 +215,7 @@ def test_for_date(date, def_val=None):
                 ret_val = def_val
     return ret_val
 
+
 def is_distant(dt, days=35):
     """ test whether date time is in 'distant' past compared to today
     """
@@ -206,6 +227,7 @@ def is_distant(dt, days=35):
         ret_val = True
     return ret_val
 
+
 def is_past(secs, min_val=1000000000):
     """ test whether second is in the past compared to now in epoch seconds
     """
@@ -215,6 +237,7 @@ def is_past(secs, min_val=1000000000):
         ret_val = True
     return ret_val
 
+
 def is_future(secs, min_val=1000000000):
     """ test whether second is in the future compared to now in epoch seconds 
     """
@@ -223,6 +246,7 @@ def is_future(secs, min_val=1000000000):
     if secs > min_val and secs > now:
         ret_val = True
     return ret_val
+
 
 def make_tab_obj(name, uri=None, date=None, append=None):
     """ for the date tab on the stop schedule page, we expect an object that has a name and a url
@@ -245,6 +269,7 @@ def make_tab_obj(name, uri=None, date=None, append=None):
             ret_val["url"] = "{0}&{1}".format(ret_val["url"], append)
 
     return ret_val
+
 
 def get_svc_date_tabs(dt, uri, more_tab=True, translate=ret_me, fmt='%m/%d/%Y', smfmt='%m/%d', pttyfmt='%A, %B %d, %Y'):
     """ return 3 date strings representing the next WEEKDAY, SAT, SUN 
@@ -290,6 +315,7 @@ def get_svc_date_tabs(dt, uri, more_tab=True, translate=ret_me, fmt='%m/%d/%Y', 
 
     return ret_val
 
+
 def str_to_date(str_date, fmt_list=['%Y-%m-%d', '%m/%d/%Y', '%m-%d-%Y'], def_val=None):
     """ utility function to parse a request object for something that looks like a date object...
     """
@@ -307,10 +333,12 @@ def str_to_date(str_date, fmt_list=['%Y-%m-%d', '%m/%d/%Y', '%m-%d-%Y'], def_val
             log.debug(e)
     return ret_val
 
+
 def today_str(fmt='%m-%d-%Y'):
     date = get_local_date()
     ret_val = date.strftime(fmt)
     return ret_val
+
 
 def date_to_str(date, fmt='%Y-%m-%d'):
     if date is None:
@@ -321,6 +349,7 @@ def date_to_str(date, fmt='%Y-%m-%d'):
         ret_val = date.strftime(fmt)
     return ret_val
 
+
 def make_date_from_timestamp(num, def_val=None):
     ret_val = def_val
     try:
@@ -328,6 +357,7 @@ def make_date_from_timestamp(num, def_val=None):
     except Exception as e:
         log.debug(e)
     return ret_val
+
 
 def is_date_between(start, end, now=None):
     """ will compare a datetime (now) to a start and end datetime.
@@ -358,6 +388,7 @@ def is_date_between(start, end, now=None):
         log.debug(e)
     return ret_val
 
+
 def split_time(time):
     """ given 02:33:44 as a time string, return
     """
@@ -370,6 +401,7 @@ def split_time(time):
     except Exception as e:
         log.debug(e)
     return h, m
+
 
 def now_time_code(time, now=None, tolerance_minutes=30):
     """ return a code comparing NOW to time string in milatary format
@@ -392,7 +424,7 @@ def now_time_code(time, now=None, tolerance_minutes=30):
         if h > 23:
             h = h - 23
 
-        if   now.hour < h - tolerance_hours:
+        if now.hour < h - tolerance_hours:
             ret_val - "E"
         elif now.hour > h - tolerance_hours:
             ret_val - "L"
@@ -414,6 +446,7 @@ def now_time_code(time, now=None, tolerance_minutes=30):
     except:
         pass
     return ret_val
+
 
 def military_to_english_time(time, fmt="{0}:{1:02d}{2}"):
     """ assumes 08:33:55 and 22:33:42 type times
@@ -437,4 +470,3 @@ def military_to_english_time(time, fmt="{0}:{1:02d}{2}"):
         pass
 
     return ret_val
-
