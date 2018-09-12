@@ -10,7 +10,6 @@ except ImportError:
 import os
 import sys
 import logging
-import logging.config
 log = logging.getLogger(__file__)
 
 SECTION = 'view'
@@ -81,7 +80,7 @@ class ConfigUtil(object):
                 candidates = candidates + c
 
         # create the config parser and read the .ini files
-        scp = SafeConfigParser()
+        scp = configparser.SafeConfigParser()
         paths = scp.read(candidates)
 
         # set variables
