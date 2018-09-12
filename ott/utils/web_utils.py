@@ -99,11 +99,12 @@ def scp_client(host, user, password=None):
     """ return the 'scp' & 'ssh' clients (ssh probably not needed, but if it loses scope the tunnel gets closed)
         NOTE: caller is responsible to call scp.close() on this object
     """
-    from paramiko import SSHClient
+    import paramiko
     from scp import SCPClient
 
-    ssh = SSHClient()
+    ssh = paramiko.SSHClient()
     ssh.load_system_host_keys()
+    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     if password:
         ssh.connect(host, username=user, password=password)
     else:
