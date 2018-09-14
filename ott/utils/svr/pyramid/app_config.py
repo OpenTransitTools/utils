@@ -1,4 +1,5 @@
 from ott.utils import db_utils
+from ott.utils.parse.url.param_parser import SimpleParamParser
 
 import logging
 log = logging.getLogger(__file__)
@@ -53,6 +54,37 @@ class AppConfig(object):
 
         # step 3: finally, scan this view class for attributes to config view endpoints
         self.pyramid.scan(clazz.__name__)
+
+    def get_url_param(self):
+        """
+        this function returns a Pyramid WSGI application.
+        """
+        if self.wsgi_app is None:
+            self.wsgi_app = self.pyramid.make_wsgi_app()
+        return self.wsgi_app
+
+    def get_agency(self, url_params, def_val=None):
+        """
+        agency can be passed thru URL
+        default agency can also be configured in the .ini file
+        this routine will do a variety of checks for agency
+        """
+        ret_val = def_val
+        try:
+            # step 1: make sure we have a param parser
+            if not isinstance(url_params, SimpleParamParser):
+                url_params = SimpleParamParser(url_params)
+
+            # step 2: get the agency id from the .ini file (as a default)
+            def_agency = self.ini_settings.get('agency_id')
+
+            # step 3: get agency from URL or .ini file, and return it
+            agency = url_params.get_first_val(['agency', 'agency_id'], def_agency)
+            if agency:
+                ret_val = agency
+        except:
+            pass
+        return ret_val
 
     @property
     def db(self):
