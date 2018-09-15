@@ -19,8 +19,8 @@ def stream_json(url, args=None, extra_path=None, def_val={}):
     if args:
         url = "{0}?{1}".format(url, args)
     with contextlib.closing(urllib.request.urlopen(url)) as stream:
-        data = stream.read()
-        ret_val = json.loads(data)
+        content_string = stream.read().decode('utf-8')
+        ret_val = json.loads(content_string)
     return ret_val
 
 
