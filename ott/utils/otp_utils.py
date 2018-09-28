@@ -27,8 +27,8 @@ DEF_SSL_PORT = "55551"
 OTP_DOWNLOAD_URL = "https://repo1.maven.org/maven2/org/opentripplanner/otp/1.3.0/otp-1.3.0-shaded.jar"
 
 
-def get_agency_stop_ids(otp_stop_id, agency_id=None):
-    """ sometimes OTP has <AGENCY_ID>:<STOP_ID> """
+def breakout_agency_id(otp_stop_id, agency_id=None):
+    """ OTP has <AGENCY_ID>:<STOP_ID> and <AGENCY_ID>:<ROUTE_ID>, so break those apart """
     stop_id = otp_stop_id
     try:
         agency_id, stop_id = otp_stop_id.split(':')
