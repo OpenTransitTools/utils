@@ -124,16 +124,13 @@ def json_repr(obj, pretty_print=False):
     return dict_to_json_str(data, pretty_print)
 
 
-def proxy_json(url, query_string):
+def proxy_json(url, query_string=None, def_val={'error': 'all your stream no good'}):
     """
     will call a json url and send back response / error string...
     """
-    ret_val = None
+    ret_val = def_val
     try:
         ret_val = stream_json(url, query_string)
     except Exception as e:
         log.warning(e)
-        ret_val = system_err_msg.status_message
-    finally:
-        pass
     return ret_val
