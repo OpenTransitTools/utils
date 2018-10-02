@@ -133,4 +133,5 @@ def proxy_json(url, query_string=None, def_val={'error': 'all your stream no goo
         ret_val = stream_json(url, query_string)
     except Exception as e:
         log.warning(e)
+        ret_val['url'] = url
     return ret_val
