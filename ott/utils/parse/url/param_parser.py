@@ -137,7 +137,7 @@ class ParamParser(SimpleParamParser):
         self.min   = None
         self.am_pm = None
 
-        self.agency = self.get_first_val(['agency'], 'TRIMET')
+        self.agency = self.get_first_val(['agency', 'agency_id', 'agencyId'], 'TRIMET')
         self.detailed = self.get_first_val_as_bool(['detailed', 'full'], False)
         self.show_geo = self.get_first_val_as_bool(['show_geo', 'geo'], False)
         self.alerts = self.get_first_val_as_bool(['alerts', 'full'], False)
