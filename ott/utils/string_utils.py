@@ -13,7 +13,7 @@ def get_val(val, def_val=None):
     return ret_val
 
 
-def safe_index(str, search):
+def safe_index(val, search):
     ret_val = -1
     try:
         ret_val = val.index(search)
