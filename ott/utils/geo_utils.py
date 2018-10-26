@@ -343,6 +343,19 @@ def city_from_named_place(place, def_val=None):
     return ret_val
 
 
+def xy_to_url_param_str(x, y, x_name="lon", y_name="lat", sep="&", check_lat_lon=True):
+    if check_lat_lon:
+        x = float(x)
+        y = float(y)
+        if y > 90.0 or y < -90.0:
+            t = x
+            x = y
+            y = t
+
+    ret_val = "{}={}{}{}={}".format(x_name, x, sep, y_name, y)
+    return ret_val
+
+
 def ll_from_str(place, def_val=None, to_float=False):
     """ break 45.5,-122.5 to lat,lon components
     """
