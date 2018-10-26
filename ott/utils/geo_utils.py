@@ -72,7 +72,7 @@ def is_coord(str):
     ret_val = False
     try:
         ll = str.split(",")
-        if float(ll[0].strip()) and float(ll[1].strip()):
+        if float(ll[0].strip().strip('%20')) and float(ll[1].strip().strip('%20')):
             ret_val = True
     except:
         pass
@@ -264,12 +264,12 @@ def get_coord_from_request(request, param_name='placeCoord', def_val=None):
     try:
         c = html_utils.get_first_param(request, param_name)
         if c and ',' in c:
-            ret_val = c.strip()
+            ret_val = c.strip().strip('%20')
         else:
             lat = html_utils.get_first_param(request, 'lat')
             lon = html_utils.get_first_param(request, 'lon')
             if lat and lon:
-                ret_val = "{0},{1}".format(lat.strip(), lon.strip())
+                ret_val = "{0},{1}".format(lat.strip().strip('%20'), lon.strip().strip('%20'))
     except:
         pass 
     return ret_val
@@ -366,8 +366,8 @@ def ll_from_str(place, def_val=None, to_float=False):
         if "::" in place:
             coord = place.split("::")[1]
         ll  = coord.split(',')
-        la  = ll[0].strip()
-        lo  = ll[1].strip()
+        la  = ll[0].strip().strip('%20')
+        lo  = ll[1].strip().strip('%20')
         laf = float(la)
         lof = float(lo)
         if to_float:
