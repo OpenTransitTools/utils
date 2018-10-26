@@ -1,9 +1,40 @@
 from . import date_utils
 from . import num_utils
+from . import string_utils
 
+import ast
 import datetime
 import logging
 log = logging.getLogger(__file__)
+
+
+def get_param_value_from_qs(query_string, param_name, def_val=None):
+    """find a parameter in a query string"""
+    ret_val = def_val
+    try:
+        p = query_string.split(param_name + "=")
+        if len(p) == 2:
+            n = string_utils.safe_index(p[1], '&')
+            if n >= 0:
+                ret_val = p[1][:n]
+            else:
+                ret_val = p[1]
+        else:
+            if param_name in query_string:
+                ret_val = True  # handle (boolean) parameters that have no value
+    except Exception as e:
+        log.debug(e)
+    return ret_val
+
+
+def get_numeric_value_from_qs(query_string, param_name, def_val=None):
+    ret_val = def_val
+    try:
+        v = get_param_value_from_qs(query_string, param_name)
+        ret_val = ast.literal_eval(v)  # convert 1 to int, or 1.11 to float ... might be problematic in py 3.x ???
+    except Exception as e:
+        log.debug(e)
+    return ret_val
 
 
 def get_svr_port(request):

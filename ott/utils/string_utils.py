@@ -13,6 +13,15 @@ def get_val(val, def_val=None):
     return ret_val
 
 
+def safe_index(str, search):
+    ret_val = -1
+    try:
+        ret_val = val.index(search)
+    except ValueError:
+        ret_val = -1
+    return ret_val
+
+
 def safe_append(str1, str2, def_val=None):
     ret_val = def_val
     try:
