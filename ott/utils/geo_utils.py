@@ -68,26 +68,30 @@ def parse_geojson(geojson):
     return ret_val
 
 
-def is_coord(str):
+def is_coord(c):
     ret_val = False
     try:
-        ll = str.split(",")
-        if float(ll[0].strip().strip('%20')) and float(ll[1].strip().strip('%20')):
-            ret_val = True
+        # import pdb; pdb.set_trace()
+        if "," in c or "%2C" in c:
+            ll = c.split(",")
+            if len(ll) < 2:
+                ll = c.split("%2C")
+            if float(ll[0].strip().strip('%20')) and float(ll[1].strip().strip('%20')):
+                ret_val = True
     except:
         pass
     return ret_val
 
 
-def is_address(str):
+def is_address(c):
     """ does string look kinda-like an (US postal) address 
     """
     ret_val = False
     try:
-        if ADDRESS_RE.search(str):
+        if ADDRESS_RE.search(c):
             ret_val = True
-    except:
-        pass
+    except Exception as e:
+        log.debug(e)
     return ret_val
 
 
@@ -259,7 +263,6 @@ def get_address_from_dict(address, def_val=None):
 def get_coord_from_request(request, param_name='placeCoord', def_val=None):
     """ return lat,lon based on either a coord name, or lat/lon parametres
     """
-    # import pdb; pdb.set_trace()
     ret_val = def_val
     try:
         c = html_utils.get_first_param(request, param_name)
@@ -344,13 +347,16 @@ def city_from_named_place(place, def_val=None):
 
 
 def xy_to_url_param_str(x, y, x_name="lon", y_name="lat", sep="&", check_lat_lon=True):
-    if check_lat_lon:
-        x = float(x)
-        y = float(y)
-        if y > 90.0 or y < -90.0:
-            t = x
-            x = y
-            y = t
+    try:
+        if check_lat_lon:
+            x = float(x)
+            y = float(y)
+            if y > 90.0 or y < -90.0:
+                t = x
+                x = y
+                y = t
+    except Exception as e:
+        log.debug(e)
 
     ret_val = "{}={}{}{}={}".format(x_name, x, sep, y_name, y)
     return ret_val
@@ -366,6 +372,8 @@ def ll_from_str(place, def_val=None, to_float=False):
         if "::" in place:
             coord = place.split("::")[1]
         ll  = coord.split(',')
+        if len(ll) < 2:
+            ll = coord.split("%2C")
         la  = ll[0].strip().strip('%20')
         lo  = ll[1].strip().strip('%20')
         laf = float(la)
@@ -376,28 +384,30 @@ def ll_from_str(place, def_val=None, to_float=False):
         else:
             lat = la
             lon = lo
-    except:
-        pass
+    except Exception as e:
+        log.debug(e)
     return lat,lon
 
 
-def get_name_city_from_string(str):
+def get_name_city_from_string(c):
     """ will break up something like 834 SE X Street, Portland <97xxx> into '834 SE X Street' and 'Portland'
     """
     name = None
     city = None
     try:
-        v = str.split(',')
+        v = c.split(',')
+        if len(v) < 2:
+            v = c.split('%2C')
         name = v[0].strip()
         city = v[1].strip()
         city = ZIP_CODE_RE.sub('', city)
-    except:
-        pass
+    except Exception as e:
+        log.debug(e)
     finally:
-        if name == None:
-            name = str
+        if name is None:
+            name = c
             city = None
-    return name,city
+    return name, city
 
 
 def is_nearby(latA, lonA, latB, lonB, decimal_diff=0.0015):
@@ -422,7 +432,6 @@ def distance(latA, lonA, latB, lonB, R=6371e3):
     gives d in metres
     :see https://www.movable-type.co.uk/scripts/latlong.html:
     """
-    #import pdb; pdb.set_trace()
     y1 = math.radians(float(latA))
     y2 = math.radians(float(latB))
     deltaX = math.radians(float(float(lonB) - float(lonA)))
