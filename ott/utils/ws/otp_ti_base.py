@@ -20,12 +20,12 @@ class OtpTiBase(object):
         https://<domain & port>/otp/routers/default/index/stops/TriMet:823/stoptimes?timeRange=14400
     """
     def __init__(self, args={}):
-        self.set_attribute_via_dict('agencyName', args)
         self.set_attribute_via_dict('id', args)
+        self.set_attribute_via_dict('agencyName', args)
         self.set_attribute_via_dict('name', args)
+        self.set_attribute_via_dict('url', args)
         self.set_attribute_via_dict('lat', args)
         self.set_attribute_via_dict('lon', args)
-        self.set_attribute_via_dict('url', args)
 
     def set_attribute_via_dict(self, name, vals, always_cpy=False, def_val=None):
         from .. import object_utils
