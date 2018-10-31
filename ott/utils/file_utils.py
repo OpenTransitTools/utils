@@ -545,9 +545,15 @@ def make_csv_writer(fp, fieldnames=None):
     return writer
 
 
-def get_file_dir(file):
-    dir = os.path.dirname(os.path.abspath(file))
-    return dir
+def make_csv_reader(file_path):
+    """
+    :return array of dicts representing the .csv file
+    """
+    ret_val = []
+    with open(file_path, mode='r') as csv_file:
+        for l in csv.DictReader(csv_file):
+            ret_val.append(l)
+    return ret_val
 
 
 def get_parent_dir(in_dir):
@@ -555,6 +561,11 @@ def get_parent_dir(in_dir):
     TODO: os.pardir is ".." -- and we cange to full path w.out .. crap?
     """
     dir = os.path.join(in_dir, os.pardir)
+    return dir
+
+
+def get_file_dir(file):
+    dir = os.path.dirname(os.path.abspath(file))
     return dir
 
 
