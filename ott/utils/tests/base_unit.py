@@ -22,8 +22,12 @@ class BaseUnit(unittest.TestCase):
         json = json_utils.file_to_json(file_path)
         return json
 
-    def call_test(self, url, find_attribute=None, in_attribute=None):
-        """"""
+    def call_test_json(self, url, find_attribute=None, in_attribute=None):
+        """
+        will call the URL, and (optionally) test for content in the json
+        :param find_attribute: is the attribute to look for ... if not None, will make sure it is in the json and has a len() > 0
+        :param in_attribute: is a value that will be searched against the named 'find_attribute'
+        """
         ret_val = False
         r = requests.get(url).json()
         if r:
