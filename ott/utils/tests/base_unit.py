@@ -2,6 +2,7 @@ import unittest
 
 from ott.utils import json_utils
 from ott.utils import file_utils
+import requests
 
 
 class BaseUnit(unittest.TestCase):
@@ -21,23 +22,19 @@ class BaseUnit(unittest.TestCase):
         json = json_utils.file_to_json(file_path)
         return json
 
-    def call(self, url):
-        ret_val = False
-        return ret_val
-
-    def call_test(self, url, has_attribute=None, in_attribute=None):
+    def call_test(self, url, find_attribute=None, in_attribute=None):
         """"""
         ret_val = False
-        try:
-            r = self.call(url)
-            if r:
-                if has_attribute:
+        r = requests.get(url).json()
+        if r:
+            if find_attribute:
+                a = r.get(find_attribute)
+                if a:
                     if in_attribute:
-                        pass
-                    else:
+                        if in_attribute in find_attribute:
+                            ret_val = True
+                    elif len(a) > 0:
                         ret_val = True
-                else:
-                    ret_val = True
-        except:
-            pass
+            elif r is not None:
+                ret_val = True
         return ret_val
