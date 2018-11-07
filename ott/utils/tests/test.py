@@ -1,3 +1,4 @@
+import os
 import sys
 import unittest
 import logging
@@ -10,7 +11,9 @@ class TestUtils(unittest.TestCase):
 
     def test_templates(self):
         from .. import template_utils
-        t = template_utils.apply_kv_to_files('tmpl', 'a template changed me', './files/', '.xml')
+        from .. import file_utils
+        dir = os.path.join(file_utils.get_file_dir(__file__), 'files/')
+        t = template_utils.apply_kv_to_files('tmpl', 'a template changed me', dir, '.xml')
         self.assertTrue(len(t) == 1)
 
 

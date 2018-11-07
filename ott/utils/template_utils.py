@@ -27,7 +27,7 @@ def apply_template_to_files(kv, dir_path='.', ext=".txt"):
 
 
 def apply_kv_to_files(key='PASSWORD', value='PASSWORD', dir_path='.', ext=".txt"):
-    #import pdb; pdb.set_trace()
+    import pdb; pdb.set_trace()
     kv = {key: value}
     ret_val = apply_template_to_files(kv, dir_path, ext)
     return ret_val

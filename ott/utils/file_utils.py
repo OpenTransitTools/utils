@@ -22,7 +22,7 @@ OLD_DIR_NAME = "OLD"
 def find_files(dir_path, ext=".txt"):
     """ find files that have a certain ending extension """
     ret_val = []
-    for file in os.listdir(dir_path):
+    for file in listdir(dir_path):
         if file.endswith(ext):
             f = os.path.join(dir_path, file)
             ret_val.append(f)
@@ -280,7 +280,7 @@ def purge(dir_path, pattern):
         borrowed from http://stackoverflow.com/questions/1548704/delete-multiple-files-matching-a-pattern
     """
     try:
-        for f in os.listdir(dir_path):
+        for f in listdir(dir_path):
             if re.search(pattern, f):
                 os.remove(os.path.join(dir_path, f))
     except Exception as e:
@@ -559,6 +559,14 @@ def make_csv_reader(file_path, validate_element=None):
                 if len(n.strip()) == 0 or n.strip()[0] == "#" or "=>" in n:
                     continue
             ret_val.append(l)
+    return ret_val
+
+
+def listdir(dir_path):
+    try:
+        ret_val = os.listdir(dir_path)
+    except OSError:
+        ret_val = os.listdir(os.path.join(os.getcwd(), dir_path))
     return ret_val
 
 
