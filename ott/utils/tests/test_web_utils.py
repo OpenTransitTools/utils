@@ -26,13 +26,13 @@ class TestWebUtils(unittest.TestCase):
         #import pdb; pdb.set_trace()
 
         # add and comment data
-        status = web_utils.post_file(SOLR_URL, os.path.join(THIS_DIR, "add.xml"))
+        status = web_utils.post_file(SOLR_URL, os.path.join(THIS_DIR, "files/", "add.xml"))
         self.assertTrue(status == 200)
         status = web_utils.post_data(SOLR_URL, "<commit/>")
         self.assertTrue(status == 200)
 
         # delete this data
-        status = web_utils.post_file(SOLR_URL, os.path.join(THIS_DIR, "del.xml"))
+        status = web_utils.post_file(SOLR_URL, os.path.join(THIS_DIR, "files/", "del.xml"))
         self.assertTrue(status == 200)
         status = web_utils.post_data(SOLR_URL, "<commit/>")
         self.assertTrue(status == 200)

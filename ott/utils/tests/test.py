@@ -6,20 +6,14 @@ logging.basicConfig(level=logging.DEBUG, stream=sys.stderr)
 log = logging.getLogger(__file__)
 
 
-SOLR_URL = "http://maps7.trimet.org:10880/solr/core/update"
+class TestUtils(unittest.TestCase):
 
-class TestSolr(unittest.TestCase):
-
-    def test_del_type(self):
-        '''
-        '''
-        log.error("blah")
-        log.warn("blah")
-        log.info("blah")
-        print("XXX")
-        assert(False is not True)
+    def test_templates(self):
+        from .. import template_utils
+        t = template_utils.apply_kv_to_files('tmpl', 'a template changed me', './files/', '.xml')
+        self.assertTrue(len(t) == 1)
 
 
 if __name__ == "__main__":
-    t = TestSolr()
+    t = TestUtils()
     t.test_del_type()
