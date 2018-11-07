@@ -16,7 +16,10 @@ INI = ['app.ini', 'client.ini', 'services.ini', 'view.ini', 'production.ini']
 
 
 # global vars
+CONFIG_SINGLETON = None  # only 1 instance of ConfigUtil is necessary ... save overhead by creating once
 RUN_DIR = None
+
+
 def set_run_dir(dir=None):
     global RUN_DIR
     RUN_DIR = dir
@@ -51,9 +54,12 @@ class ConfigUtil(object):
     def parser(self):
         """
         get the config (making it if necessary)
+        NOTE: we use a SINGLETON, since only 1 parser is necessary and needed
         """
-        if self._parser is None:
-            self._parser = self._make_parser()
+        global CONFIG_SINGLETON
+        if CONFIG_SINGLETON is None:
+            CONFIG_SINGLETON = self._make_parser()
+        self._parser = CONFIG_SINGLETON
         return self._parser
 
     def _make_parser(self):
