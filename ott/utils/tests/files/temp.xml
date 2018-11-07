@@ -1,0 +1,7 @@
+you know what,
+$tmpl
+
+this $template shouldn't change ... nor should ${this}
+
+but ${tmpl} should change
+
