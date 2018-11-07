@@ -1,5 +1,4 @@
 from ott.utils import file_utils
-from ott.utils import json_utils
 from ott.utils import object_utils
 
 try:
@@ -15,11 +14,9 @@ log = logging.getLogger(__file__)
 SECTION = 'view'
 INI = ['app.ini', 'client.ini', 'services.ini', 'view.ini', 'production.ini']
 
+
 # global vars
 RUN_DIR = None
-PARSER = None
-
-
 def set_run_dir(dir=None):
     global RUN_DIR
     RUN_DIR = dir
@@ -31,7 +28,7 @@ class ConfigUtil(object):
     ini = INI
     _parser = None
 
-    found_ini = None
+    found_ini = False
     ini_dir_path = None
     ini_file_path = None
 
@@ -52,17 +49,15 @@ class ConfigUtil(object):
 
     @property
     def parser(self):
-        """ make the config PARSER
         """
-        if self._parser == None:
-            global PARSER
-            if PARSER is None:
-                PARSER = self._make_parser()
-            self._parser = PARSER
+        get the config (making it if necessary)
+        """
+        if self._parser is None:
+            self._parser = self._make_parser()
         return self._parser
 
     def _make_parser(self):
-        """ make the config PARSER (SafeConfigParser) ... file lookup relative to the directory you run your app from
+        """ make the config parser (SafeConfigParser) ... file lookup relative to the directory you run your app from
         """
         # import pdb; pdb.set_trace()
         # capture the execution directory in a global, as we're likely to cd out of here at some point
@@ -156,6 +151,7 @@ class ConfigUtil(object):
         return top,bottom,left,right
 
     def get_json(self, id, section=None):
+        from ott.utils import json_utils
         ret_val = None
         str_val = self.get(id, section=section)
         if str_val:
@@ -188,6 +184,8 @@ class ConfigUtil(object):
         ret_val.append(os.path.abspath(cfg))
         ret_val.append(os.path.abspath(os.path.join(RUN_DIR, name)))
         ret_val.append(os.path.abspath(os.path.join(RUN_DIR, cfg)))
+        ret_val.append(os.path.join(os.path.expanduser("~"), name))
+        ret_val.append(os.path.join(os.path.expanduser("~"), cfg))
         return ret_val
 
     @classmethod
