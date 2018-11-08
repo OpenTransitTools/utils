@@ -12,8 +12,8 @@ class TestUtils(unittest.TestCase):
     def test_templates(self):
         from .. import template_utils
         from .. import file_utils
-        dir = os.path.join(file_utils.get_file_dir(__file__), 'files/')
-        t = template_utils.apply_kv_to_files('tmpl', 'a template changed me', dir, '.xml')
+        dir = os.path.join(file_utils.get_file_dir(__file__), 'files')
+        t = template_utils.apply_kv_to_files('tmpl', 'a template changed me', dir, '.xml', rewrite=False)
         self.assertTrue(len(t) == 1)
 
 
