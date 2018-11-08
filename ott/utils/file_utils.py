@@ -29,11 +29,18 @@ def find_files(dir_path, ext=".txt"):
     return ret_val
 
 
-def read_file_into_string(file_path):
+def read_file_into_string_list(file_path):
     """read file into a string"""
     ret_val = None
     with open(file_path, "r") as f:
         ret_val = f.readlines()
+    return ret_val
+
+
+def read_file_into_string(file_path, sep=""):
+    """read file into a string"""
+    l = read_file_into_string_list(file_path)
+    ret_val = sep.join(l)
     return ret_val
 
 
