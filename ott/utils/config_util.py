@@ -108,6 +108,17 @@ class ConfigUtil(object):
             log.info("Couldn't find '{0}' in config under section '{1}'\n{2}".format(id, section, e))
         return ret_val
 
+    def get_section(self, section=None):
+        """ get config value
+        """
+        ret_val = None
+        try:
+            if section is None: section = self.section
+            ret_val =  dict(self.parser.items(section))
+        except Exception as e:
+            log.info("Couldn't find '{0}' in config under section '{1}'\n{2}".format(id, section, e))
+        return ret_val
+
     def get_int(self, id, section=None, def_val=None):
         """ get config value as int (or go with def_val)
         """

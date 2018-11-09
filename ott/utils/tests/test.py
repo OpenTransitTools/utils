@@ -30,6 +30,13 @@ class TestUtils(unittest.TestCase):
         v = c.get_int('section')
         self.assertTrue(v == 2)
 
+    def test_config_get_seciton(self):
+        """ test get entire section (as dict) from config """
+        from ..config_util import ConfigUtil
+        c = ConfigUtil(section="section_dos", run_dir=FILES_DIR)
+        v = c.get_section()
+        self.assertTrue(v.get('string') == "low")
+
 if __name__ == "__main__":
     t = TestUtils()
     t.test_del_type()
