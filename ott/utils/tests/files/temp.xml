@@ -3,5 +3,6 @@ $tmpl
 
 this $template shouldn't change ... nor should ${this}
 
-but ${tmpl} should change
+but ${tmpl}ate should change
 
+if all you're changing is $TEMPL (case sensitive change?)
