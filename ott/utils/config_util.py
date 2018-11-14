@@ -119,6 +119,15 @@ class ConfigUtil(object):
             log.info("Couldn't find '{0}' in config under section '{1}'\n{2}".format(id, section, e))
         return ret_val
 
+    def get_os_section(self, os, section):
+        os_section = "{}_{}".format(os, section)
+        return self.get_section(os_section)
+
+    def find_os_section(self, section):
+        import platform
+        os = platform.system()
+        return self.get_os_section(os, section)
+
     def get_int(self, id, section=None, def_val=None):
         """ get config value as int (or go with def_val)
         """
