@@ -123,6 +123,11 @@ class ConfigUtil(object):
         os_section = "{}_{}".format(os, section)
         return self.get_section(os_section)
 
+    def find_os_section(self, section):
+        import platform
+        os = platform.system()
+        return self.get_os_section(os, section)
+
     def get_int(self, id, section=None, def_val=None):
         """ get config value as int (or go with def_val)
         """
