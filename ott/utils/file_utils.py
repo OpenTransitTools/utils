@@ -114,6 +114,12 @@ def file_size(file_path):
     return s.st_size
 
 
+def chmod(file_path, perms=0o644):
+    """ py 2.x == 0755 vs py 3.x 0o755 """
+    # import pdb; pdb.set_trace()
+    os.chmod(file_path, perms)  # py 3.x ...
+
+
 def touch(file_path):
     try:
         os.utime(file_path, None)
