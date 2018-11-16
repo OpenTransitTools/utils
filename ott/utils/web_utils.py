@@ -56,7 +56,7 @@ def background_web_server(dir=None, port="50080"):
     return ret_val
 
 
-def my_wget(url, file_path, delete_first=True):
+def my_wget(url, file_path=None, delete_first=True):
     """ wget a file from url
         IMPORTANT NOTE: this will *not* work if the URL is a redirect, etc...
     """
@@ -68,6 +68,9 @@ def my_wget(url, file_path, delete_first=True):
 
         if delete_first:
             file_utils.rm(file_path)
+
+        if file_path is None:
+            file_path = file_utils.get_file_name_from_url(url)
 
         # write it out
         f = open(file_path, 'wb')
@@ -83,7 +86,7 @@ def my_wget(url, file_path, delete_first=True):
     return is_success
 
 
-def wget(url, file_path, delete_first=True):
+def wget(url, file_path=None, delete_first=True):
     """ wget a file from url
         IMPORTANT NOTE: this will *not* work if the URL is a redirect, etc...
         IMPORTANT NOTE 2: you need to have requests package installed ...
@@ -93,6 +96,9 @@ def wget(url, file_path, delete_first=True):
     is_success = True
     if delete_first:
         file_utils.rm(file_path)
+
+    if file_path is None:
+        file_path = file_utils.get_file_name_from_url(url)
 
     log.info("wget: downloaded {} into file {}".format(url, file_path))
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.107 Safari/537.36',
