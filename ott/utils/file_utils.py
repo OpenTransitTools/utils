@@ -444,11 +444,11 @@ def diff_files(old_name, new_name):
 
 def sys_unzip_file(file):
     if file.endswith("tar.gz"):
-        system("tar zxvf " + file)
+        os.system("tar zxvf " + file)
     elif file.endswith("tar"):
-        system("tar xvf " + file)
+        os.system("tar xvf " + file)
     elif file.lower().endswith("zip"):
-        system("unzip " + file)
+        os.system("unzip " + file)
 
 
 def unzip_file(zip_path, file_name, target_file_path=None):
