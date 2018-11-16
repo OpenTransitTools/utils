@@ -29,6 +29,17 @@ def get_name_from_url(url, def_name=None):
     return ret_val
 
 
+def make_url(hostname, port=None, path=None, arg_str=None):
+    ret_val = hostname
+    if port and port != '80':
+        ret_val = "{}:{}".format(hostname, port)
+    if path and len(path) > 0:
+        ret_val = "{}/{}".format(ret_val.rstrip('/'), path.lstrip('/'))
+    if arg_str and len(arg_str) > 0:
+        ret_val = "{}?{}".format(ret_val, arg_str)
+    return ret_val
+
+
 def basic_web_server(port="50080"):
     print("NOTE: TODO - THIS WON'T WORK ON PY 3.x")
     import SimpleHTTPServer
