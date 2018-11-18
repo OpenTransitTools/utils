@@ -40,14 +40,15 @@ def make_url(hostname, port=None, path=None, arg_str=None):
     return ret_val
 
 
-def basic_web_server(port="50080"):
+def basic_web_server(port=50080):
     print("NOTE: TODO - THIS WON'T WORK ON PY 3.x")
     import SimpleHTTPServer
     import SocketServer
     Handler = SimpleHTTPServer.SimpleHTTPRequestHandler
-    httpd = SocketServer.TCPServer(("", port), Handler)
+    httpd = SocketServer.TCPServer(("", int(port)), Handler)
     print("serving at port {}".format(port))
     httpd.serve_forever()
+    return httpd
 
 
 def background_web_server(dir=None, port="50080"):
