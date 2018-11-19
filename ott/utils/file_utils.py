@@ -121,8 +121,11 @@ def chmod(file_path, perms=0o644):
     try:
         os.chmod(file_path, perms)  # py 3.x ...
     except:
-        p = perms.lsplit('0o')
-        os.system("chmod {} {}".format(p, file_path))
+        try:
+            p = oct(perms).lstrip('0o').lstrip('0')
+            os.system("chmod {} {}".format(p, file_path))
+        except:
+            pass
 
 
 def touch(file_path):
