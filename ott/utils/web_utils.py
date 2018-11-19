@@ -29,8 +29,8 @@ def get_name_from_url(url, def_name=None):
     return ret_val
 
 
-def make_url(hostname, port=None, path=None, arg_str=None):
-    ret_val = hostname
+def make_url(hostname, port=None, path=None, arg_str=None, def_hostname="http://127.0.0.1"):
+    ret_val = hostname if hostname else def_hostname
     if port and port != '80':
         ret_val = "{}:{}".format(hostname, port)
     if path and len(path) > 0:
