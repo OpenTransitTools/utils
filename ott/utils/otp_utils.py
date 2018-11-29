@@ -143,6 +143,12 @@ def wait_for_otp(otp_url, delay=15, max_tries=50):
 
         time.sleep(delay)
 
+        # step 4: other stopping conditions ... bogus urls, etc....
+        if otp_url.startswith("None"):
+            log.error("Ruh Roh: url '{}' really don't not much look like a URL".format(otp_url))
+            otp_is_up = False
+            break
+
     return otp_is_up
 
 
