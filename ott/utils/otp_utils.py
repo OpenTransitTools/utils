@@ -118,7 +118,7 @@ def call_planner_svc(url, accept='application/xml'):
     return ret_val
 
 
-def wait_for_otp(otp_url, delay=15, max_tries=50):
+def wait_for_otp(otp_url, delay=15, max_tries=10):
     try_count = 0
 
     # need some delay between checks...
