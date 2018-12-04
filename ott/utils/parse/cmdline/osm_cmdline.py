@@ -29,6 +29,13 @@ def osm_parser(prog_name='bin/osm_process', **kwargs):
         required=kwargs.get('out_required'),
         help=".osm (or .pbf) file name / path to write osm output"
     )
+    parser.add_argument(
+        '--osmosis_exe',
+        '--exe',
+        '-e',
+        required=kwargs.get('exe_required'),
+        help="path to OSMOSIS binary"
+    )
     return parser
 
 
