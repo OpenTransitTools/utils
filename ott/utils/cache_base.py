@@ -18,6 +18,7 @@ class CacheBase(object):
         # step 0: config junk
         self._config = ConfigUtil.factory(section=section)
         self.cache_expire = self.config.get_int('cache_expire', 'cache', self.cache_expire)
+        cache_dir_name = self.config.get('dir_name', 'cache', "cache")
 
         # step 1 - 3: create some type of cache dir
         # step 1: if cache dir not passed in or configured someplace ???
@@ -33,7 +34,7 @@ class CacheBase(object):
         # step 3: haven't yet gotten a cache dir, so lets try to find and/or create a default
         #         cache dir local to this module directory
         if file_utils.exists(cache_dir) is False:
-            cache_dir = os.path.join(self.this_module_dir, "cache")
+            cache_dir = os.path.join(self.this_module_dir, cache_dir_name)
             file_utils.mkdir(cache_dir)
 
         # step 4: assign internal cache dir variable
