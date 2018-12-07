@@ -44,11 +44,7 @@ def stop_option(parser, required=False, def_val=None, help_msg="GTFS stop id"):
     )
 
 
-
-def api_key(parser, required=False, help_msg=None):
-    if help_msg is None:
-        help_msg = "api key needed to access this data"
-
+def api_key(parser, required=False, help_msg="api key needed to access this data"):
     parser.add_argument(
         '--api_key',
         '-akey',

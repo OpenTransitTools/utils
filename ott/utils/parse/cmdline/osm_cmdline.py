@@ -1,7 +1,3 @@
-import logging
-log = logging.getLogger(__file__)
-
-
 def osm_parser(prog_name='bin/osm_process', **kwargs):
     """ create a generic OSM processor commandline arg PARSER """
     import argparse
