@@ -168,12 +168,12 @@ def pretty_date(dt=None, fmt=None):
     return ret_val
 
 
-def pretty_date_time(dt=None, date_fmt=None, time_format=None):
+def pretty_date_time(dt=None, date_fmt=None, time_format=None, sep_str=" @ "):
     d = pretty_date(dt, date_fmt)
-    t = pretty_time(dt, time_format, "")
+    t = pretty_time(dt, time_format)
     ret_val = d
     if t and len(t) > 2:
-        ret_val = "{} @ {}".format(t, d)
+        ret_val = "{}{}{}".format(t, sep_str, d)
     return ret_val
 
 
