@@ -147,10 +147,13 @@ def set_date(dt=None, month=None, day=None, year=None):
     return ret_val
 
 
-def pretty_time(dt, fmt=" %I:%M%p", def_val=None):
+def pretty_time(dt, fmt=None, def_val=None):
     ret_val = def_val
     try:
-        ret_val = dt.strftime(fmt).lower().replace(' 0','').strip()  # "3:40pm"
+        if fmt is None:
+            fmt = ' %I:%M%p'
+        ret_val = dt.strftime(fmt)
+        ret_val = ret_val.lower().replace(' 0', '').strip()  # "3:40pm"
     except Exception as e:
         log.debug(e)
     return ret_val
@@ -161,7 +164,16 @@ def pretty_date(dt=None, fmt=None):
         fmt = '%A, %B %d, %Y'
     if dt is None:
         dt = get_local_date()
-    ret_val =  dt.strftime(fmt).replace(' 0',' ')  # "Monday, March 4, 2013"
+    ret_val = dt.strftime(fmt).replace(' 0',' ')  # "Monday, March 4, 2013"
+    return ret_val
+
+
+def pretty_date_time(dt=None, date_fmt=None, time_format=None):
+    d = pretty_date(dt, date_fmt)
+    t = pretty_time(dt, time_format, "")
+    ret_val = d
+    if t and len(t) > 2:
+        ret_val = "{} @ {}".format(t, d)
     return ret_val
 
 
