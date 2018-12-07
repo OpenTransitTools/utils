@@ -1,7 +1,7 @@
 from .base_cmdline import *
 
 
-def agency_option(parser, required=False, def_val='ALL', help_msg="GTFS agency id (i.e., might also be a db schema name)"):
+def agency_option(parser, required=False, def_val='all', help_msg="GTFS agency id (i.e., might also be a db schema name)"):
     parser.add_argument(
         '--agency_id',
         '-agency',
