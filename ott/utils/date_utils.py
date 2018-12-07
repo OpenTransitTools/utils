@@ -147,11 +147,13 @@ def set_date(dt=None, month=None, day=None, year=None):
     return ret_val
 
 
-def pretty_time(dt, fmt=None, def_val=None):
+def pretty_time(dt=None, fmt=None, def_val=None):
     ret_val = def_val
     try:
         if fmt is None:
             fmt = ' %I:%M%p'
+        if dt is None:
+            dt = time
         ret_val = dt.strftime(fmt)
         ret_val = ret_val.lower().replace(' 0', '').strip()  # "3:40pm"
     except Exception as e:
@@ -173,7 +175,7 @@ def pretty_date_time(dt=None, date_fmt=None, time_format=None, sep_str=" @ "):
     t = pretty_time(dt, time_format)
     ret_val = d
     if t and len(t) > 2:
-        ret_val = "{}{}{}".format(t, sep_str, d)
+        ret_val = "{}{}{}".format(d, sep_str, t)
     return ret_val
 
 
