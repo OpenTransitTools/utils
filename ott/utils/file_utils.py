@@ -308,20 +308,29 @@ def purge(dir_path, pattern):
         log.info(e)
 
 
-def ls(dir_path, include_filter=None):
+def ls(dir_path, include_filter=None, full_paths=False):
     """ return a list of files in a directory, with an optional name filter
     """
     ret_val = []
     file_paths = next(os.walk(dir_path))[2]
     for f in file_paths:
+
+        # file filter
         if include_filter:
+            # extension filter ... triggered by regex '$'
             if include_filter.endswith('$'):
                 extension = include_filter.rstrip('$')
                 if not f.endswith(extension):
                     continue
+            # any string match filter
             elif not string_utils.is_in_string(f, include_filter):
                 continue
+
+        # add file to result list
+        if full_paths:
+            f = os.path.join(dir_path, f)
         ret_val.append(f)
+
     return ret_val
 
 
