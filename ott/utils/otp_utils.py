@@ -86,8 +86,15 @@ def get_gtfs_paths(graph_dir=None, gtfs_extension=".zip$"):
         ret_val.append(p)
     return ret_val
 
+
 def get_osm_paths(graph_dir=None, osm_extension=".osm$"):
     """"return list of full paths to all OSM files (based on extension) """
+    osm_files = file_utils.ls(graph_dir, osm_extension, full_paths=True)
+    return osm_files
+
+
+def get_config_paths(graph_dir=None, osm_extension=".json$"):
+    """"return list of full paths to all otp's JSON config files (based on extension) """
     osm_files = file_utils.ls(graph_dir, osm_extension, full_paths=True)
     return osm_files
 
