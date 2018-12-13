@@ -54,7 +54,7 @@ def api_key(parser, required=False, help_msg="api key needed to access this data
     )
 
 
-def simple_stop_route_parser(parser=None):
+def simple_stop_route_parser(parser=None, do_parse=True):
     """ simple stop & route cmd line parser """
     if parser is None:
         parser = blank_parser('bin/stop_route')
@@ -62,7 +62,11 @@ def simple_stop_route_parser(parser=None):
     stop_option(parser)
     route_option(parser)
     misc_option(parser)
-    return parser
+    ret_val = parser
+    if do_parse:
+        # finalize the parser
+        ret_val = parser.parse_args()
+    return ret_val
 
 
 def gtfs_parser(exe_name='bin/gtfs', do_parse=True):
