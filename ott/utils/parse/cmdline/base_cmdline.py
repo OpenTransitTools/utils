@@ -7,7 +7,7 @@ def blank_parser(prog_name='bin/ott_blah'):
         prog=prog_name,
         formatter_class=argparse.ArgumentDefaultsHelpFormatter
     )
-    parser.add_argument("--force",
+    parser.add_argument("-force", "--force",
                         help="Force update flag",
                         action="store_true"
     )
