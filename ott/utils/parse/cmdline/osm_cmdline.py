@@ -1,10 +1,9 @@
-def osm_parser(prog_name='bin/osm_process', **kwargs):
+from .base_cmdline import blank_parser
+
+
+def osm_parser(prog_name='bin/osm_process', do_parse=False, **kwargs):
     """ create a generic OSM processor commandline arg PARSER """
-    import argparse
-    parser = argparse.ArgumentParser(
-        prog=prog_name,
-        formatter_class=argparse.ArgumentDefaultsHelpFormatter
-    )
+    parser = blank_parser(prog_name)
     parser.add_argument(
         '--pbf',
         '-pbf',
@@ -32,9 +31,35 @@ def osm_parser(prog_name='bin/osm_process', **kwargs):
         required=kwargs.get('exe_required'),
         help="path to OSMOSIS binary"
     )
-    return parser
+    ret_val = parser
+    if do_parse:
+        ret_val = parser.parse_args()
+    return ret_val
 
 
 def osm_parser_args(prog_name, **kwargs):
-    parser = osm_parser(prog_name, **kwargs)
-    return parser.parse_args()
+    return osm_parser(prog_name, True, **kwargs)
+
+
+def geoserver_parser(prog_name='bin/generate_geoserver_config', do_parse=True):
+    """ create a generic GEOSERVER processor commandline arg PARSER """
+    parser = blank_parser(prog_name)
+    parser.add_argument(
+        '--ignore_layergroups',
+        '-il',
+        action="store_true",
+        help="should geoserver scripts generate layergroups configs"
+    )
+    parser.add_argument(
+        '--data_dir',
+        '-data_dir',
+        '-dd',
+        required=False,
+        help="path to geoserver 'data' directory"
+    )
+
+    ret_val = parser
+    if do_parse:
+        ret_val = parser.parse_args()
+    return ret_val
+
