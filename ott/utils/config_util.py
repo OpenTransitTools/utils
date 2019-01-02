@@ -139,11 +139,11 @@ class ConfigUtil(object):
             log.info("Couldn't convert '{0}' value into an INT type under section '{1}'\n{2}".format(id, section, e))
         return ret_val
 
-    def get_bool(self, id, section=None, def_val="false"):
+    def get_bool(self, id, section=None, def_val=False):
         """ get config value as boolean (string w/in .ini can be either True or true)
         """
         ret_val = self.get(id, section, def_val)
-        return ret_val == "True" or ret_val == "true"
+        return ret_val == True or ret_val == "True" or ret_val == "true"
 
     def get_float(self, id, section=None, def_val=None):
         """ get config value as float (or go with def_val)
