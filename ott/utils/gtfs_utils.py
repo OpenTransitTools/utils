@@ -3,13 +3,20 @@ import logging
 log = logging.getLogger(__file__)
 
 
-def get_feeds_from_config(config=None):
+def get_feeds_from_config(config=None, feed_filter=None):
     """ return the GTFS feed info from config
     """
     if config is None:
         config = ConfigUtil(section='gtfs')
 
     feeds = config.get_json('feeds')
+    if feed_filter and feed_filter != "all":
+        ftmp = []
+        for f in feeds:
+            if feed_filter.lower() in f.get('name', "").lower():
+                ftmp.append(f)
+        if len(ftmp) > 0:
+            feeds = ftmp
     return feeds
 
 
