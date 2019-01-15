@@ -28,6 +28,8 @@ def safe_append(str1, str2, def_val=None):
         ret_val = str1 + str2
     except Exception as e:
         log.debug(e)
+        if ret_val is None and (str1 or str2):
+            ret_val = str1 if str1 else str2
     return ret_val
 
 
