@@ -36,6 +36,20 @@ def distance_mi(lat1, lon1, lat2, lon2):
     return km * 0.621371192
 
 
+def is_valid_hex_color(color):
+    ret_val = False
+    if len(color) == 7 and color[0] == '#':
+        try:
+            r = int(color[1:3], 16)
+            g = int(color[3:5], 16)
+            b = int(color[5:7], 16)
+            if (r <= 255 and r >= 0) and (g <= 255 and g >= 0) and (b <= 255 and b >= 0):
+                ret_val = True
+        except Exception as e:
+            ret_val = False
+    return ret_val
+
+
 def to_int(val, def_val):
     ret_val = def_val
     try:
