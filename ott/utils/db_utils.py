@@ -84,6 +84,19 @@ def gtfsdb_conn(kwargs):
     return db
 
 
+def gtfsdb_param(db_url, schema=None, is_geospatial=False, current_tables=True):
+    """
+    return kv pair for gtfsdb from parts
+    """
+    kwargs = dict(
+        url=db_url,
+        schema=schema,
+        is_geospatial=is_geospatial,
+        current_tables=current_tables
+    )
+    return kwargs
+
+
 def gtfsdb_conn_parts(db_url, schema=None, is_geospatial=False):
     """ make Database() from individual url/schemal/geometry flag """
     kwargs = gtfsdb_param(db_url, schema, is_geospatial)
@@ -93,18 +106,6 @@ def gtfsdb_conn_parts(db_url, schema=None, is_geospatial=False):
 def gtfsdb_conn_from_config(config):
     u, s, g = db_params_from_config(config)
     return gtfsdb_conn_parts(u, s, g)
-
-
-def gtfsdb_param(db_url, schema=None, is_geospatial=False):
-    """
-    return kv pair for gtfsdb from parts
-    """
-    kwargs = dict(
-        url=db_url,
-        schema=schema,
-        is_geospatial=is_geospatial
-    )
-    return kwargs
 
 
 def gtfsdb_param_from_config(config):
