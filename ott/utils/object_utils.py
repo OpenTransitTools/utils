@@ -161,7 +161,7 @@ def safe_get(obj, key, def_val=None):
         try:
             ret_val = obj[key]
         except:
-            if isinstance(obj, (int, long, str)):
+            if isinstance(obj, (int, str)):
                 ret_val = obj
     return ret_val
 
