@@ -15,5 +15,10 @@ class BBox(object):
     def to_geojson(self):
         return geo_utils.make_geojson_bbox(self.min_lat, self.max_lat, self.min_lon, self.max_lon, self.srid)
 
+    def to_gtfsdb_bbox(self):
+        from gtfsdb.util import BBox
+        bbox = BBox(min_lat=self.min_lat, max_lat=self.max_lat, min_lon=self.min_lon, max_lon=self.max_lon, srid=self.srid)
+        return bbox
+
     def is_valid(self):
         return self.min_lat and self.max_lat and self.min_lon and self.max_lon

@@ -20,6 +20,11 @@ class Point(object):
     def to_geojson(self):
         return geo_utils.make_geojson_point(self.x, self.y, self.srid)
 
+    def to_gtfsdb_point(self):
+        from gtfsdb.util import Point
+        point = Point(lat=self.y, lon=self.lon, srid=self.srid)
+        return point
+
     def is_valid(self):
         return self.x and self.y
 
