@@ -2,8 +2,24 @@ from . import object_utils
 
 import os
 import math
+import tempfile
+
 import logging
 log = logging.getLogger(__file__)
+
+
+def make_temp_sqlite_db_uri(name=None):
+    """
+    will return a FILE URI to a temp file, ala /tmp/bLaHh111 for the path of a new sqlite file db
+    NOTE: name is optional ... if provided, the file will be named as such (good for testing and refreshing sqlite db)
+    """
+    if name:
+        db_file = os.path.join(tempfile.gettempdir(), name)
+    else:
+        db_file = tempfile.mkstemp()[1]
+    url = 'sqlite:///{0}'.format(db_file)
+    log.debug("DATABASE TMP FILE: {0}".format(db_file))
+    return url
 
 
 def add_schema(schema, data_classes=[]):
