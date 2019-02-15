@@ -1,3 +1,10 @@
+MAX_AGE = 1728000
+
+
+def set_max_age(age):
+    """:see 'Access-Control-Max-Age': str(MAX_AGE) below"""
+    global MAX_AGE
+    MAX_AGE = age
 
 
 def add_cors_headers_response_callback(event):
@@ -17,7 +24,7 @@ def add_cors_headers_response_callback(event):
             'Access-Control-Allow-Methods': 'POST,GET,DELETE,PUT,OPTIONS',
             'Access-Control-Allow-Headers': 'Origin, Content-Type, Accept, Authorization',
             'Access-Control-Allow-Credentials': 'true',
-            'Access-Control-Max-Age': '1728000',
+            'Access-Control-Max-Age': str(MAX_AGE),
         })
 
     # set the function above to be called for each response, where we'll set the CORS headers

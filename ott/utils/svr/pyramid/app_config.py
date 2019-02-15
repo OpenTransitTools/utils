@@ -55,6 +55,19 @@ class AppConfig(object):
         # step 3: finally, scan this view class for attributes to config view endpoints
         self.pyramid.scan(clazz.__name__)
 
+    def add_cors_headers(self, timeout=None):
+        """
+        set the CORS headers so that this app can serve AJAX calls from a different domain that the calling app
+        :param timeout: optional parameter to set 'Access-Control-Max-Age' from the default 1728000 value
+        """
+        if timeout:
+            from .app_utils import set_max_age
+            set_max_age(timeout)
+
+        from pyramid.events import NewRequest
+        from .app_utils import add_cors_headers_response_callback
+        self.pyramid.add_subscriber(add_cors_headers_response_callback, NewRequest)
+
     def get_url_param(self):
         """
         this function returns a Pyramid WSGI application.
