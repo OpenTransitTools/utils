@@ -365,7 +365,7 @@ class TripParamParser(ParamParser):
         elif ('TRANS' in self.mode or ('RAIL' in self.mode and 'BUS' in self.mode)) and 'BIC' in self.mode:
             ret_val = 'BICYCLE,' + transit_mode
         elif ('TRAIN' in self.mode or 'RAIL' in self.mode) and 'BIC' in self.mode:
-            ret_val = rail_mode
+            ret_val = 'BICYCLE,' + rail_mode
         elif 'BUS' in self.mode and 'BIC' in self.mode:
             ret_val = 'BICYCLE,BUS'
         elif self.mode == 'BIKE' or self.mode =='BICYCLE':
@@ -373,9 +373,9 @@ class TripParamParser(ParamParser):
         elif self.mode in ('B', 'BUS', 'BUSISH', 'BUSISH,WALK', 'BUS,WALK'):
             ret_val = 'WALK,BUS'
         elif self.mode in ('T', 'TRAIN', 'TRAINISH', 'TRAINISH,WALK') or 'RAIL' in self.mode:
-            ret_val = rail_mode
+            ret_val = 'WALK,' + rail_mode
         elif 'CAR' in self.mode:
-            ret_val = self.mode
+            ret_val = 'WALK,' + transit_mode + ',CAR_PARK'
         else:
             log.info("don't recoginize this mode -- so changing to default mode {}".format(self.mode, def_mode))
             ret_val = def_mode
