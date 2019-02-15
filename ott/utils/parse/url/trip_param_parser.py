@@ -148,7 +148,7 @@ class TripParamParser(ParamParser):
                 fromPlace=PDX%3A%3A45.587647%2C-122.593173
                 time=5%3A30%20pm
                 date=2013-06-13
-                mode=%2CWALK
+                mode=WALK,BUS,TRAM,RAIL,GONDOLA
                 optimize=QUICK
                 maxWalkDistance=420
                 arriveBy=true
