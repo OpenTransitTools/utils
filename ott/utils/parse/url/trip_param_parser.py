@@ -127,10 +127,10 @@ class TripParamParser(ParamParser):
     def map_url_params(self, fmt="from={frm}&to={to}&time={time}&date={month}/{day}/{year}&mode={mode}&optimize={optimize}&maxWalkDistance={walk_meters:.0f}&arriveBy={arrive_depart}"):
         """ return a string with the parameter values formatted for the OTT webapps
             http://maps.trimet.org/prod?
-                toPlace=ZOO%3A%3A45.509700%2C-122.716290
-                fromPlace=PDX%3A%3A45.587647%2C-122.593173
+                to=ZOO%3A%3A45.509700%2C-122.716290
+                from=PDX%3A%3A45.587647%2C-122.593173
                 time=5%3A30%20pm
-                date=2013-06-13
+                date=6/13/2013
                 mode=TRANSIT%2CWALK
                 optimize=QUICK
                 maxWalkDistance=420
@@ -138,7 +138,27 @@ class TripParamParser(ParamParser):
         """
         ret_val = self.safe_format(fmt)
         ret_val = ret_val.replace("False", "false").replace("True", "true")
-        ret_val = self.add_banned_routes_param(ret_val)
+        ret_val = object_utils.fix_url(ret_val)
+        return ret_val
+
+    def mod_url_params(self, fmt="fromPlace={frm}&toPlace={to}&optimize={optimize}&arriveBy={arrive_depart}&time={time}"):
+        """ return a string with the parameter values formatted for the OTT webapps
+            https://modbeta.trimet.org/map/#/
+                toPlace=ZOO%3A%3A45.509700%2C-122.716290
+                fromPlace=PDX%3A%3A45.587647%2C-122.593173
+                time=5%3A30%20pm
+                date=2013-06-13
+                mode=%2CWALK
+                optimize=QUICK
+                maxWalkDistance=420
+                arriveBy=true
+        """
+        ret_val = self.safe_format(fmt)
+        mode = self.to_mod_mode()
+        dist = self.to_mod_distance()
+        mod_date = "date={}-{}-{}".format(self.year, str(self.month).zfill(2), str(self.day).zfill(2))
+        ret_val = "{}&{}&mode={}&maxWalkDistance={}".format(ret_val, mod_date, mode, dist)
+        ret_val = ret_val.replace("False", "false").replace("True", "true")
         ret_val = object_utils.fix_url(ret_val)
         return ret_val
 
@@ -287,9 +307,20 @@ class TripParamParser(ParamParser):
         if mh:
             self.max_hours = mh
 
+    def _parse_optimize(self):
+        """ parse out the optimize flag
+        """
+        self.optimize = self.get_first_val(['Optimize', 'Opt', 'Min'])
+        if self.optimize in ('F', 'X', 'TRANSFERS'):
+            self.optimize = 'TRANSFERS'
+        elif self.optimize in ('S', 'SAFE'):
+            self.optimize = 'SAFE'
+        else:
+            self.optimize = 'QUICK'
+
     def _parse_mode(self):
         """ parse out the mode string ... and default to TRANSIT,WALK
-            convert mode string, if it's legacy, to OTP mode strings 
+            convert mode string, if it's legacy, to OTP mode strings
         """
         self.mode = self.get_first_val(['Mode'])
 
@@ -316,13 +347,61 @@ class TripParamParser(ParamParser):
             log.info("don't recoginize this mode -- so changing self.mode from '{}' to the default 'TRANSIT,WALK'".format(self.mode))
             self.mode = 'TRANSIT,WALK'
 
-    def _parse_optimize(self):
-        """ parse out the optimize flag
+    def to_mod_mode(self):
         """
-        self.optimize = self.get_first_val(['Optimize', 'Opt', 'Min'])
-        if self.optimize in ('F', 'X', 'TRANSFERS'):
-            self.optimize = 'TRANSFERS'
-        elif self.optimize in ('S', 'SAFE'):
-            self.optimize = 'SAFE'
+        parse out the mode string for the MOD map...
+        """
+        transit_mode = 'BUS,TRAM,RAIL,GONDOLA'
+        rail_mode = 'TRAM,RAIL,GONDOLA'
+        def_mode = 'WALK,' + transit_mode
+
+        # order is important....
+        if self.mode is None:
+            ret_val = def_mode
+        elif self.mode == 'TRANSIT,WALK':
+            ret_val = def_mode
+        elif self.mode == 'WALK':
+            ret_val = 'WALK'
+        elif ('TRANS' in self.mode or ('RAIL' in self.mode and 'BUS' in self.mode)) and 'BIC' in self.mode:
+            ret_val = 'BICYCLE,' + transit_mode
+        elif ('TRAIN' in self.mode or 'RAIL' in self.mode) and 'BIC' in self.mode:
+            ret_val = rail_mode
+        elif 'BUS' in self.mode and 'BIC' in self.mode:
+            ret_val = 'BICYCLE,BUS'
+        elif self.mode == 'BIKE' or self.mode =='BICYCLE':
+            ret_val = 'BICYCLE'
+        elif self.mode in ('B', 'BUS', 'BUSISH', 'BUSISH,WALK', 'BUS,WALK'):
+            ret_val = 'WALK,BUS'
+        elif self.mode in ('T', 'TRAIN', 'TRAINISH', 'TRAINISH,WALK') or 'RAIL' in self.mode:
+            ret_val = rail_mode
+        elif 'CAR' in self.mode:
+            ret_val = self.mode
         else:
-            self.optimize = 'QUICK'
+            log.info("don't recoginize this mode -- so changing to default mode {}".format(self.mode, def_mode))
+            ret_val = def_mode
+        return ret_val
+
+    def to_mod_distance(self):
+        """
+        mod uses different lenghts than what other systems use (such precision)
+        """
+        ret_val = self.walk
+        if self.walk == "160":
+            ret_val = "160.9"
+        elif self.walk == "420":
+            ret_val = "402.3"
+        elif self.walk == "840":
+            ret_val = "804.7"
+        elif self.walk == "1260":
+            ret_val = "1207"
+        elif self.walk == "1609":
+            ret_val = "1609"
+        elif self.walk == "3219":
+            ret_val = "3219"
+        elif self.walk == "8047":
+            ret_val = "8047"
+        elif self.walk == "16093":
+            ret_val = "16093"
+        else:
+            ret_val = "1207"
+        return ret_val
