@@ -233,6 +233,7 @@ def dir_has_newer_files(cmp_file, dir_path, offset_minutes=0, include_filter=Non
                 continue
             dir_file = os.path.join(dir_path, f)
             if is_a_newer_than_b(dir_file, cmp_file, offset_minutes):
+                log.info("IMPORTANT: {} *has* newer files: {} is newer than {}!".format(dir_path, dir_file, cmp_file))
                 ret_val = True
                 break
     return ret_val
