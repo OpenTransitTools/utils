@@ -1,4 +1,5 @@
-def db_parser(prog_name='bin/loader', tables=['Could be (Decarative) Base.metadata.sorted_tables']):
+def db_parser(prog_name='bin/loader', tables=['Could be (Decarative) Base.metadata.sorted_tables'],
+              url_required=True, do_parse=False):
     """
     create a generic database commandline arg PARSER
     """
@@ -10,7 +11,7 @@ def db_parser(prog_name='bin/loader', tables=['Could be (Decarative) Base.metada
     parser.add_argument(
         '--database_url',
         '-d',
-        required=True,
+        required=url_required,
         help="(geo) database url ala dialect+driver://user:password@host/dbname[?key=value..]"
     )
     parser.add_argument(
@@ -26,7 +27,13 @@ def db_parser(prog_name='bin/loader', tables=['Could be (Decarative) Base.metada
     )
     create_and_clear(parser)
     is_spatial(parser)
-    return parser
+
+    # return either parser or args
+    if do_parse:
+        ret_val = parser.parse_args()
+    else:
+        ret_val = parser
+    return ret_val
 
 
 def create_and_clear(parser):

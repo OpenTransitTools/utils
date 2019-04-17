@@ -12,7 +12,7 @@ import logging
 log = logging.getLogger(__file__)
 
 SECTION = 'view'
-INI = ['app.ini', 'client.ini', 'services.ini', 'view.ini', 'production.ini']
+INI = ['app.ini', 'client.ini', 'services.ini', 'view.ini', 'production.ini', 'staging.ini', 'development.ini']
 
 
 # global vars
