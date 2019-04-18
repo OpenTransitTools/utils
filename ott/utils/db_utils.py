@@ -133,9 +133,15 @@ def gtfsdb_param_from_config(config):
 
 def db_params_from_config(config):
     """ simple utility to pull url, schema and is/not geospatial from config .ini file """
-    u = object_utils.safe_dict_val(config, 'sqlalchemy.url')
-    s = object_utils.safe_dict_val(config, 'sqlalchemy.schema')
-    g = object_utils.safe_dict_val(config, 'sqlalchemy.is_geospatial', False)
+    from .config_util import ConfigUtil
+    if isinstance(config, ConfigUtil):
+        u = config.get('url')
+        s = config.get('schema')
+        g = config.get_bool('is_geospatial', False)
+    else:
+        u = object_utils.safe_dict_val(config, 'sqlalchemy.url')
+        s = object_utils.safe_dict_val(config, 'sqlalchemy.schema')
+        g = object_utils.safe_dict_val(config, 'sqlalchemy.is_geospatial', False)
     return u, s, g
 
 
