@@ -10,6 +10,7 @@ def agency_option(parser, required=False, def_val='all', help_msg="GTFS agency i
         default=def_val,
         help=help_msg
     )
+    return parser
 
 
 def url_option(parser, required=True, help_msg="url to gtfs feed (ala https://developers.google.com/transit/gtfs/examples/sample-feed.zip)"):
@@ -20,6 +21,7 @@ def url_option(parser, required=True, help_msg="url to gtfs feed (ala https://de
         required=required,
         help=help_msg
     )
+    return parser
 
 
 def route_option(parser, required=False, def_val=None, help_msg="GTFS route id"):
@@ -31,6 +33,7 @@ def route_option(parser, required=False, def_val=None, help_msg="GTFS route id")
         default=def_val,
         help=help_msg
     )
+    return parser
 
 
 def stop_option(parser, required=False, def_val=None, help_msg="GTFS stop id"):
@@ -42,6 +45,7 @@ def stop_option(parser, required=False, def_val=None, help_msg="GTFS stop id"):
         default=def_val,
         help=help_msg
     )
+    return parser
 
 
 def api_key(parser, required=False, help_msg="api key needed to access this data"):
@@ -52,6 +56,37 @@ def api_key(parser, required=False, help_msg="api key needed to access this data
         required=required,
         help=help_msg
     )
+    return parser
+
+
+def output_format(parser, detailed=False, required=False, help_msg="describe the output (json, geojson, csv, etc...)"):
+    if detailed:
+        parser.add_argument(
+            '--geojson',
+            '-geoj',
+            '-gj',
+            required=required,
+            action="store_true",
+            help=help_msg
+        )
+        parser.add_argument(
+            '--json',
+            '-jsn',
+            '-j',
+            required=required,
+            action="store_true",
+            help=help_msg
+        )
+    else:
+        parser.add_argument(
+            '--output',
+            '-out',
+            '-o',
+            required=required,
+            help=help_msg
+        )
+    return parser
+
 
 
 def simple_stop_route_parser(parser=None, do_parse=True):
