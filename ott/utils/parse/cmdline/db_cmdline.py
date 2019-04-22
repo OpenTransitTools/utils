@@ -2,11 +2,9 @@ def db_parser(prog_name='bin/loader', tables=['Could be (Decarative) Base.metada
     """
     create a generic database commandline arg PARSER
     """
-    import argparse
-    parser = argparse.ArgumentParser(
-        prog=prog_name,
-        formatter_class=argparse.ArgumentDefaultsHelpFormatter
-    )
+    from .base_cmdline import blank_parser
+    parser = blank_parser(prog_name, add_misc)
+
     parser.add_argument(
         '--database_url',
         '-d',
@@ -26,9 +24,6 @@ def db_parser(prog_name='bin/loader', tables=['Could be (Decarative) Base.metada
     )
     create_and_clear(parser)
     is_spatial(parser)
-    if add_misc:
-        from .base_cmdline import misc_option
-        misc_option(parser)
 
     # return either parser or args
     if do_parse:

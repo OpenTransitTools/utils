@@ -104,9 +104,9 @@ def simple_stop_route_parser(parser=None, do_parse=True):
     return ret_val
 
 
-def gtfs_parser(exe_name='bin/gtfs', do_parse=True):
+def gtfs_parser(exe_name='bin/gtfs', do_parse=True, add_misc=False):
     """ simple select agency PARSER """
-    parser = blank_parser(exe_name)
+    parser = blank_parser(exe_name, add_misc)
     agency_option(parser)
     ret_val = parser
     if do_parse:
@@ -127,10 +127,10 @@ def gtfs_download_parser(exe_name='bin/download_gtfs', do_parse=True):
     return ret_val
 
 
-def gtfs_rt_parser(api_key_required=False, api_key_msg=None, exe_name='bin/load_gtfs_rt', do_parse=True):
+def gtfs_rt_parser(api_key_required=False, api_key_msg=None, exe_name='bin/load_gtfs_rt', do_parse=True, add_misc=False):
     """ create a database and gtfs rt commandline arg PARSER """
     from . import db_cmdline
-    parser = db_cmdline.db_parser(exe_name)
+    parser = db_cmdline.db_parser(exe_name, add_misc=add_misc)
     agency_option(parser, True)
 
     if api_key_required:

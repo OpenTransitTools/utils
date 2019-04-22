@@ -1,4 +1,4 @@
-def blank_parser(prog_name='bin/ott_blah'):
+def blank_parser(prog_name='bin/ott_blah', add_misc=False):
     """
     create a generic OTP commandline arg PARSER
     """
@@ -11,6 +11,9 @@ def blank_parser(prog_name='bin/ott_blah'):
                         help="Force update flag",
                         action="store_true"
     )
+    if add_misc:
+        misc_option(parser)
+
     return parser
 
 
