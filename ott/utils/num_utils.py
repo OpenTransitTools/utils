@@ -50,7 +50,7 @@ def is_valid_hex_color(color):
     return ret_val
 
 
-def to_int(val, def_val):
+def to_int(val, def_val=None):
     ret_val = def_val
     try:
         ret_val = int(val)

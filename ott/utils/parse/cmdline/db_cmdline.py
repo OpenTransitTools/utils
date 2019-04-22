@@ -1,5 +1,4 @@
-def db_parser(prog_name='bin/loader', tables=['Could be (Decarative) Base.metadata.sorted_tables'],
-              url_required=True, do_parse=False):
+def db_parser(prog_name='bin/loader', tables=['Could be (Decarative) Base.metadata.sorted_tables'], url_required=True, do_parse=False, add_misc=False):
     """
     create a generic database commandline arg PARSER
     """
@@ -27,6 +26,9 @@ def db_parser(prog_name='bin/loader', tables=['Could be (Decarative) Base.metada
     )
     create_and_clear(parser)
     is_spatial(parser)
+    if add_misc:
+        from .base_cmdline import misc_option
+        misc_option(parser)
 
     # return either parser or args
     if do_parse:
@@ -47,7 +49,7 @@ def create_and_clear(parser):
     parser.add_argument(
         '--clear',
         '-clear',
-        '-cf',
+        '-cl',
         action="store_true",
         help="clear table(s) before loading"
     )

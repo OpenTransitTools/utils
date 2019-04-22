@@ -25,12 +25,39 @@ def server_option(parser, required=False, def_val='all', help_msg="which server 
     )
 
 
-def misc_option(parser, required=False, limit=111):
+def limit_option(parser, required=False, def_val=None):
     parser.add_argument(
         '--limit',
         '-lim',
         '-l',
         required=required,
-        default=limit,
-        help="limit results"
+        default=def_val,
+        help="limit (number): --limit 5 could mean to trim a longer list of results to just 5"
     )
+
+def durr_option(parser, required=False, def_val=None):
+    parser.add_argument(
+        '--durr',
+        '--duration',
+        '-durr',
+        required=required,
+        default=def_val,
+        help="duration (number): --durr 60 could be used to mean run a process for 60 seconds"
+    )
+
+
+def freq_option(parser, required=False, def_val=None):
+    parser.add_argument(
+        '--freq',
+        '--frequency',
+        '-freq',
+        required=required,
+        default=def_val,
+        help="freq (number): --freq 5 could mean to run a process every 5 seconds"
+    )
+
+
+def misc_option(parser, required=False, limit=111, durr=False, freq=False):
+    limit_option(parser, required, limit)
+    durr_option(parser, required, durr)
+    freq_option(parser, required, freq)
