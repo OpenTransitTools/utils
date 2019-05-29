@@ -1,6 +1,7 @@
 from . import object_utils
 
 import os
+import time
 import math
 import tempfile
 
@@ -247,18 +248,23 @@ def postgres_check_db(db_name, db_user, db_table=None):
     return ret_val
 
 
+def postgres_conn_curr(db_name, db_user, iso=True):
+    from psycopg2 import connect
+    con = connect(user=db_user, dbname=db_name)
+    if iso:
+        from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
+        con.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
+    cur = con.cursor()
+    return con, cur
+
+
 def postgres_add_postgis(db_name, db_user):
     """ add postgis extension on a named database
     """
     ret_val = True
     con = None
     try:
-        from psycopg2 import connect
-        from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
-
-        con = connect(user=db_user, dbname=db_name)
-        con.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-        cur = con.cursor()
+        con, cur = postgres_conn_curr(db_name, db_user)
         cur.execute('CREATE EXTENSION postgis')
         cur.close()
         con.close()
@@ -278,13 +284,7 @@ def postgres_create_db(db_name, db_user):
     ret_val = True
     con = None
     try:
-        from psycopg2 import connect
-        from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
-
-        # step 1: connect to global postgres database and then create new db
-        con = connect(user=db_user, dbname='postgres')
-        con.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-        cur = con.cursor()
+        con, cur = postgres_conn_curr(db_name, db_user)
         cur.execute('CREATE DATABASE {}'.format(db_name))
         cur.close()
         con.close()
@@ -311,8 +311,61 @@ def postgres_check_create_db(db_name, db_user, is_geospatial=False):
     except Exception as e:
         log.error("POSTGRES CREATE DATABASE ERROR : {}".format(e))
         ret_val = False
-
     return ret_val
+
+
+def postgres_vacuum_db(db_name, db_user):
+    """
+    VACUUM FULL ANALYZE this puppy!
+    NOTE: can take many minutes (probably 6 minutes...bu maybe 20 minutes or more)
+    """
+    ret_val = True
+    try:
+        con, cur = postgres_conn_curr(db_name, db_user)
+        log.info('VACUUM(FULL, ANALYZE, VERBOSE)')
+        cur.execute('VACUUM(FULL, ANALYZE, VERBOSE)')
+        cur.close()
+        con.close()
+        con = None
+    except Exception as e:
+        log.error("PG VACUUM ERROR : {}".format(e))
+        ret_val = False
+    finally:
+        if con:
+            con.close()
+    return ret_val
+
+
+def postgres_reindex_db(db_name, db_user):
+    """
+    will call postgres' reindex command on the specified db
+    @see https://www.postgresql.org/docs/current/sql-reindex.html
+    NOTE: can take many minutes (probably 6 minutes...bu maybe 20 minutes or more)
+    """
+    ret_val = True
+    try:
+
+        con, cur = postgres_conn_curr(db_name, db_user)
+        log.info('REINDEX DATABASE {}'.format(db_name))
+        cur.execute('REINDEX DATABASE {}'.format(db_name))
+        cur.close()
+        con.close()
+        con = None
+    except Exception as e:
+        log.error("PG RE-INDEX ERROR : {}".format(e))
+        ret_val = False
+    finally:
+        if con:
+            con.close()
+    return ret_val
+
+
+def postgres_db_cleanup(db_name, db_user, db_schema=None, sleep_secs=10):
+    time.sleep(sleep_secs)
+    postgres_vacuum_db(db_name, db_user, db_schema)
+    time.sleep(sleep_secs)
+    postgres_reindex_db(db_name, db_user, db_schema)
+    time.sleep(sleep_secs)
 
 
 def postgres_drop_schema(db_url, db_user, move=False):
