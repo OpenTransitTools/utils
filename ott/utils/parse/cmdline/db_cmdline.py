@@ -1,3 +1,5 @@
+from .base_cmdline import *
+
 def db_parser(prog_name='bin/loader', tables=['Could be (Decarative) Base.metadata.sorted_tables'], url_required=True, do_parse=False, add_misc=False):
     """
     create a generic database commandline arg PARSER
@@ -31,23 +33,6 @@ def db_parser(prog_name='bin/loader', tables=['Could be (Decarative) Base.metada
     else:
         ret_val = parser
     return ret_val
-
-
-def create_and_clear(parser):
-    parser.add_argument(
-        '--create',
-        '-create',
-        '-c',
-        action="store_true",
-        help="drop / create database tables for vehicles"
-    )
-    parser.add_argument(
-        '--clear',
-        '-clear',
-        '-cl',
-        action="store_true",
-        help="clear table(s) before loading"
-    )
 
 
 def is_spatial(parser):

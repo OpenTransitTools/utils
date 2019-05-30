@@ -28,6 +28,23 @@ def server_option(parser, required=False, def_val='all', help_msg="which server 
     )
 
 
+def create_and_clear(parser):
+    parser.add_argument(
+        '--create',
+        '-create',
+        '-c',
+        action="store_true",
+        help="drop / create database tables for vehicles"
+    )
+    parser.add_argument(
+        '--clear',
+        '-clear',
+        '-cl',
+        action="store_true",
+        help="clear table(s) before loading"
+    )
+
+
 def limit_option(parser, required=False, def_val=None):
     parser.add_argument(
         '--limit',
