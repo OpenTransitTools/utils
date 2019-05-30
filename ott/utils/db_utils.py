@@ -40,8 +40,7 @@ def check_create_db(db_url, is_geospatial=False):
     #import pdb; pdb.set_trace()
     ret_val = True
     if 'postgres' in db_url:
-        db_name = database_name_from_url(db_url)
-        db_user = username_from_url(db_url, def_val=os.getenv('USERNAME'))
+        db_name, db_user = db_name_and_user_from_url(db_url)
         ret_val = postgres_check_create_db(db_name, db_user, is_geospatial)
 
     return ret_val
@@ -75,6 +74,12 @@ def username_from_url(db_url, def_val=None):
     if u and u.username:
         ret_val = u.username
     return ret_val
+
+
+def db_name_and_user_from_url(db_url):
+    db_name = database_name_from_url(db_url)
+    db_user = username_from_url(db_url, def_val=os.getenv('USERNAME'))
+    return db_name, db_user
 
 
 def db_conn(url):
@@ -360,11 +365,12 @@ def postgres_reindex_db(db_name, db_user):
     return ret_val
 
 
-def postgres_db_cleanup(db_name, db_user, db_schema=None, sleep_secs=10):
+def postgres_db_cleanup(db_url=None, sleep_secs=10):
+    db_name, db_user = db_name_and_user_from_url(db_url)
     time.sleep(sleep_secs)
-    postgres_vacuum_db(db_name, db_user, db_schema)
+    postgres_vacuum_db(db_name, db_user)
     time.sleep(sleep_secs)
-    postgres_reindex_db(db_name, db_user, db_schema)
+    postgres_reindex_db(db_name, db_user)
     time.sleep(sleep_secs)
 
 
