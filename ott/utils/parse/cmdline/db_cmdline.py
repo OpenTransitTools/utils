@@ -1,5 +1,16 @@
 from .base_cmdline import *
 
+
+def is_spatial(parser):
+    parser.add_argument(
+        '--is_geospatial',
+        '-geo',
+        '-g',
+        action="store_true",
+        help="add geometry columns"
+    )
+
+
 def db_parser(prog_name='bin/loader', tables=['Could be (Decarative) Base.metadata.sorted_tables'], url_required=True, do_parse=False, add_misc=False):
     """
     create a generic database commandline arg PARSER
@@ -24,7 +35,8 @@ def db_parser(prog_name='bin/loader', tables=['Could be (Decarative) Base.metada
         choices=tables, default=None, nargs='*',
         help="Limited list of TABLES to load, if blank, load all tables"
     )
-    create_and_clear(parser)
+    create_option(parser)
+    clear_option(parser)
     is_spatial(parser)
 
     # return either parser or args
@@ -33,13 +45,3 @@ def db_parser(prog_name='bin/loader', tables=['Could be (Decarative) Base.metada
     else:
         ret_val = parser
     return ret_val
-
-
-def is_spatial(parser):
-    parser.add_argument(
-        '--is_geospatial',
-        '-geo',
-        '-g',
-        action="store_true",
-        help="add geometry columns"
-    )
