@@ -22,13 +22,18 @@ def json_response_list(lst, mime='application/json', status=200):
     return json_response(json_data, mime, status)
 
 
-def json_response(json_data, mime='application/json', status=200):
+def json_response(json_data, mime='application/json', status=200, headers=None):
     """ @return Response() with content_type of 'application/json' """
     from pyramid.response import Response
 
     if json_data is None:
         json_data = DATA_NOT_FOUND_MSG.to_json()
-    return Response(json_data, content_type=mime, status_int=status)
+
+    response = Response(json_data, content_type=mime, status_int=status)
+    if headers and isinstance(headers, dict):
+        response.headers.update(headers)
+    return response
+
 
 
 def proxy_json(url, query_string):

@@ -24,6 +24,7 @@ def add_cors_headers_response_callback(event):
     :see https://stackoverflow.com/questions/21107057/pyramid-cors-for-ajax-requests
     """
     def cors_headers(request, response):
+        #import pdb; pdb.set_trace()
         response.headers.update({
             'Access-Control-Allow-Origin': '*',
             'Access-Control-Allow-Methods': 'POST,GET,DELETE,PUT,OPTIONS',
