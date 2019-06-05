@@ -1,6 +1,7 @@
 from ott.utils import json_utils
 from .globals import *
 
+import datetime
 import logging
 log = logging.getLogger(__file__)
 
@@ -22,7 +23,7 @@ def json_response_list(lst, mime='application/json', status=200):
     return json_response(json_data, mime, status)
 
 
-def json_response(json_data, mime='application/json', status=200, headers=None):
+def json_response(json_data, mime='application/json', status=200, last_modified=None):
     """ @return Response() with content_type of 'application/json' """
     from pyramid.response import Response
 
@@ -30,8 +31,11 @@ def json_response(json_data, mime='application/json', status=200, headers=None):
         json_data = DATA_NOT_FOUND_MSG.to_json()
 
     response = Response(json_data, content_type=mime, status_int=status)
-    if headers and isinstance(headers, dict):
-        response.headers.update(headers)
+    if last_modified:
+        lm = str(last_modified)
+        if isinstance(last_modified, (int, long, float)):
+            lm = datetime.datetime.utcfromtimestamp(last_modified)
+        response.headers.update({'Last-Modified': lm})
     return response
 
 
