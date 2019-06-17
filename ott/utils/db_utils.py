@@ -325,6 +325,7 @@ def postgres_vacuum_db(db_name, db_user):
     NOTE: can take many minutes (probably 6 minutes...bu maybe 20 minutes or more)
     """
     ret_val = True
+    con = None
     try:
         con, cur = postgres_conn_curr(db_name, db_user)
         log.info('VACUUM(FULL, ANALYZE, VERBOSE)')
@@ -334,6 +335,7 @@ def postgres_vacuum_db(db_name, db_user):
         con = None
     except Exception as e:
         log.error("PG VACUUM ERROR : {}".format(e))
+        log.error("PG VACUUM ERROR : db:{}, user:{}".format(db_name, db_user))
         ret_val = False
     finally:
         if con:
@@ -348,6 +350,7 @@ def postgres_reindex_db(db_name, db_user):
     NOTE: can take many minutes (probably 6 minutes...bu maybe 20 minutes or more)
     """
     ret_val = True
+    con = None
     try:
 
         con, cur = postgres_conn_curr(db_name, db_user)
@@ -358,6 +361,7 @@ def postgres_reindex_db(db_name, db_user):
         con = None
     except Exception as e:
         log.error("PG RE-INDEX ERROR : {}".format(e))
+        log.error("PG RE-INDEX ERROR : db:{}, user:{}".format(db_name, db_user))
         ret_val = False
     finally:
         if con:
