@@ -33,6 +33,10 @@ class AppConfig(object):
         except Exception as e:
             log.warning(e)
 
+        # step 3: enable cors
+        if ini_settings and ini_settings.get('pyramid.debug_all', 'false').startswith('true'):
+            self.add_cors_headers()
+
     def make_wsgi_app(self):
         """
         this function returns a Pyramid WSGI application.
