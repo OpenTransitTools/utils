@@ -80,7 +80,7 @@ class AppConfig(object):
             self.wsgi_app = self.pyramid.make_wsgi_app()
         return self.wsgi_app
 
-    def get_agency(self, url_params, def_val=None):
+    def get_agency(self, url_params=None, def_val=None):
         """
         agency can be passed thru URL
         default agency can also be configured in the .ini file
@@ -88,19 +88,21 @@ class AppConfig(object):
         """
         ret_val = def_val
         try:
-            # step 1: make sure we have a param parser
-            if not isinstance(url_params, SimpleParamParser):
-                url_params = SimpleParamParser(url_params)
-
-            # step 2: get the agency id from the .ini file (as a default)
+            # step 1: get the agency id from the .ini file (as a default)
             def_agency = self.ini_settings.get('agency_id')
 
-            # step 3: get agency from URL or .ini file, and return it
-            agency = url_params.get_first_val(['agency', 'agency_id'], def_agency)
-            if agency:
-                ret_val = agency
-        except:
-            pass
+            # step 2: if we were sent either url params or a request object, check that for a default override
+            if url_params:
+                # step 2a: make sure we have a param parser
+                if not isinstance(url_params, SimpleParamParser):
+                    url_params = SimpleParamParser(url_params)
+
+                # step 2b: get agency from URL or .ini file, and return it
+                agency = url_params.get_first_val(['agency', 'agency_id'], def_agency)
+                if agency:
+                    ret_val = agency
+        except Exception as e:
+            log.info(e)
         return ret_val
 
     @property
