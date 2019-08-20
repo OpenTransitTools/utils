@@ -161,7 +161,7 @@ def wait_for_otp(otp_url, delay=15, max_tries=10):
         if otp_is_up or try_count > max_tries:
             break
         else:
-            log.warn("OTP is not ready yet. Will try again ({} of {} tries) in {} seconds...".format(try_count, max_tries, delay))
+            log.warn("OTP is not ready yet.\nURL: {}\nWill try again ({} of {} tries) in {} seconds...".format(try_count, otp_url, max_tries, delay))
 
         time.sleep(delay)
 
