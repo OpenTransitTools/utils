@@ -5,8 +5,7 @@ import filecmp
 import datetime
 import time
 
-from future.standard_library import install_aliases; install_aliases() # for py 2 and 3 compat w/urllib
-import urllib
+import requests
 
 from ott.utils.config_util import ConfigUtil
 from ott.utils import exe_utils
@@ -128,13 +127,10 @@ def call_planner_svc(url, accept='application/xml'):
     # import pdb; pdb.set_trace()
     ret_val = None
     try:
-        socket.setdefaulttimeout(2000)
         log.debug("call_otp: OTP output for " + url)
-        req = urllib.request.Request(url, None, {'Accept': accept})
-        res = urllib.request.urlopen(req)
-        log.debug("call_otp: OTP output for " + url)
-        ret_val = res.read()
-        res.close()
+        resp = requests.get(url)
+        ret_val = resp.text
+        resp.close()
     except Exception as e:
         log.warning('ERROR: could not get data from url (timeout?): {0}'.format(url))
     return ret_val
@@ -142,10 +138,6 @@ def call_planner_svc(url, accept='application/xml'):
 
 def wait_for_otp(otp_url, delay=15, max_tries=10):
     try_count = 0
-
-    # need some delay between checks...
-    if delay < 10:
-        delay = 10
 
     otp_is_up = False
     while True:
@@ -155,7 +147,7 @@ def wait_for_otp(otp_url, delay=15, max_tries=10):
         response = call_planner_svc(otp_url)
 
         # step 2: check result ... if valid break out of loop
-        otp_is_up = response and ("RouterInfo" in response or "Response" in response)
+        otp_is_up = response and ("requestParameters" in response or "elevationMetadata" in response)
 
         # step 3: either break out of loop or warn an continue checking OTP
         if otp_is_up or try_count > max_tries:

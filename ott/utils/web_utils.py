@@ -30,13 +30,26 @@ def get_name_from_url(url, def_name=None):
 
 
 def make_url(hostname, port=None, path=None, arg_str=None, def_hostname="http://127.0.0.1"):
-    ret_val = hostname if hostname else def_hostname
+    ret_val = None
+
+    # step 1: make sure hostname is valid
+    if hostname is None:
+        hostname = def_hostname
+    elif not hostname.startswith('http'):
+        hostname = "http://{}".format(hostname)
+
+    # step 2: fix ports
     if port and port != '80':
         ret_val = "{}:{}".format(hostname, port)
+    else:
+        ret_val = hostname
+
+    # step 3: add path to url
     if path and len(path) > 0:
         ret_val = "{}/{}".format(ret_val.rstrip('/'), path.lstrip('/'))
     if arg_str and len(arg_str) > 0:
         ret_val = "{}?{}".format(ret_val, arg_str)
+
     return ret_val
 
 
