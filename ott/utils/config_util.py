@@ -1,15 +1,21 @@
 from ott.utils import file_utils
 from ott.utils import object_utils
+import os
+import sys
+import logging
+log = logging.getLogger(__file__)
+
 
 try:
     import configparser
 except ImportError:
     import ConfigParser as configparser
+# py 3 removes basestring
+try:
+    basestring = basestring
+except:
+    basestring = str
 
-import os
-import sys
-import logging
-log = logging.getLogger(__file__)
 
 SECTION = 'view'
 INI = ['app.ini', 'client.ini', 'services.ini', 'view.ini', 'base.ini', 'production.ini', 'staging.ini', 'development.ini']

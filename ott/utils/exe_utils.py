@@ -46,6 +46,8 @@ def run_cmd_get_stdout(cmd):
         @see: http://stackoverflow.com/questions/4760215/running-shell-command-from-python-and-capturing-the-output
     """
     output = subprocess.check_output(cmd, shell=True)
+    if output:
+        output = output.decode("utf-8")
     return output
 
 

@@ -8,6 +8,13 @@ import logging
 log = logging.getLogger(__file__)
 
 
+# py 3 removes basestring
+try:
+    basestring = basestring
+except:
+    basestring = str
+
+
 def get_param_value_from_qs(query_string, param_name, def_val=None):
     """find a parameter in a query string"""
     ret_val = def_val

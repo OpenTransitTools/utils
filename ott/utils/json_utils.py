@@ -8,6 +8,12 @@ import urllib
 import logging
 log = logging.getLogger(__file__)
 
+# py 3 removes basestring
+try:
+    basestring = basestring
+except:
+    basestring = str
+
 
 def stream_json(url, args=None, extra_path=None, def_val={}):
     """

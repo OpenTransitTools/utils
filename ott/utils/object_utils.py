@@ -4,6 +4,12 @@ import hashlib
 import logging
 log = logging.getLogger(__file__)
 
+# py 3 removes basestring
+try:
+    basestring = basestring
+except:
+    basestring = str
+
 
 class SimpleObject(object):
     pass
