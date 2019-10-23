@@ -233,10 +233,8 @@ def postgres_check_db(db_name, db_user, db_table=None):
     ret_val = True
     con = None
     try:
-        from psycopg2 import connect
-
         # step 1: check the database connection
-        con = connect(user=db_user, dbname=db_name)
+        con = connect(db_name, db_user)
 
         # step 2: (optionally) check a value from a given database
         if db_table:
@@ -253,9 +251,14 @@ def postgres_check_db(db_name, db_user, db_table=None):
     return ret_val
 
 
+def connect(db_name, db_user):
+    from psycopg2 import connect as pyscon
+    con = pyscon(user=db_user, dbname=db_name)
+    return con
+
+
 def postgres_conn_curr(db_name, db_user, iso=True):
-    from psycopg2 import connect
-    con = connect(user=db_user, dbname=db_name)
+    con = connect(db_name, db_user)
     if iso:
         from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
         con.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
