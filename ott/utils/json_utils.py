@@ -141,3 +141,21 @@ def proxy_json(url, query_string=None, def_val={'error': 'all your stream no goo
         log.warning(e)
         ret_val['url'] = url
     return ret_val
+
+
+def append_to_json(json, name, val):
+    """
+    simple util to add an element to json / dict
+    """
+    try:
+        json[name] = val
+    except Exception as e:
+        log.warning("couldn't append '{}: {} to json data".format(name, val))
+
+
+def append_envvar_to_json(json, name, def_val=None):
+    """
+    simple util to add an element to json / dict
+    """
+    val = os.getenv(name, def_val)
+    append_to_json(json, name.lower(), val)
