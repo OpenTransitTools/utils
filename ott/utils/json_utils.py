@@ -159,3 +159,14 @@ def append_envvar_to_json(json, name, def_val=None):
     """
     val = os.getenv(name, def_val)
     append_to_json(json, name.lower(), val)
+
+
+def append_hostname_to_json(json):
+    """
+    simple util to add an element to json / dict
+    """
+    name = "HOSTNAME"
+    val = os.getenv(name)
+    if val is None:
+        val = os.getenv("COMPUTERNAME")  # Windows
+    append_to_json(json, name.lower(), val)
