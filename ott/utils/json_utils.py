@@ -1,4 +1,5 @@
 import os
+import socket
 import simplejson as json
 import contextlib
 
@@ -113,7 +114,7 @@ def dict_to_json_str(data, pretty_print=False):
 
 
 def object_to_json_file(file_path, obj, pretty_print=False):
-    #import pdb; pdb.set_trace()
+    # import pdb; pdb.set_trace()
     data = obj_to_dict(obj)
     with open(file_path, 'w+') as outfile:
         if pretty_print:
@@ -153,6 +154,15 @@ def append_to_json(json, name, val):
         log.warning("couldn't append '{}: {} to json data".format(name, val))
 
 
+def find_element_in_json(json, name, val):
+    """
+    """
+    try:
+        json[name] = val
+    except Exception as e:
+        log.warning("couldn't append '{}: {} to json data".format(name, val))
+
+
 def append_envvar_to_json(json, name, def_val=None):
     """
     simple util to add an element to json / dict
@@ -163,10 +173,15 @@ def append_envvar_to_json(json, name, def_val=None):
 
 def append_hostname_to_json(json):
     """
-    simple util to add an element to json / dict
+    simple util to add hostname to json file
+    will look via sockets, then environs for information
     """
     name = "HOSTNAME"
-    val = os.getenv(name)
+
+    # import pdb; pdb.set_trace()
+    val = socket.gethostname()
+    if val is None:
+        val = os.getenv(name)
     if val is None:
         val = os.getenv("COMPUTERNAME")  # Windows
     append_to_json(json, name.lower(), val)
