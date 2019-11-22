@@ -351,20 +351,28 @@ def is_force_update(argv=sys.argv, force=["force", "update", "reload"]):
     return ret_val
 
 
-def gen_dict_extract(key, var):
+def find_elements(key, obj):
     """
-    find
+    find elements of dict (e.g. json) object via the key
+    note: could be better with generators maybe, but 3.7 kinda f's up generators (StopIteration), so I don't have time
+    note: this isn't perfect (by any means), since json can start with an top-level array I guess...
+    """
+    ret_val = []
 
-    note: https://stackoverflow.com/questions/9807634/find-all-occurrences-of-a-key-in-nested-python-dictionaries-and-lists
-    """
-    if hasattr(var, 'iteritems'):
-        for k, v in var.iteritems():
+    # import pdb; pdb.set_trace()
+    if isinstance(obj, dict):
+        for k, v in obj.items():
             if k == key:
-                yield v
-            if isinstance(v, dict):
-                for result in gen_dict_extract(key, v):
-                    yield result
+                ret_val.append(v)
+            elif isinstance(v, dict):
+                n = find_elements(key, v)
+                if n and len(n) > 0:
+                    ret_val = ret_val + n
             elif isinstance(v, list):
                 for d in v:
-                    for result in gen_dict_extract(key, d):
-                        yield result
+                    n = find_elements(key, d)
+                    if n and len(n) > 0:
+                        ret_val = ret_val + n
+
+    return ret_val
+
