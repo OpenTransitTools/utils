@@ -23,14 +23,14 @@ def json_response_list(lst, mime='application/json', status=200):
     return json_response(json_data, mime, status)
 
 
-def json_response(json_data, mime='application/json', status=200, last_modified=None):
+def json_response(json_data, mime='application/json', status=200, last_modified=None, charset='UTF-8'):
     """ @return Response() with content_type of 'application/json' """
     from pyramid.response import Response
 
     if json_data is None:
         json_data = DATA_NOT_FOUND_MSG.to_json()
 
-    response = Response(json_data, content_type=mime, status_int=status)
+    response = Response(json_data, content_type=mime, status_int=status, charset=charset)
     if last_modified:
         lm = str(last_modified)
         if isinstance(last_modified, (int, long, float)):
@@ -44,12 +44,13 @@ def proxy_json(url, query_string):
     """
     will call a json url and send back response / error string...
     """
+    # import pdb; pdb.set_trace()
     ret_val = None
     try:
         ret_val = json_utils.stream_json(url, query_string)
     except Exception as e:
         log.warning(e)
-        ret_val = sys_error_response()
+        ret_val = SYSTEM_ERROR_MSG.__dict__  # NOTE: changed from Response to dict on Nov 2019 ... might break old code
     finally:
         pass
     return ret_val

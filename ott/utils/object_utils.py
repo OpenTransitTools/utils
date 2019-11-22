@@ -349,3 +349,22 @@ def is_force_update(argv=sys.argv, force=["force", "update", "reload"]):
                     ret_val = True
                     break
     return ret_val
+
+
+def gen_dict_extract(key, var):
+    """
+    find
+
+    note: https://stackoverflow.com/questions/9807634/find-all-occurrences-of-a-key-in-nested-python-dictionaries-and-lists
+    """
+    if hasattr(var, 'iteritems'):
+        for k, v in var.iteritems():
+            if k == key:
+                yield v
+            if isinstance(v, dict):
+                for result in gen_dict_extract(key, v):
+                    yield result
+            elif isinstance(v, list):
+                for d in v:
+                    for result in gen_dict_extract(key, d):
+                        yield result
