@@ -1,3 +1,4 @@
+from .compat_2_to_3 import *
 from . import date_utils
 from . import num_utils
 from . import string_utils
@@ -6,13 +7,6 @@ import ast
 import datetime
 import logging
 log = logging.getLogger(__file__)
-
-
-# py 3 removes basestring
-try:
-    basestring = basestring
-except:
-    basestring = str
 
 
 def get_param_value_from_qs(query_string, param_name, def_val=None):

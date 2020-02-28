@@ -1,20 +1,17 @@
-from ott.utils import file_utils
-from ott.utils import object_utils
 import os
 import sys
+
+from .compat_2_to_3 import *
+from . import file_utils
+from . import object_utils
+
 import logging
 log = logging.getLogger(__file__)
-
 
 try:
     import configparser
 except ImportError:
     import ConfigParser as configparser
-# py 3 removes basestring
-try:
-    basestring = basestring
-except:
-    basestring = str
 
 
 SECTION = 'view'

@@ -2,6 +2,9 @@ import logging
 log = logging.getLogger(__file__)
 
 
+## TODO: why pyramid_utils.py and also ott.utils.svr.pyramid   ??????
+
+
 def url_response(host, service, id, agency_id=None, extra="&detailed"):
     """ return a url with id and other good stuff
     """

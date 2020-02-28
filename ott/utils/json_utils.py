@@ -5,15 +5,10 @@ import contextlib
 
 from future.standard_library import install_aliases; install_aliases() # for py 2 and 3 compat w/urllib
 import urllib
+from .compat_2_to_3 import *
 
 import logging
 log = logging.getLogger(__file__)
-
-# py 3 removes basestring
-try:
-    basestring = basestring
-except:
-    basestring = str
 
 
 def stream_json(url, args=None, extra_path=None, def_val={}):
