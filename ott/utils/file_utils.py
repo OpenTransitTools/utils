@@ -527,15 +527,20 @@ def remove_file_from_zip(zip_path, file_name):
     mv(tmpzip, zip_path)
 
 
-def add_file_to_zip(zip_path, file_path, basename=None):
+def add_file_to_zip(zip_path, file_path, file_name=None):
     """ add a file to a zip file
     """
-    if basename is None:
-        basename = os.path.basename(file_path)
+    if file_name is None:
+        file_name = os.path.basename(file_path)
     zip = zipfile.ZipFile(zip_path, mode='a', compression=zipfile.ZIP_DEFLATED)
-    zip.write(file_path, basename)
+    zip.write(file_path, file_name)
     zip.close()
 
+def replace_file_in_zipfile(zip_path, file_path, file_name=None):
+    if file_name is None:
+        file_name = os.path.basename(file_path)
+    remove_file_from_zip(zip_path, file_name)
+    add_file_to_zip(zip_path, file_path, file_name)
 
 def replace_strings_in_zipfile(zip_path, file_name, regex_str, replace_str, zip_basename=None):
     """ collective of file utils functions to open a file from a .zip file, replace contents in that zip, and bundle
@@ -543,9 +548,7 @@ def replace_strings_in_zipfile(zip_path, file_name, regex_str, replace_str, zip_
     """
     file_path = unzip_file(zip_path, file_name)
     replace_strings_in_file(file_path, regex_str, replace_str)
-    remove_file_from_zip(zip_path, file_name)
-    add_file_to_zip(zip_path, file_path, zip_basename)
-
+    replace_file_in_zipfile(zip_path, file_path, zip_basename)
 
 def replace_strings_in_file(file_path, regex_str, replace_str):
     """ replace a pattern in each line of a text file
