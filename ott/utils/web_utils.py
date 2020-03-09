@@ -6,8 +6,10 @@ import smtplib
 
 try:
     import urlparse
+    from urlparse import urlsplit
 except:
     from urllib.parse import urlparse
+    from urllib.parse import urlsplit
 
 from . import file_utils
 from . import exe_utils
@@ -23,9 +25,9 @@ def get_hostname():
 def get_name_from_url(url, def_name=None):
     ret_val = def_name
     try:
-        ret_val = urlparse.urlsplit(url).path.split('/')[-1]
+        ret_val = urlsplit(url).path.split('/')[-1]
     except Exception as e:
-        log.info(e)
+        log.warning(e)
     return ret_val
 
 
@@ -95,7 +97,7 @@ def my_wget(url, file_path=None, delete_first=True):
 
         log.info("wget: downloaded {} into file {}".format(url, file_path))
     except Exception as e:
-        log.info(e)
+        log.warning(e)
         is_success = False
     return is_success
 
@@ -164,8 +166,8 @@ def post(hostname, port, path, data):
         #result = webservice.getfile().read()
         #log.info("{}".format(result))
     except Exception as e:
-        log.info(e)
-        log.info("FIX ME -- py 3.x -- httplib")
+        log.warning(e)
+        log.warning("FIX ME -- py 3.x -- httplib")
     return statuscode
 
 
@@ -187,7 +189,7 @@ def post_file(url, file_path):
         f.close()
     except Exception as e:
         statuscode = -111
-        log.info(e)
+        log.warning(e)
     return statuscode
 
 
@@ -199,7 +201,7 @@ def get(url):
     try:
         response = urllib.request.urlopen(url)
     except Exception as e:
-        log.info(e)
+        log.warning(e)
         success = False
     return success, response
 
@@ -216,7 +218,7 @@ def get_response(url, show_info=False):
         else:
             ret_val = "{}\n".format(response.read())
     except Exception as e:
-        log.info(e)
+        log.warning(e)
     finally:
         if response:
             response.close()
