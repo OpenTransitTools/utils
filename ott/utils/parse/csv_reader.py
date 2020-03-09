@@ -5,8 +5,7 @@ import datetime
 import time
 from threading import Thread
 
-from future.standard_library import install_aliases; install_aliases() # for py 2 and 3 compat w/urllib
-import urllib
+from ott.utils.compat_2_to_3 import *
 
 import logging
 log = logging.getLogger(__file__)

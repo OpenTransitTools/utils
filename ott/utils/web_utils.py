@@ -1,16 +1,7 @@
-from future.standard_library import install_aliases; install_aliases() # for py 2 and 3 compat w/urllib
-
 import socket
-import urllib
 import smtplib
 
-try:
-    import urlparse
-    from urlparse import urlsplit
-except:
-    from urllib.parse import urlparse
-    from urllib.parse import urlsplit
-
+from .compat_2_to_3 import *
 from . import file_utils
 from . import exe_utils
 

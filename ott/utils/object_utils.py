@@ -284,7 +284,7 @@ def to_code(s, def_val=''):
     """
     ret_val = def_val
     try:
-        ret_val = s.decode('utf-8')
+        ret_val = decode(s, 'utf-8')
     except:
         try:
             ret_val = str(s)
@@ -298,7 +298,7 @@ def to_str_code(s, def_val=''):
     """
     ret_val = def_val
     try:
-        ret_val = s.decode('utf-8')
+        ret_val = decode(s, 'utf-8')
     except:
         try:
             ret_val = str(s)

@@ -2,9 +2,7 @@ import os
 import unittest
 import contextlib
 
-from future.standard_library import install_aliases; install_aliases() # for py 2 and 3 compat w/urllib
-import urllib
-
+from ott.utils.compat_2_to_3 import *
 from ott.utils import config_util
 from ott.utils import file_utils
 
