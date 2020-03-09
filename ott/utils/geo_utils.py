@@ -6,7 +6,7 @@ import math
 import logging
 log = logging.getLogger(__file__)
 
-OSM_ATTRIB = '&copy; <a href="http://openstreetmap.org/copyright">OpenStreetMap</a>'
+OSM_ATTRIB = '&copy; <a target="#" href="http://openstreetmap.org/copyright">OpenStreetMap</a>'
 METRO_ATTRIB = '&copy; <a target="#" href="https://www.oregonmetro.gov/rlis-live">Metro</a> | ' + OSM_ATTRIB
 
 ZIP_CODE_RE = re.compile("[,\s]*\d{5}(?:[-\s]\d{4})?$")
