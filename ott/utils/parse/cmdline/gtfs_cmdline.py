@@ -157,6 +157,13 @@ def gtfs_rt_parser(api_key_required=False, api_key_msg=None, exe_name='bin/load_
         required=False,
         help="url to gtfs-realtime *vehicle positions* data feed"
     )
+    parser.add_argument(
+        '--api_key',
+        '-appid',
+        '-key',
+        required=False,
+        help="api key, ala https://developer.trimet.org/why_an_appid.shtml"
+    )
 
     ret_val = parser
     if do_parse:
