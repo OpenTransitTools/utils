@@ -127,14 +127,13 @@ def gtfs_download_parser(exe_name='bin/download_gtfs', do_parse=True):
     return ret_val
 
 
-def gtfs_rt_parser(api_key_required=False, api_key_msg=None, exe_name='bin/load_gtfs_rt', do_parse=True, add_misc=False):
+def gtfs_rt_parser(exe_name='bin/load_gtfs_rt', api_key_required=False, api_key_msg=None, agency_required=False, do_parse=True, add_misc=False):
     """ create a database and gtfs rt commandline arg PARSER """
     from . import db_cmdline
     parser = db_cmdline.db_parser(exe_name, add_misc=add_misc)
-    agency_option(parser, True)
 
-    if api_key_required:
-        api_key(parser, api_key_required, api_key_msg)
+    agency_option(parser, agency_required)
+    api_key(parser, api_key_required, api_key_msg)
 
     parser.add_argument(
         '--alerts_url',
