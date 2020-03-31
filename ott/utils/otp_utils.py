@@ -181,8 +181,9 @@ def kill_otp_server(graph_dir):
     exe_utils.kill_old_pid(pid_file=pid_path)
 
 
-def kill_all(cmd="java"):
-    exe_utils.run_cmd("pkill -9 " + cmd)
+def kill(cmd="java", delay=15):
+    time.sleep(delay)
+    exe_utils.kill_all(cmd)
 
 
 def get_otp_version(graph_dir=None, otp_name=OTP_NAME):

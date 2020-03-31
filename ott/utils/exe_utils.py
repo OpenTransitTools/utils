@@ -140,6 +140,10 @@ def kill(pid):
             log.debug(e)
 
 
+def kill_all(cmd):
+    os.system("pkill -9 " + cmd)
+
+
 def find_executable(name):
     ret_val = None
     try:
