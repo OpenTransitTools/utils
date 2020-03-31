@@ -10,6 +10,7 @@ class TripParamParser(ParamParser):
     def __init__(self, request):
         super(TripParamParser, self).__init__(request)
 
+        # import pdb; pdb.set_trace()
         config = ConfigUtil.factory(section="otp")
 
         self.frm   = None
@@ -229,7 +230,8 @@ class TripParamParser(ParamParser):
         return ret_val
 
     def _parse_from(self):
-        """ parse out the trip origin from get params ... the value could be a string, a coordinate or combo of the two
+        """
+        parse out the trip origin from get params ... the value could be a string, a coordinate or combo of the two
         """
         name = self.get_first_val(['from', 'fromPlace', 'f'])
         if name:
@@ -250,7 +252,8 @@ class TripParamParser(ParamParser):
             self.frm = self.frm.replace("&", "%26")  # escape & in the name
 
     def _parse_to(self):
-        """ parse out the trip destination from get params ... the value could be a string,a coordinate or combo of the two
+        """
+        parse out the trip destination from get params ... the value could be a string,a coordinate or combo of the two
         """
         name = self.get_first_val(['to', 'toPlace', 't'])
         if name:
