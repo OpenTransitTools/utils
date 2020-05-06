@@ -611,6 +611,9 @@ def replace_adjacent_strings_in_file(file_path, regex_str1, replace_str1, regex_
 
                 # step 4b: if we did a regex to this line, then that's a trigger to look for 2nd line
                 if line != newln:
+                    sys.stdout.write('.')
+                    sys.stdout.flush()
+
                     # import pdb; pdb.set_trace()
                     if changing:
                         # stops regex'ing since we've seen the other line to change
@@ -625,6 +628,7 @@ def replace_adjacent_strings_in_file(file_path, regex_str1, replace_str1, regex_
             fin.close()
             tmp.flush()
             tmp.close()
+            print("")
 
             # step 5: mv tmp file into place for file
             if ovrwt:
