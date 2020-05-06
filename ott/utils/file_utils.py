@@ -605,7 +605,7 @@ def replace_adjacent_strings_in_file(file_path, regex_str1, replace_str1, regex_
             changing = False
             for line in fin.readlines():
                 newln = line
-                if replace_str != None:
+                if replace_str != None and (replace_str == "" or replace_str not in line):
                     newln = regex.sub(replace_str, line)
                 tmp.write(newln)
 
