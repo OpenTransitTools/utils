@@ -605,12 +605,13 @@ def replace_adjacent_strings_in_file(file_path, regex_str1, replace_str1, regex_
             changing = False
             for line in fin.readlines():
                 newln = line
-                if replace_str:
+                if replace_str != None:
                     newln = regex.sub(replace_str, line)
                 tmp.write(newln)
 
                 # step 4b: if we did a regex to this line, then that's a trigger to look for 2nd line
                 if line != newln:
+                    # import pdb; pdb.set_trace()
                     if changing:
                         # stops regex'ing since we've seen the other line to change
                         replace_str = None
@@ -636,11 +637,13 @@ def replace_adjacent_strings_in_file(file_path, regex_str1, replace_str1, regex_
 def uncomment_block_xml(file_path, comment_regex="", ovrwt=True):
     """
     <!--  THIS METHOD
-          will uncomment a block xml comment LIKE ME, ala
+          will uncomment a block xml comment LIKE ME
+          (and it won't mess with any 3-character comment junk below)
+          note: see the main method below for a simple test using this file
     -->
     """
     regex_str1 = "<!--.*" + comment_regex
-    replace_str1 = "<!-- " + comment_regex + "-->"
+    replace_str1 = "<!-- " + comment_regex + " -->"
     regex_str2 = "-->"
     replace_str2 = ""
     replace_adjacent_strings_in_file(file_path, regex_str1, replace_str1, regex_str2, replace_str2, ovrwt)
@@ -737,7 +740,8 @@ def get_project_root_dir(path=None):
 
 def main():
     # will demo the uncomment block on this file
-    uncomment_block_xml(__file__, comment_regex="THIS", ovrwt=False)
+    # import pdb; pdb.set_trace()
+    uncomment_block_xml("file_utils.py", comment_regex="THIS METHOD", ovrwt=False)
 
 
 if __name__ == "__main__":
