@@ -581,6 +581,71 @@ def replace_strings_in_file(file_path, regex_str, replace_str):
         log.warning("problems editing file {}\n(exception: {})".format(file_path, e))
 
 
+def replace_adjacent_strings_in_file(file_path, regex_str1, replace_str1, regex_str2, replace_str2, ovrwt=True):
+    """
+    replace a pattern in each line of a text file
+    """
+    try:
+        if os.path.exists(file_path):
+            # step 1: setup tmp file
+            tmp_file_path = file_path + ".tmp"
+            rm(tmp_file_path)
+
+            # step 2: open files
+            fin = open(file_path,'r')
+            tmp = open(tmp_file_path,'w')
+
+            # step 3: set up the 2 regexs and initial replace code
+            regex1 = re.compile(regex_str1, re.IGNORECASE)
+            regex2 = re.compile(regex_str2, re.IGNORECASE)
+            replace_str = replace_str1
+            regex = regex1
+
+            # step 4: start going thru the lines of the files
+            changing = False
+            for line in fin.readlines():
+                newln = line
+                if replace_str:
+                    newln = regex.sub(replace_str, line)
+                tmp.write(newln)
+
+                # step 4b: if we did a regex to this line, then that's a trigger to look for 2nd line
+                if line != newln:
+                    if changing:
+                        # stops regex'ing since we've seen the other line to change
+                        replace_str = None
+                    else:
+                        # switch the rexex stuff so we're looking for 2nd line
+                        changing = True
+                        regex = regex2
+                        replace_str = replace_str2
+
+            # step 4: close files
+            fin.close()
+            tmp.flush()
+            tmp.close()
+
+            # step 5: mv tmp file into place for file
+            if ovrwt:
+                rm(file_path)
+                mv(tmp_file_path, file_path)
+    except Exception as e:
+        log.warning("problems editing file {}\n(exception: {})".format(file_path, e))
+
+
+def uncomment_block_xml(file_path, comment_regex="", ovrwt=True):
+    """
+    <!--  THIS METHOD
+          will uncomment a block xml comment LIKE ME, ala
+    -->
+    """
+    regex_str1 = "<!--.*" + comment_regex
+    replace_str1 = "<!-- " + comment_regex + "-->"
+    regex_str2 = "-->"
+    replace_str2 = ""
+    replace_adjacent_strings_in_file(file_path, regex_str1, replace_str1, regex_str2, replace_str2, ovrwt)
+
+
 def make_csv_writer(fp, fieldnames=None):
     """ :return from the input file pointer (and optional header field names list), return a csv writer
     """
@@ -668,3 +733,12 @@ def get_project_root_dir(path=None):
             path = os.path.join(path, '..')
             break
     return path
+
+
+def main():
+    # will demo the uncomment block on this file
+    uncomment_block_xml(__file__, comment_regex="THIS", ovrwt=False)
+
+
+if __name__ == "__main__":
+    main()
