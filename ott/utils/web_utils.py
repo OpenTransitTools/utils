@@ -139,6 +139,10 @@ def scp_client(host, user, password=None):
     return scp, ssh
 
 
+def flash(cmd):
+    exe_utils.kill_all(cmd)
+
+
 def post(hostname, port, path, data):
     """
     """
