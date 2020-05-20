@@ -140,7 +140,10 @@ def scp_client(host, user, password=None):
 
 
 def flash(cmd):
-    exe_utils.kill_all(cmd)
+    if cmd == "docker":
+        exe_utils.run_cmd_get_stdout("docker kill $(docker ps -aq)")
+    else:
+        exe_utils.kill_all(cmd)
 
 
 def post(hostname, port, path, data):
