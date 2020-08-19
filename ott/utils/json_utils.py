@@ -1,4 +1,5 @@
 import os
+import requests
 import socket
 import simplejson as json
 import contextlib
@@ -18,9 +19,12 @@ def stream_json(url, args=None, extra_path=None, def_val={}):
         url = "{0}/{1}".format(url, extra_path)
     if args:
         url = "{0}?{1}".format(url, args)
-    with contextlib.closing(urllib.request.urlopen(url)) as stream:
-        content_string = stream.read().decode('utf-8')
-        ret_val = json.loads(content_string)
+
+    # use requests to GET the .json content from this url
+    response = requests.get(url)
+    ret_val = response.json()
+    response.close()
+
     return ret_val
 
 
