@@ -80,7 +80,7 @@ def write_pid_file(pid_file, pid):
         log.debug("Couldn't write to the pid file -- {}".format(e))
 
 
-def run_cmd(cmd_line, fork=False, shell=False, pid_file=None, log_file=None):
+def run_cmd(cmd_line, fork=False, shell=False, pid_file=None, log_file=None, shell_script=False):
     """ run_cmd("sleep 200") will block for 200 seconds
         run_cmd("sleep 200", True) will background the process
 
@@ -99,14 +99,20 @@ def run_cmd(cmd_line, fork=False, shell=False, pid_file=None, log_file=None):
         cmd_line = "{} > {} 2>&1".format(cmd_line, log_file)
         log.debug("new cmd line: {}".format(cmd_line))
 
-    if fork:
+
+    if shell_script:
+        process = None
+        os.system(cmd_line)
+    elif fork:
         process = subprocess.Popen(cmd_line, shell=shell)
     else:
         process = subprocess.call(cmd_line, shell=shell)
 
     # Write PID file
-    pid = object_utils.safe_get(process, 'pid')
-    write_pid_file(pid_file, pid)
+    pid = None
+    if process:
+        pid = object_utils.safe_get(process, 'pid')
+        write_pid_file(pid_file, pid)
     return pid
 
 

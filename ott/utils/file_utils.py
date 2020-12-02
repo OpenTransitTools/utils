@@ -354,6 +354,29 @@ def mkdir(dir_path):
         os.makedirs(dir_path)
 
 
+def cat(dir, file_name=None, input=None):
+    """ act like unix 'cat' - put string into file (or echo data out """
+    ret_val = None
+
+    # step 1: figure out the file path
+    if dir:
+        if file_name:
+            file_path = os.path.join(dir, file_name)
+        else:
+            file_path = dir
+
+        # step 2: write to the file if we have something to input
+        if input:
+            with open(file_path, "w") as f:
+                f.write(input)
+
+        # step 3: read contents of the file
+        if os.path.exists(file_path):
+            with open(file_path, "r") as f:
+                ret_val = f.readlines()
+    return ret_val
+
+
 def copy_contents(src_dir, target_dir, overwrite=True):
     file_paths = next(os.walk(src_dir))[2]
     for f in file_paths:
