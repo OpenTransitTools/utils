@@ -446,13 +446,15 @@ def distance(latA, lonA, latB, lonB, R=6371e3):
 
 def bearing(latA, lonA, latB, lonB, normalize=True):
     """
+    find angle / compass bearing between 2 points
     :see answer 4: https://stackoverflow.com/questions/17624310/geopy-calculating-gps-heading-bearing
     :return: compass bearing (either normalized at 0-360, or -180 to 180)
     """
     dist_lon = lonB - lonA
-    y = math.sin(dist_lon) * math.cos(latB)
-    x = math.cos(latA) * math.sin(latB) - math.sin(latA) * math.cos(latB) * math.cos(dist_lon)
-    b = math.degrees(math.atan2(y, x))
+    x = math.sin(math.radians(dist_lon)) * math.cos(math.radians(latB))
+    y = math.cos(math.radians(latA)) * math.sin(math.radians(latB)) - \
+        math.sin(math.radians(latA)) * math.cos(math.radians(latB)) * math.cos(math.radians(dist_lon))
+    b = math.degrees(math.atan2(x, y))
 
     # bearing is -180 to 180 ... normalize to 0 - 360 compass ?
     if normalize:
@@ -462,11 +464,10 @@ def bearing(latA, lonA, latB, lonB, normalize=True):
     return b
 
 
-def compass(bearing, def_val='N'):
+def compass(bearing):
     """
     :return: N/S/E/W/etc...
     """
-    ret_val = def_val
     if bearing >= 337.5 or bearing <= 22.5:
         ret_val = 'N'
     elif bearing <= 67.5:
