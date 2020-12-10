@@ -444,6 +444,48 @@ def distance(latA, lonA, latB, lonB, R=6371e3):
 # todo dist = num_utils.distance_mi(s.stop_lat, s.stop_lon, geo_params.lat, geo_params.lon)
 
 
+def bearing(latA, lonA, latB, lonB, normalize=True):
+    """
+    :see answer 4: https://stackoverflow.com/questions/17624310/geopy-calculating-gps-heading-bearing
+    :return: compass bearing (either normalized at 0-360, or -180 to 180)
+    """
+    dist_lon = lonB - lonA
+    y = math.sin(dist_lon) * math.cos(latB)
+    x = math.cos(latA) * math.sin(latB) - math.sin(latA) * math.cos(latB) * math.cos(dist_lon)
+    b = math.degrees(math.atan2(y, x))
+
+    # bearing is -180 to 180 ... normalize to 0 - 360 compass ?
+    if normalize:
+        if b < 0.0:
+            b += 360
+
+    return b
+
+
+def compass(bearing, def_val='N'):
+    """
+    :return: N/S/E/W/etc...
+    """
+    ret_val = def_val
+    if bearing >= 337.5 or bearing <= 22.5:
+        ret_val = 'N'
+    elif bearing <= 67.5:
+        ret_val = 'NE'
+    elif bearing <= 112.5:
+        ret_val = 'E'
+    elif bearing <= 157.5:
+        ret_val = 'SE'
+    elif bearing <= 202.5:
+        ret_val = 'S'
+    elif bearing <= 247.5:
+        ret_val = 'SW'
+    elif bearing <= 292.5:
+        ret_val = 'W'
+    else:
+        ret_val = 'NW'
+    return ret_val
+
+
 def list_sort(obj_list, sort_on_attrib='distance', reverse_order=False, assign_order=False):
     """
     sort a python list [] by attribute, and assign order
