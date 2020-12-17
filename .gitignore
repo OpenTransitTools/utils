@@ -2,6 +2,7 @@
 *~
 *.py[cod]
 .settings
+.token
 COMMIT_EDITMSG
 .git/
 .git/*

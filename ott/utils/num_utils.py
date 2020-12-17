@@ -59,6 +59,21 @@ def to_int(val, def_val=None):
     return ret_val
 
 
+def to_int_range(val, low, high, def_val=None):
+    ret_val = def_val
+    try:
+        v = to_int(val, def_val)
+        low = to_int(low, 0)
+        high = to_int(high, 111111111111)
+        if v < low:
+            v = low
+        if v > high:
+            v = high
+        ret_val = v
+    except:
+        pass
+    return ret_val
+
 def to_float(val, def_val=None):
     ret_val = def_val
     try:
