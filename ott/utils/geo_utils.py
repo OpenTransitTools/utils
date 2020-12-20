@@ -23,8 +23,23 @@ def BBox(t, b, l, r):
 def bbox(min_lat, max_lat, min_lon, max_lon):
     """
     minLat=45.50854243338104&maxLat=45.519789433696744&minLon=-122.6960849761963&maxLon=-122.65591621398927):
+    TODO: this format is strange...  should be lat,lon,lat,lon
     """
     return BBox(max_lat, min_lat, max_lon, min_lon)
+
+
+def bbox_to_points(bbox, sep=","):
+    """
+    TODO: this format is different from above ... this is lat,lon,lat,lon
+          would be good to see this as a method of BBox
+          constructor to bbox would also take similar points...
+    """
+    ll = bbox.split(sep)
+    if len(ll) < 4:
+        ll = bbox.split(",")
+    p1 = "{}{}{}".format(ll[0], sep, ll[1])
+    p2 = "{}{}{}".format(ll[2], sep, ll[3])
+    return p1, p2
 
 
 def make_geojson_bbox(min_lat, max_lat, min_lon, max_lon, srid=None):

@@ -1,4 +1,4 @@
-def blank_parser(prog_name='bin/ott_blah', add_misc=False):
+def empty_parser(prog_name='bin/ott_blah'):
     """
     create a generic OTP commandline arg PARSER
     """
@@ -7,6 +7,14 @@ def blank_parser(prog_name='bin/ott_blah', add_misc=False):
         prog=prog_name,
         formatter_class=argparse.ArgumentDefaultsHelpFormatter
     )
+    return parser
+
+
+def blank_parser(prog_name, add_misc=False):
+    """
+    create a generic OTP commandline arg PARSER
+    """
+    parser = empty_parser(prog_name)
     parser.add_argument("-force", "--force",
                         help="Force update flag",
                         action="store_true"
