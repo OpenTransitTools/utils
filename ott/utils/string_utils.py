@@ -22,6 +22,16 @@ def safe_index(val, search):
     return ret_val
 
 
+def safe_replace(val, target="", replace=""):
+    ret_val = val
+    try:
+        if len(target) > 0:
+            ret_val = val.replace(target, replace)
+    except:
+        pass
+    return ret_val
+
+
 def safe_append(str1, str2, def_val=None):
     ret_val = def_val
     try:
