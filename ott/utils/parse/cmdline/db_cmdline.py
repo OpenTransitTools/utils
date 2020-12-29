@@ -31,6 +31,12 @@ def db_parser(prog_name='bin/loader', tables=['Could be (Decarative) Base.metada
         help="database schema"
     )
     parser.add_argument(
+        '--user',
+        '-user',
+        '-u',
+        help="database user"
+    )
+    parser.add_argument(
         '--tables',
         choices=tables, default=None, nargs='*',
         help="Limited list of TABLES to load, if blank, load all tables"

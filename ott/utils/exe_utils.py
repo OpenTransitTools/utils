@@ -41,11 +41,11 @@ def run_java(cmd_line, fork=False, big_xmx="-Xmx4096m", small_xmx="-Xmx1536m", j
     return ret_val
 
 
-def run_cmd_get_stdout(cmd):
+def run_cmd_get_stdout(cmd, shell=True):
     """ 2.7 way to run things and get output
         @see: http://stackoverflow.com/questions/4760215/running-shell-command-from-python-and-capturing-the-output
     """
-    output = subprocess.check_output(cmd, shell=True)
+    output = subprocess.check_output(cmd, shell=shell)
     if output:
         output = output.decode("utf-8")
     return output

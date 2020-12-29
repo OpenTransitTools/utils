@@ -722,12 +722,16 @@ def get_parent_dir(in_dir):
 
 
 def get_file_dir(file):
+    """
+    note: client calling this function can use __file__, ala dir = file_utils.get_file_dir(__file__)
+    """
     dir = os.path.dirname(os.path.abspath(file))
     return dir
 
 
 def get_module_dir(clazz):
-    """ send me a __class__, and I'll return the path to the directory where it lives
+    """
+    send me a __class__, and I'll return the path to the directory where it lives
     """
     file = inspect.getsourcefile(clazz)
     dir = get_file_dir(file)
@@ -735,7 +739,8 @@ def get_module_dir(clazz):
 
 
 def get_bin_dir():
-    """ :return the path to where python binary is running (e.g., <project>/bin/ for buildout projects)
+    """
+    :return the path to where python binary is running (e.g., <project>/bin/ for buildout projects)
     """
     python_path = os.path.dirname(sys.modules['__main__'].__file__)
     return python_path

@@ -201,8 +201,20 @@ def safe_set_from_dict(obj, key, src={}, always_cpy=True, def_val=None):
         log.info(e)
 
 
+def list_to_str(list, sep=" "):
+    ret_val = ""
+    try:
+        for n in list:
+            ret_val += n + sep
+        ret_val = ret_val.rstrip(sep)
+    except:
+        ret_val = to_str(list)
+    return ret_val
+
+
 def str_to_list(str, def_val=[]):
-    """ try to return a list of some sort
+    """
+    try to return a list of some sort
     """
     ret_val = def_val
     try:
