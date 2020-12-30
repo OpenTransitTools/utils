@@ -28,6 +28,20 @@ def bbox(min_lat, max_lat, min_lon, max_lon):
     return BBox(max_lat, min_lat, max_lon, min_lon)
 
 
+def normalize_postgis_bbox(bbox, sep=","):
+    """
+    convert BOX(-122.685494484516 45.5093902248328,-122.658580182051 45.5351200407387)
+    :param bbox: string
+    :return: string of lat,lon,lat,lon
+    """
+    bbox = bbox.strip("BOX(").strip(")")
+    points = bbox.split(",")
+    p1 = points[0].split(" ")
+    p2 = points[0].split(" ")
+    ret_val = "{}{}{}{}{}{}{}".format(p1[1], sep, p1[0], sep, p2[1], sep, p2[0])
+    return ret_val
+
+
 def bbox_to_points(bbox, sep=","):
     """
     TODO: this format is different from above ... this is lat,lon,lat,lon
