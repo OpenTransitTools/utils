@@ -37,7 +37,7 @@ def normalize_postgis_bbox(bbox, sep=","):
     bbox = bbox.strip("BOX(").strip(")")
     points = bbox.split(",")
     p1 = points[0].split(" ")
-    p2 = points[0].split(" ")
+    p2 = points[1].split(" ")
     ret_val = "{}{}{}{}{}{}{}".format(p1[1], sep, p1[0], sep, p2[1], sep, p2[0])
     return ret_val
 
