@@ -115,19 +115,10 @@ def has_content(obj):
     return ret_val
 
 
-def safe_str(obj, def_val=''):
-    ret_val = def_val
+def is_list(obj, key):
+    ret_val = False
     try:
-        ret_val = str(obj)
-    except:
-        pass
-    return ret_val
-
-
-def safe_int(obj, def_val=None):
-    ret_val = def_val
-    try:
-        ret_val = int(obj)
+        ret_val = isinstance(obj[key], list)
     except:
         pass
     return ret_val
@@ -151,6 +142,33 @@ def safe_array_val(list, index, def_val=None):
     return ret_val
 
 
+def safe_str(obj, def_val=''):
+    ret_val = def_val
+    try:
+        ret_val = str(obj)
+    except:
+        pass
+    return ret_val
+
+
+def safe_int(obj, def_val=0):
+    ret_val = def_val
+    try:
+        ret_val = int(obj)
+    except:
+        pass
+    return ret_val
+
+
+def safe_float(obj, def_val=0.0):
+    ret_val = def_val
+    try:
+        ret_val = float(obj)
+    except:
+        pass
+    return ret_val
+
+
 def safe_get(obj, key, def_val=None):
     """ try to return the key'd value from either a class or a dict
         (or return the raw value if we were handed a native type)
@@ -162,9 +180,21 @@ def safe_get(obj, key, def_val=None):
         try:
             ret_val = obj[key]
         except:
-            if isinstance(obj, (int, str)):
+            if isinstance(obj, (float, int, str)):
                 ret_val = obj
     return ret_val
+
+
+def safe_get_str(obj, key, def_val=''):
+    return safe_str(safe_get(obj, key), def_val)
+
+
+def safe_get_int(obj, key, def_val=0):
+    return safe_int(safe_get(obj, key), def_val)
+
+
+def safe_get_float(obj, key, def_val=0.0):
+    return safe_float(safe_get(obj, key), def_val)
 
 
 def safe_get_any(obj, keys, def_val=None):
