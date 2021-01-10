@@ -367,7 +367,7 @@ def cat(dir, file_name=None, input=None):
 
         # step 2: write to the file if we have something to input
         if input:
-            with open(file_path, "w") as f:
+            with open(file_path, "w+") as f:
                 f.write(input)
 
         # step 3: read contents of the file
