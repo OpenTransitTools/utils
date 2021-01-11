@@ -99,6 +99,18 @@ def parse_geojson(geojson):
     return ret_val
 
 
+def ll_from_point_str(point):
+    """
+    takes the string POINT(-122.694675 45.529864), and returns lat,lon floats
+    :param point: string POINT(lon lat)
+    :return: lat,lon floats
+    """
+    coord = point.replace('POINT(', '').replace(')', '').split(' ')
+    lon = float(coord[0])
+    lat = float(coord[1])
+    return lat,lon
+
+
 def is_coord(c):
     ret_val = False
     try:
