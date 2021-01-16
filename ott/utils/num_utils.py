@@ -74,10 +74,12 @@ def to_int_range(val, low, high, def_val=None):
         pass
     return ret_val
 
-def to_float(val, def_val=None):
+def to_float(val, def_val=None, round_to=0):
     ret_val = def_val
     try:
         ret_val = float(val)
+        if int(round_to) > 0:
+            ret_val = round(ret_val, round_to)
     except:
         pass
     return ret_val

@@ -100,22 +100,21 @@ def obj_to_dict(obj):
         return repr(obj) # Don't know how to handle, convert to string
 
 
-def dict_to_json_str(data, pretty_print=False):
+def dict_to_json_str(data, pretty_print=False, indent=4):
     """ dump nested dict into string """
-    ret_val = None
     if pretty_print:
-        ret_val = json.dumps(data, sort_keys=True, indent=4)
+        ret_val = json.dumps(data, sort_keys=True, indent=indent)
     else:
         ret_val = json.dumps(data)
     return ret_val
 
 
-def object_to_json_file(file_path, obj, pretty_print=False):
+def object_to_json_file(file_path, obj, pretty_print=False, indent=4):
     # import pdb; pdb.set_trace()
     data = obj_to_dict(obj)
     with open(file_path, 'w+') as outfile:
         if pretty_print:
-            json.dump(data, outfile, sort_keys=True, indent=4)
+            json.dump(data, outfile, sort_keys=True, indent=indent)
         else:
             json.dump(data, outfile)
 
