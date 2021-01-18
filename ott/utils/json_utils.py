@@ -109,14 +109,18 @@ def dict_to_json_str(data, pretty_print=False, indent=4):
     return ret_val
 
 
-def object_to_json_file(file_path, obj, pretty_print=False, indent=4):
-    # import pdb; pdb.set_trace()
-    data = obj_to_dict(obj)
+def dict_to_json_file(file_path, data, pretty_print=False, indent=4):
     with open(file_path, 'w+') as outfile:
         if pretty_print:
             json.dump(data, outfile, sort_keys=True, indent=indent)
         else:
             json.dump(data, outfile)
+
+
+def object_to_json_file(file_path, obj, pretty_print=False, indent=4):
+    # import pdb; pdb.set_trace()
+    data = obj_to_dict(obj)
+    dict_to_json_file(file_path, data, pretty_print, indent)
 
 
 def json_repr(obj, pretty_print=False):
