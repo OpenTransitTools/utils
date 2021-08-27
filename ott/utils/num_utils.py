@@ -55,7 +55,7 @@ def to_int(val, def_val=None):
     try:
         ret_val = int(val)
     except:
-        pass
+        log.debug("couldn't convert {} to int".format(val))
     return ret_val
 
 
