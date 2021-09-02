@@ -19,11 +19,11 @@ NEW_SUFFIX = "-new"
 OLD_DIR_NAME = "OLD"
 
 
-def find_files(dir_path, ext=".txt"):
+def find_files(dir_path, ext=".txt", contains=False):
     """ find files that have a certain ending extension """
     ret_val = []
     for file in listdir(dir_path):
-        if file.endswith(ext):
+        if (contains and ext in file) or file.endswith(ext):
             f = os.path.join(dir_path, file)
             ret_val.append(f)
     return ret_val
@@ -558,6 +558,7 @@ def add_file_to_zip(zip_path, file_path, file_name=None):
     zip = zipfile.ZipFile(zip_path, mode='a', compression=zipfile.ZIP_DEFLATED)
     zip.write(file_path, file_name)
     zip.close()
+
 
 def replace_file_in_zipfile(zip_path, file_path, file_name=None):
     if file_name is None:
