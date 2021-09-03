@@ -19,7 +19,20 @@ NEW_SUFFIX = "-new"
 OLD_DIR_NAME = "OLD"
 
 
-def find_files(dir_path, ext=".txt", contains=False):
+def find_files(dir_path, ext=".txt", contains=False, sub_dirs=[""]):
+    """ find files that have a certain ending extension """
+    ret_val = []
+    for sd in sub_dirs:
+        path = os.path.join(dir_path, sd)
+        if os.path.exists(path):
+            for file in listdir(path):
+                if (contains and ext in file) or file.endswith(ext):
+                    f = os.path.join(path, file)
+                    ret_val.append(f)
+    return ret_val
+
+
+def find_files_in_subdirs(dir_path, ext=".txt", contains=False):
     """ find files that have a certain ending extension """
     ret_val = []
     for file in listdir(dir_path):
