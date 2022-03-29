@@ -1,4 +1,6 @@
 import os
+from re import T
+from tkinter.messagebox import NO
 import requests
 import socket
 import simplejson as json
@@ -10,21 +12,59 @@ import logging
 log = logging.getLogger(__file__)
 
 
+def rec_array_to_dict(rec_array, name_ele='name', content_ele=None):
+    """
+    convert an array of recs to a dictionary, ala
+      [{'name': 'a', 'blah': 'blah'}, {'name': 'b', 'blah': 'blah'}]
+      -to-
+      {'a': {'name': 'a', 'blah': 'blah'}, 'b': {'name': 'b', 'blah': 'blah'} }
+    """
+    ret_val = {}
+    for r in rec_array:
+        if name_ele in r and r[name_ele]:
+            name = r[name_ele]
+            if content_ele:
+                if content_ele in r:
+                    ret_val[name] = r[content_ele]
+            else:
+                ret_val[name] = r
+    return ret_val
+
+
+def exists_in(rec, ele1, ele2=None, ele3=None):
+    """
+    check whether a (nested) element exists in a dict
+    """
+    ret_val = False
+    if rec and ele1 and ele1 in rec:
+        ret_val = True
+        if ele2:
+            if ele2 not in rec[ele1]:
+                ret_val = False
+            elif ele3 and ele3 not in rec[ele1][ele2]:
+                ret_val = False
+    return ret_val
+
+
 def stream_json(url, args=None, extra_path=None, def_val={}):
     """
     utility class to stream .json
     """
     ret_val = def_val
-    if extra_path:
-        url = "{0}/{1}".format(url, extra_path)
-    if args:
-        url = "{0}?{1}".format(url, args)
+    try:
+        if extra_path:
+            url = "{0}/{1}".format(url, extra_path)
+        if args:
+            url = "{0}?{1}".format(url, args)
 
-    # use requests to GET the .json content from this url
-    response = requests.get(url)
-    ret_val = response.json()
-    response.close()
-
+        # use requests to GET the .json content from this url
+        response = requests.get(url)
+        ret_val = response.json()
+        response.close()
+    except Exception as e:
+            ret_val = def_val
+            log.error(url)
+            log.error(e)
     return ret_val
 
 
