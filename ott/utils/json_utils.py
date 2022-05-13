@@ -46,7 +46,7 @@ def exists_in(rec, ele1, ele2=None, ele3=None):
     return ret_val
 
 
-def stream_json(url, args=None, extra_path=None, def_val={}):
+def stream_json(url, args=None, extra_path=None, raw_data=False, def_val={}):
     """
     utility class to stream .json
     """
@@ -59,7 +59,7 @@ def stream_json(url, args=None, extra_path=None, def_val={}):
 
         # use requests to GET the .json content from this url
         response = requests.get(url)
-        ret_val = response.json()
+        ret_val = response.text if raw_data else response.json()
         response.close()
     except Exception as e:
             ret_val = def_val
