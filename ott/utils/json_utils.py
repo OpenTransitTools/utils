@@ -1,6 +1,5 @@
 import os
 from re import T
-from tkinter.messagebox import NO
 import requests
 import socket
 import simplejson as json
