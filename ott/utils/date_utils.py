@@ -106,6 +106,19 @@ def parse_month_day_year_string(mdy_str, sep='/'):
     return ret_val
 
 
+def parse_datetime(dtstr, format=None, def_val=None):
+    ret_val = def_val
+    try:
+        ret_val = datetime.datetime.fromisoformat(dtstr)
+    except Exception as e:
+        log.warning(e)
+    return ret_val
+
+
+def parse_datetime_seconds(dtstr, format=None):
+    return parse_datetime(dtstr, format, datetime.datetime.now()).timestamp()
+
+
 def normalize_year(input_month, input_year=None):
     """ This routine is used when we only have month parameters (text planner / stop schedule lookup) and the
         year is implied...

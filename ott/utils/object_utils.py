@@ -17,6 +17,17 @@ def to_hash(str):
     return ret_val
 
 
+def safe_len(n, def_val=0, min_len=0):
+    ret_val = def_val
+    try:
+        ret_val = len(n)
+        if ret_val < min_len:
+            ret_val = def_val
+    except Exception as e:
+        log.warning(e)
+    return ret_val
+
+
 def get_error_message(err, def_val=None):
     """ return error message from an OTP error object
         {'error': {'msg': 'Origin is within a trivial distance of the destination.', 'id': 409}}
