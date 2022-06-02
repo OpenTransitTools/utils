@@ -25,6 +25,23 @@ def blank_parser(prog_name, add_misc=False):
     return parser
 
 
+def file_cmdline(prog_name, def_val='', help_msg="what is the file name?", do_parse=True, required=False):
+    """
+    create a generic file commandline arg PARSER
+    """
+    parser = empty_parser(prog_name)
+    parser.add_argument(
+        '--file',
+        '-file',
+        '-f',
+        required=required,
+        default=def_val,
+        help=help_msg
+    )
+
+    return parser.parse_args() if do_parse else parser
+
+
 def server_option(parser, required=False, def_val='all', help_msg="which server (maps7, svrX, etc...) should I send this to? "):
     parser.add_argument(
         '--server',
