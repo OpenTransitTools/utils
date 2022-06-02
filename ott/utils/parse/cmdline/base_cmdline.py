@@ -25,7 +25,7 @@ def blank_parser(prog_name, add_misc=False):
     return parser
 
 
-def file_cmdline(prog_name, def_val='', help_msg="what is the file name?", do_parse=True, required=False):
+def file_cmdline(prog_name='bin/app-file', def_file='blah.txt', help_msg="what is the file name?", do_parse=True, required=False):
     """
     create a generic file commandline arg PARSER
     """
@@ -35,7 +35,7 @@ def file_cmdline(prog_name, def_val='', help_msg="what is the file name?", do_pa
         '-file',
         '-f',
         required=required,
-        default=def_val,
+        default=def_file,
         help=help_msg
     )
 
