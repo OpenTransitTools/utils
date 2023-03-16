@@ -9,17 +9,17 @@ import logging
 log = logging.getLogger(__file__)
 
 
-def run_python(cmd_line, fork=False, py_cmd="python", shell=None, pid_file=None, log_file=None):
+def run_python(cmd_line, fork=False, py_cmd="python", shell=None, pid_file=None, log_file=None, echo=False):
     """ run a python command
     """
     cmd_line = "{} {}".format(py_cmd, cmd_line)
     if shell is None:
         shell = does_cmd_need_a_shell(py_cmd, "--version", fork)
-    ret_val = run_cmd(cmd_line, fork, shell, pid_file, log_file)
+    ret_val = run_cmd(cmd_line, fork, shell, pid_file, log_file, echo=echo)
     return ret_val
 
 
-def run_java(cmd_line, fork=False, big_xmx="-Xmx4096m", small_xmx="-Xmx1536m", java_cmd="java", shell=None, pid_file=None, log_file=None):
+def run_java(cmd_line, fork=False, big_xmx="-Xmx4096m", small_xmx="-Xmx1536m", java_cmd="java", shell=None, pid_file=None, log_file=None, echo=False):
     """ run java ... if we get an exception, try to run again with lower heap size
         @pid_file: send this variable with the name of a file (e.g., "pid.txt") in to get the process pid written out
         NOTE: shell is None NONE None, since we want to test if java can run first w/out an environment
@@ -31,7 +31,7 @@ def run_java(cmd_line, fork=False, big_xmx="-Xmx4096m", small_xmx="-Xmx1536m", j
         if big_xmx is None:
             big_xmx = "-Xmx4096m"
         cmd_line = "{} {} {}".format(java_cmd, big_xmx, cmd_line)
-        ret_val = run_cmd(cmd_line, fork, shell, pid_file, log_file)
+        ret_val = run_cmd(cmd_line, fork, shell, pid_file, log_file, echo=echo)
     except Exception as e:
         # try again with smaller java heap memory request
         # NOTE: 'fork' won't get you to see an exception here (because you fork the exception into another process)
@@ -80,7 +80,7 @@ def write_pid_file(pid_file, pid):
         log.debug("Couldn't write to the pid file -- {}".format(e))
 
 
-def run_cmd(cmd_line, fork=False, shell=False, pid_file=None, log_file=None, shell_script=False):
+def run_cmd(cmd_line, fork=False, shell=False, pid_file=None, log_file=None, shell_script=False, echo=False):
     """ run_cmd("sleep 200") will block for 200 seconds
         run_cmd("sleep 200", True) will background the process
 
@@ -90,7 +90,10 @@ def run_cmd(cmd_line, fork=False, shell=False, pid_file=None, log_file=None, she
           devnull = open(os.devnull, 'wb')
           subprocess.Popen(['nohup', 'sleep', '100'], stdout=devnull, stderr=devnull)
     """
-    log.info(cmd_line)
+    if echo:
+        log.warning(cmd_line)
+    else:
+        log.info(cmd_line)
     kill_old_pid(pid_file)
 
     # append log file cmd to pipe output to that file (should work on both linux and dos)
@@ -98,7 +101,6 @@ def run_cmd(cmd_line, fork=False, shell=False, pid_file=None, log_file=None, she
         log.debug("changing cmd line {} by appending log file {}".format(cmd_line, log_file))
         cmd_line = "{} > {} 2>&1".format(cmd_line, log_file)
         log.debug("new cmd line: {}".format(cmd_line))
-
 
     if shell_script:
         process = None
