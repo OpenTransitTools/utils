@@ -124,6 +124,68 @@ def get_test_urls_from_config(section='otp', hostname=None, ws_path=None, ws_por
     return ws_url, app_url
 
 
+def get_sub_str(s, start_str, end_str=",", def_val=None, return_something=True):
+    #import pdb; pdb.set_trace()
+    ret_val = def_val
+    if start_str in s:
+        b = s.index(start_str)
+        e = len(s) if end_str not in s else s.index(end_str, b)
+        ret_val = s[b : e]
+    if return_something and ret_val is None:
+        ret_val = s
+    return ret_val
+
+
+def get_otp_version_simple(graph_dir=None, otp_name=OTP_NAME, def_ver=OTP_2):
+    """ return the simplified version number """
+    ret_val = def_ver
+    v,c = get_otp_version(graph_dir, otp_name)
+    if "version: 2" in v: ret_val = OTP_2
+    elif "version: 1" in v: ret_val = OTP_1
+    return ret_val
+
+
+def get_otp_version(graph_dir=None, otp_name=OTP_NAME, otp_version=OTP_VERSION):
+    """ find the version and commit strings """
+    version = None
+    commit = None
+    try:
+        file_utils.cd(graph_dir)
+        otp_path = get_otp_path(graph_dir, otp_name)
+        cmd = "java -jar {} --version".format(otp_path)
+        stdout = exe_utils.run_cmd_get_stdout(cmd)
+        for s in stdout.split("\n"):
+            version = get_sub_str(s, 'version', ',', version)
+            commit = get_sub_str(s, 'commit', ',', commit)
+    except Exception as e:
+        log.error(e)
+    return version,commit
+
+
+def run_graph_builder(graph_dir, otp_version, otp_name=OTP_NAME, java_mem=None):
+    """ run OTP graph builder """
+    log.info("building the graph")
+    otp_path = get_otp_path(graph_dir, otp_name)
+    file_utils.cd(graph_dir)
+    if otp_version == OTP_2:
+        cmd = '-jar {} --build --save --cache {} {}'.format(otp_path, graph_dir, graph_dir)
+    else:
+        cmd = '-jar {} --build {} --cache {}'.format(otp_path, graph_dir, graph_dir)
+    ret_val = exe_utils.run_java(cmd, big_xmx=java_mem)
+    return ret_val
+
+
+def vizualize_graph(graph_dir, otp_version, otp_name=OTP_NAME, java_mem=None):
+    otp_path = os.path.join(graph_dir, otp_name)
+    file_utils.cd(graph_dir)
+    if otp_version == OTP_2:
+        cmd = '-jar {} --visualize --graphs {}'.format(otp_path, graph_dir)
+    else:
+        cmd = '-jar {} --visualize --router "" --graphs {}'.format(otp_path, graph_dir)
+    ret_val = exe_utils.run_java(cmd, big_xmx=java_mem)
+    return ret_val
+
+
 def call_planner_svc(url, accept='application/xml'):
     """ make a call to the OTP web service """
     # import pdb; pdb.set_trace()
@@ -168,11 +230,10 @@ def wait_for_otp(otp_url, delay=15, max_tries=10):
     return otp_is_up
 
 
-def run_otp_server(graph_dir=None, port=DEF_PORT, ssl=DEF_SSL_PORT, otp_name=OTP_NAME, java_mem=None, otp_version=OTP_VERSION, **kwargs):
+def run_otp_server(graph_dir, otp_version=OTP_VERSION, port=DEF_PORT, ssl=DEF_SSL_PORT, otp_name=OTP_NAME, java_mem=None, **kwargs):
     """ launch the server in a separate process """
     file_utils.cd(graph_dir)
     otp_path = get_otp_path(graph_dir, otp_name)
-
     if otp_version == OTP_2:
         cmd = '-server -jar {} --port {} --securePort {} --serve {}'.format(otp_path, port, ssl, graph_dir, graph_dir)
     else:
@@ -189,67 +250,6 @@ def kill_otp_server(graph_dir):
 def kill(cmd="java", delay=15):
     time.sleep(delay)
     exe_utils.kill_all(cmd)
-
-
-def get_sub_str(s, start_str, end_str=",", def_val=None, return_something=True):
-    #import pdb; pdb.set_trace()
-    ret_val = def_val
-    if start_str in s:
-        b = s.index(start_str)
-        e = len(s) if end_str not in s else s.index(end_str, b)
-        ret_val = s[b : e]
-    if return_something and ret_val is None:
-        ret_val = s
-    return ret_val
-
-
-def get_otp_version_simple(graph_dir=None, otp_name=OTP_NAME, def_ver=OTP_2):
-    """ return the simplified version number """
-    ret_val = def_ver
-    v,c = get_otp_version(graph_dir, otp_name)
-    if "version: 2" in v: ret_val = OTP_2
-    elif "version: 1" in v: ret_val = OTP_1
-    return ret_val
-
-
-def get_otp_version(graph_dir=None, otp_name=OTP_NAME, otp_version=OTP_VERSION):
-    """ find the version and commit strings """
-    version = None
-    commit = None
-    try:
-        file_utils.cd(graph_dir)
-        otp_path = get_otp_path(graph_dir, otp_name)
-        cmd = "java -jar {} --version".format(otp_path)
-        stdout = exe_utils.run_cmd_get_stdout(cmd)
-        for s in stdout.split("\n"):
-            version = get_sub_str(s, 'version', ',', version)
-            commit = get_sub_str(s, 'commit', ',', commit)
-    except Exception as e:
-        log.error(e)
-    return version,commit
-
-
-def run_graph_builder(graph_dir, otp_name=OTP_NAME, java_mem=None, otp_version=OTP_VERSION):
-    """ run OTP graph builder """
-    log.info("building the graph")
-    graph_path = os.path.join(graph_dir, get_graph_name(otp_version))
-    otp_path = get_otp_path(graph_dir, otp_name)
-    file_utils.rm(graph_path)
-    file_utils.cd(graph_dir)
-    if otp_version == OTP_2:
-        cmd = '-jar {} --build --save --cache {} {}'.format(otp_path, graph_dir, graph_dir)
-    else:
-        cmd = '-jar {} --build {} --cache {}'.format(otp_path, graph_dir, graph_dir)
-    ret_val = exe_utils.run_java(cmd, big_xmx=java_mem)
-    return ret_val
-
-
-def vizualize_graph(graph_dir, java_mem=None, otp_name=OTP_NAME, otp_version=OTP_VERSION):
-    otp_path = os.path.join(graph_dir, otp_name)
-    file_utils.cd(graph_dir)
-    cmd = '-jar {} --visualize --router "" --graphs {}'.format(otp_path, graph_dir)
-    ret_val = exe_utils.run_java(cmd, big_xmx=java_mem)
-    return ret_val
 
 
 def send_build_test_email(to, build_status=True, test_status=True, server_status=True):
