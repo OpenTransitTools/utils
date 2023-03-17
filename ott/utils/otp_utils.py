@@ -203,6 +203,15 @@ def get_sub_str(s, start_str, end_str=",", def_val=None, return_something=True):
     return ret_val
 
 
+def get_otp_version_simple(graph_dir=None, otp_name=OTP_NAME, def_ver=OTP_2):
+    """ return the simplified version number """
+    ret_val = def_ver
+    v,c = get_otp_version(graph_dir, otp_name)
+    if "version: 2" in v: ret_val = OTP_2
+    elif "version: 1" in v: ret_val = OTP_1
+    return ret_val
+
+
 def get_otp_version(graph_dir=None, otp_name=OTP_NAME, otp_version=OTP_VERSION):
     """ find the version and commit strings """
     version = None
