@@ -179,7 +179,7 @@ def vizualize_graph(graph_dir, otp_version, otp_name=OTP_NAME, java_mem=None):
     otp_path = os.path.join(graph_dir, otp_name)
     file_utils.cd(graph_dir)
     if otp_version == OTP_2:
-        cmd = '-jar {} --visualize --graphs {}'.format(otp_path, graph_dir)
+        cmd = '-jar {} --visualize --load {}'.format(otp_path, graph_dir)
     else:
         cmd = '-jar {} --visualize --router "" --graphs {}'.format(otp_path, graph_dir)
     ret_val = exe_utils.run_java(cmd, big_xmx=java_mem)
