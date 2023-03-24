@@ -186,6 +186,28 @@ def vizualize_graph(graph_dir, otp_version, otp_name=OTP_NAME, java_mem=None):
     return ret_val
 
 
+def run_otp_server(graph_dir, otp_version=OTP_VERSION, port=DEF_PORT, ssl=DEF_SSL_PORT, otp_name=OTP_NAME, java_mem=None, **kwargs):
+    """ launch the server in a separate process """
+    file_utils.cd(graph_dir)
+    otp_path = get_otp_path(graph_dir, otp_name)
+    if otp_version == OTP_2:
+        cmd = '-server -jar {} --port {} --securePort {} --load --serve {}'.format(otp_path, port, ssl, graph_dir, graph_dir)
+    else:
+        cmd = '-server -jar {} --port {} --securePort {} --router "" --graphs {}'.format(otp_path, port, ssl, graph_dir)
+    ret_val = exe_utils.run_java(cmd, fork=True, big_xmx=java_mem, pid_file=PID_FILE, echo=True)
+    return ret_val
+
+
+def kill_otp_server(graph_dir):
+    pid_path = os.path.join(graph_dir, PID_FILE)
+    exe_utils.kill_old_pid(pid_file=pid_path)
+
+
+def kill(cmd="java", delay=15):
+    time.sleep(delay)
+    exe_utils.kill_all(cmd)
+
+
 def call_planner_svc(url, accept='application/xml'):
     """ make a call to the OTP web service """
     # import pdb; pdb.set_trace()
@@ -228,28 +250,6 @@ def wait_for_otp(otp_url, delay=15, max_tries=10):
             break
 
     return otp_is_up
-
-
-def run_otp_server(graph_dir, otp_version=OTP_VERSION, port=DEF_PORT, ssl=DEF_SSL_PORT, otp_name=OTP_NAME, java_mem=None, **kwargs):
-    """ launch the server in a separate process """
-    file_utils.cd(graph_dir)
-    otp_path = get_otp_path(graph_dir, otp_name)
-    if otp_version == OTP_2:
-        cmd = '-server -jar {} --port {} --securePort {} --serve {}'.format(otp_path, port, ssl, graph_dir, graph_dir)
-    else:
-        cmd = '-server -jar {} --port {} --securePort {} --router "" --graphs {}'.format(otp_path, port, ssl, graph_dir)
-    ret_val = exe_utils.run_java(cmd, fork=True, big_xmx=java_mem, pid_file=PID_FILE, echo=True)
-    return ret_val
-
-
-def kill_otp_server(graph_dir):
-    pid_path = os.path.join(graph_dir, PID_FILE)
-    exe_utils.kill_old_pid(pid_file=pid_path)
-
-
-def kill(cmd="java", delay=15):
-    time.sleep(delay)
-    exe_utils.kill_all(cmd)
 
 
 def send_build_test_email(to, build_status=True, test_status=True, server_status=True):
