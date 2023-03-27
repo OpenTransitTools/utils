@@ -162,6 +162,10 @@ def get_otp_version(graph_dir=None, otp_name=OTP_NAME, otp_version=OTP_VERSION):
     return version,commit
 
 
+def build_with_pbf(otp_version):
+    return otp_version == OTP_2
+
+
 def run_graph_builder(graph_dir, otp_version, otp_name=OTP_NAME, java_mem=None):
     """ run OTP graph builder """
     log.info("building the graph")
