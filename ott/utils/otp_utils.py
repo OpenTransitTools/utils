@@ -226,18 +226,20 @@ def call_planner_svc(url, accept='application/xml'):
     return ret_val
 
 
-def wait_for_otp(otp_url, delay=15, max_tries=10):
+def wait_for_otp(otp_url, delay=10, max_tries=10, otp_version="1.x"):
     try_count = 0
 
     otp_is_up = False
     while True:
         try_count += 1
+        #import pdb; pdb.set_trace()
 
         # step 1: call OTP
         response = call_planner_svc(otp_url)
 
         # step 2: check result ... if valid break out of loop
-        otp_is_up = response and ("requestParameters" in response or "elevationMetadata" in response)
+        matches = ["TripViewerWidget", "requestParameters", "elevationMetadata"]
+        otp_is_up = response and any(m in response for m in matches)
 
         # step 3: either break out of loop or warn an continue checking OTP
         if otp_is_up or try_count > max_tries:
