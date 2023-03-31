@@ -140,8 +140,9 @@ def get_otp_version_simple(graph_dir=None, otp_name=OTP_NAME, def_ver=OTP_2):
     """ return the simplified version number """
     ret_val = def_ver
     v,c = get_otp_version(graph_dir, otp_name)
-    if "version: 2" in v: ret_val = OTP_2
-    elif "version: 1" in v: ret_val = OTP_1
+    if v:
+        if "version: 2" in v: ret_val = OTP_2
+        elif "version: 1" in v: ret_val = OTP_1
     return ret_val
 
 
