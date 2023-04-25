@@ -58,7 +58,7 @@ class MinimalDao(object):
         pass
 
     @classmethod
-    def parse_geojson(self, geojson):
+    def parse_geojson(cls, geojson):
         return geo_utils.parse_geojson(geojson)
 
     @classmethod
