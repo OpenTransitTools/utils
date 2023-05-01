@@ -75,19 +75,24 @@ class CacheBase(object):
         ret_val = os.path.join(self.this_module_dir, dir_name)
         return ret_val
 
-    def is_fresh_in_cache(self, file):
+    @classmethod
+    def is_recent(cls, file, recent_days=1):
         """
-        determine if file exists and is newer (in days) than the numer of days to of cache expire
+        determine if file exists and is newer (in days) than the recent_days param (default 1 day)
         """
         ret_val = False
         try:
-            # NOTE if the file isn't in the cache, we'll get an exception
+            # note: if the file isn't in the cache, we'll get an exception (thus not recent)
             age = file_utils.file_age(file)
-            if age < self.cache_expire:
+            if age <= recent_days:
                 ret_val = True
         except:
             ret_val = False
         return ret_val
+
+    def is_fresh_in_cache(self, file):
+        """ determine if file exists and is newer that cache_expire (default 31 days) """
+        return self.is_recent(file, self.cache_expire)
 
     def cp_cached_file(self, file_name, destination_dir):
         """

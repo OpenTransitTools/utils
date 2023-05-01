@@ -28,7 +28,9 @@ def get_schema_name_from_feed(feed, def_name="OTT"):
     if 'schema' in feed:
         name = feed['schema']
     else:
-        name = feed['name'].rstrip(".zip").lower()
+        name = feed['name'].rstrip(".gtfs.zip")
+        name = name.rstrip(".zip")
+        name = name.lower()
     return name
 
 

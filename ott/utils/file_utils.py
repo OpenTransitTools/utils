@@ -298,6 +298,7 @@ def mv(src, dst, delete_dst_first=True, update_ftime=True):
 
 
 def cp(src, dst):
+    # import pdb; pdb.set_trace()
     if src and dst and os.path.isfile(src):
         shutil.copy2(src, dst)
         touch(dst)
