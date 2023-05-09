@@ -19,7 +19,7 @@ log = logging.getLogger(__file__)
 # constants
 OTP_1 = "1.x"
 OTP_2 = "2.x"
-OTP_VERSION = OTP_2
+OTP_VERSION = OTP_1
 OTP_NAME = "otp.jar"
 VLOG_NAME = "otp.v"
 PID_FILE = "pid.txt"
@@ -66,6 +66,11 @@ def get_graph_name(otp_version=OTP_VERSION):
     if otp_version == "2.x":
         ret_val = "graph.obj"
     return ret_val
+
+
+def get_graph_path(graph_dir, otp_version=OTP_VERSION):
+    graph_path = os.path.join(graph_dir, get_graph_name(otp_version))
+    return graph_path
 
 
 def get_otp_path(graph_dir=None, otp_name=OTP_NAME):
