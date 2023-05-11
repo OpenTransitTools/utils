@@ -23,6 +23,7 @@ OTP_VERSION = OTP_1
 OTP_NAME = "otp.jar"
 VLOG_NAME = "otp.v"
 PID_FILE = "pid.txt"
+DEF_GRAPH_NAME="Graph.obj" 
 
 DEF_NAME = "prod"
 DEF_PORT = "55555"
@@ -62,7 +63,7 @@ def restart_call(call_db_path="call_center/db/call_db.tar.gz", call_runner="call
 
 def get_graph_name(otp_version=OTP_VERSION):
     """ return graph name (diff from 1.x and 2.x) """
-    ret_val = "Graph.obj" 
+    ret_val = DEF_GRAPH_NAME
     if otp_version == "2.x":
         ret_val = "graph.obj"
     return ret_val
