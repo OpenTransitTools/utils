@@ -41,6 +41,17 @@ def breakout_agency_id(otp_stop_id, agency_id=None):
     return agency_id, stop_id
 
 
+def breakout_transit_modes(mode_str, to_transit="BUS,TRAM,RAIL,GONDOLA", fix_null=True):
+    """ OTP 2.x wants to see the mode TRANSIT broken into BUS,TRAM,RAIL,GONDOLA """
+    ret_val = mode_str
+    if mode_str:
+        if 'TRANSIT' in mode_str:
+            ret_val = mode_str.replace('TRANSIT', to_transit)
+    elif fix_null:
+        ret_val = to_transit + ",WALK"
+    return ret_val
+
+
 def make_otp_id(id, agency_id=None):
     """
     OTP TI formats route and stop id as <AGENCY_ID>:<ROUTE_ID> and <AGENCY_ID>:<STOP_ID>

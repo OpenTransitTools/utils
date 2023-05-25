@@ -430,6 +430,19 @@ def split_time(time):
     return h, m
 
 
+def split_time_with_ampm(time):
+    t = time.lower()
+    pm = False
+    if 'pm' in t:
+        pm = True
+        t = t.strip('pm')
+    else:
+        t = t.strip('am')
+    t = t.strip()
+    h, m = split_time(t)
+    return h, m, pm
+
+
 def now_time_code(time, now=None, tolerance_minutes=30):
     """ return a code comparing NOW to time string in milatary format
         return values:
@@ -475,7 +488,7 @@ def now_time_code(time, now=None, tolerance_minutes=30):
     return ret_val
 
 
-def military_to_english_time(time, fmt="{0}:{1:02d}{2}"):
+def military_to_english_time(time, fmt="{0}:{1:02d}{2} "):
     """ assumes 08:33:55 and 22:33:42 type times
         will return 8:33am and 10:33pm
         (not we floor the minutes)
@@ -493,6 +506,27 @@ def military_to_english_time(time, fmt="{0}:{1:02d}{2}"):
             h = 12
 
         ret_val = fmt.format(h, m, ampm)
+    except:
+        pass
+
+    return ret_val
+
+
+def english_to_24hr(time, fmt="{0:02d}:{1:02d}"): 
+    """ assumes 8:33am and 10:33pm
+        will return 08:33 and 22:33 type times
+        will return 
+        (not we floor the minutes)
+    """
+    ret_val = time
+    try:
+        h, m, pm = split_time_with_ampm(time)
+        if pm and h < 12:
+            h += 12
+        elif h == 12:
+            h = 0
+
+        ret_val = fmt.format(h, m)
     except:
         pass
 
