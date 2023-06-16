@@ -56,6 +56,11 @@ def to_int(val, def_val=None):
         ret_val = int(val)
     except:
         log.debug("couldn't convert {} to int".format(val))
+        try:
+            ret_val = int(def_val)
+        except:
+            log.debug("couldn't convert def_val {} to int".format(val))
+            ret_val = None
     return ret_val
 
 
