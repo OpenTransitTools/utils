@@ -45,10 +45,22 @@ def geoserver_parser(prog_name='bin/generate_geoserver_config', do_parse=True, d
     """ create a generic GEOSERVER processor commandline arg PARSER """
     parser = blank_parser(prog_name)
     parser.add_argument(
-        '--ignore_layergroups',
-        '-il',
+        '--do_layergroup',
+        '-dl',
         action="store_true",
-        help="should geoserver scripts generate layergroups configs"
+        help="should geoserver scripts generate a layergroup config(s) for GS"
+    )
+    parser.add_argument(
+        '--do_osm',
+        '-do',
+        action="store_true",
+        help="should geoserver scripts generate osm layer configs for GS"
+    )
+    parser.add_argument(
+        '--do_styles',
+        '-ds',
+        action="store_true",
+        help="should geoserver scripts generate osm style configs GS"
     )
     parser.add_argument(
         '--data_dir',
