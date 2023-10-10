@@ -41,27 +41,9 @@ def osm_parser_args(prog_name, **kwargs):
     return osm_parser(prog_name, True, **kwargs)
 
 
-def geoserver_parser(prog_name='bin/generate_geoserver_config', do_parse=True, def_dir="geoserver/data"):
+def geoserver_parser(prog_name='bin/generate_geoserver_config', do_parse=True, def_dir="data_dir"):
     """ create a generic GEOSERVER processor commandline arg PARSER """
     parser = blank_parser(prog_name)
-    parser.add_argument(
-        '--do_layergroup',
-        '-dl',
-        action="store_true",
-        help="should geoserver scripts generate a layergroup config(s) for GS"
-    )
-    parser.add_argument(
-        '--do_osm',
-        '-do',
-        action="store_true",
-        help="should geoserver scripts generate osm layer configs for GS"
-    )
-    parser.add_argument(
-        '--do_styles',
-        '-ds',
-        action="store_true",
-        help="should geoserver scripts generate osm style configs GS"
-    )
     parser.add_argument(
         '--data_dir',
         '-data_dir',
@@ -70,7 +52,14 @@ def geoserver_parser(prog_name='bin/generate_geoserver_config', do_parse=True, d
         default=def_dir,
         help="path to geoserver 'data' directory"
     )
-
+    parser.add_argument(
+        '--db_url',
+        '-db_url',
+        '-db',
+        required=False,
+        default="localhost",
+        help="db url (localhost or docker url, ala 'db')"
+    )
     ret_val = parser
     if do_parse:
         ret_val = parser.parse_args()
