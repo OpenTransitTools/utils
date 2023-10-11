@@ -1,24 +1,43 @@
 import os
 import inspect
 import pystache
+import datetime
 
 import logging
 log = logging.getLogger(__file__)
 
 
 class TemplateBase(object):
-    renderer = pystache.Renderer()
+    _renderer = pystache.Renderer()
+
+    @classmethod
+    def _goose_content(cls, content):
+        """ append helper content before rendering """
+
+        # utc date string
+        dt = "{} UTC".format(datetime.datetime.utcnow())
+        content["utcnow"] = dt
+
+        return content
+
+    @classmethod
+    def _render_path(cls, template, content):
+        return cls._renderer.render_path(template, cls._goose_content(content))
+
+    @classmethod
+    def _render_string(cls, template, content):
+        return cls._renderer.render(template, cls._goose_content(content))
 
     @classmethod
     def render_template_file(cls, template, content):
         """treat template as a file (path) and try rendering the content """
         ret_val = None
         try:
-            ret_val = cls.renderer.render_path(template, content)
+            ret_val = cls._render_path(template, content)
         except FileNotFoundError:
             # try adding mustache extension to see if that renders
             try:
-                ret_val = cls.renderer.render_path(template + ".mustache", content)
+                ret_val = cls._render_path(template + ".mustache", content)
             except Exception as e:
                 log.info(e)
                 ret_val = None
@@ -33,7 +52,7 @@ class TemplateBase(object):
 
     @classmethod
     def render_template_string(cls, template, content):
-        ret_val = cls.renderer.render(template, content)
+        ret_val = cls._render_string(template, content)
         return ret_val
 
     @classmethod
