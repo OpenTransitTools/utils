@@ -47,10 +47,12 @@ def geoserver_parser(prog_name='bin/generate_geoserver_config', do_parse=True):
     # TODO: think about moving some of this to db_cmdline
 
     # default values
-    def_dir = "data_dir"
     workspace = "ott"
+    def_dir = "data_dir"
     db_url = "localhost"
     db_port = "5432"
+    db_user = "ott"
+    db_pass = ""
 
     parser = blank_parser(prog_name)
     parser.add_argument(
@@ -85,6 +87,22 @@ def geoserver_parser(prog_name='bin/generate_geoserver_config', do_parse=True):
         required=False,
         default=db_port,
         help="db port (5432 is the default pg port)"
+    )
+    parser.add_argument(
+        '--db_user',
+        '-db_user',
+        '-user',
+        required=False,
+        default=db_user,
+        help="db user name (def 'ott')"
+    )
+    parser.add_argument(
+        '--db_pass',
+        '-db_pass',
+        '-pass',
+        required=False,
+        default=db_pass,
+        help="db password (default is no password / blank)"
     )
 
     ret_val = parser
