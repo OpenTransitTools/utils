@@ -15,7 +15,8 @@ class TemplateBase(object):
         """ append helper content before rendering """
 
         # utc date string
-        dt = "{} UTC".format(datetime.datetime.utcnow())
+        u = "{}".format(datetime.datetime.utcnow())
+        dt = "{:.23} UTC".format(u)
         content["utcnow"] = dt
 
         return content
