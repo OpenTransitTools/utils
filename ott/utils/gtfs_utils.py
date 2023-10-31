@@ -4,8 +4,7 @@ log = logging.getLogger(__file__)
 
 
 def get_feeds_from_config(config=None, feed_filter=None):
-    """ return the GTFS feed info from config
-    """
+    """ return the GTFS feed info from config """
     if config is None:
         config = ConfigUtil(section='gtfs')
 

@@ -41,18 +41,20 @@ def osm_parser_args(prog_name, **kwargs):
     return osm_parser(prog_name, True, **kwargs)
 
 
-def geoserver_parser(prog_name='bin/generate_geoserver_config', do_parse=True):
-    """ create a generic GEOSERVER processor commandline arg PARSER """
+def geoserver_parser(default_params, prog_name='bin/generate_geoserver_config', do_parse=True):
+    """ create a generic GEOSERVER processor commandline arg PARSER
 
-    # TODO: think about moving some of this to db_cmdline
-
-    # default values
+    # default_params (names / values) example
     workspace = "ott"
     def_dir = "data_dir"
     db_url = "localhost"
     db_port = "5432"
     db_user = "ott"
-    db_pass = ""
+    db_pass = "ott"
+
+    """
+
+    # TODO: think about moving some of this to db_cmdline
 
     parser = blank_parser(prog_name)
     parser.add_argument(
@@ -60,7 +62,7 @@ def geoserver_parser(prog_name='bin/generate_geoserver_config', do_parse=True):
         '-data_dir',
         '-dd',
         required=False,
-        default=def_dir,
+        default=default_params.get('dir', 'data_dir'),
         help="path to geoserver 'data' directory"
     )
     parser.add_argument(
@@ -68,7 +70,7 @@ def geoserver_parser(prog_name='bin/generate_geoserver_config', do_parse=True):
         '-workspace',
         '-ws',
         required=False,
-        default=workspace,
+        default=default_params.get('workspace', 'ott'),
         help="path to geoserver 'data' directory"
     )
     parser.add_argument(
@@ -77,7 +79,7 @@ def geoserver_parser(prog_name='bin/generate_geoserver_config', do_parse=True):
         '-db',
         '-url',
         required=False,
-        default=db_url,
+        default=default_params.get('db_url', 'localhost'),
         help="db url (localhost or docker url, ala 'db')"
     )
     parser.add_argument(
@@ -85,7 +87,7 @@ def geoserver_parser(prog_name='bin/generate_geoserver_config', do_parse=True):
         '-db_port',
         '-port',
         required=False,
-        default=db_port,
+        default=default_params.get('db_port', '5432'),
         help="db port (5432 is the default pg port)"
     )
     parser.add_argument(
@@ -93,7 +95,7 @@ def geoserver_parser(prog_name='bin/generate_geoserver_config', do_parse=True):
         '-db_user',
         '-user',
         required=False,
-        default=db_user,
+        default=default_params.get('db_user', 'ott'),
         help="db user name (def 'ott')"
     )
     parser.add_argument(
@@ -101,7 +103,7 @@ def geoserver_parser(prog_name='bin/generate_geoserver_config', do_parse=True):
         '-db_pass',
         '-pass',
         required=False,
-        default=db_pass,
+        default=default_params.get('db_pass', 'ott'),
         help="db password (default is no password / blank)"
     )
 

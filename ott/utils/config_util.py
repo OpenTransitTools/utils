@@ -239,4 +239,10 @@ class ConfigUtil(object):
         return cfg
 
 
-
+def get_params_from_config(params, config=None):
+    """ utility method to return random params from config """
+    if config is None: config = ConfigUtil(section='gtfs')
+    ret_val = {}
+    for p in params:
+        ret_val[p] = config.get_json(p)
+    return ret_val
