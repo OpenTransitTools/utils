@@ -213,7 +213,7 @@ def run_otp_server(graph_dir, otp_version=OTP_VERSION, port=DEF_PORT, ssl=DEF_SS
     file_utils.cd(graph_dir)
     otp_path = get_otp_path(graph_dir, otp_name)
     if otp_version == OTP_2:
-        cmd = '-server -jar {} --port {} --securePort {} --load --serve {}'.format(otp_path, port, ssl, graph_dir, graph_dir)
+        cmd = '-server -jar {} --port {} --load --serve {}'.format(otp_path, port, graph_dir, graph_dir)
     else:
         cmd = '-server -jar {} --port {} --securePort {} --router "" --graphs {}'.format(otp_path, port, ssl, graph_dir)
     ret_val = exe_utils.run_java(cmd, fork=True, big_xmx=java_mem, pid_file=PID_FILE, echo=True)
