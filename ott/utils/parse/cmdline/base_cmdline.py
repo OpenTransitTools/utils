@@ -45,6 +45,16 @@ def basic_cmdline(prog_name, print=True, file=True, clear=False, do_parse=True):
     return parser.parse_args() if do_parse else parser
 
 
+def misc_options(parser, *names):
+    """ add any number of named boolean cmdline options via abitrary args """
+    for n in names:
+        parser.add_argument(
+            '--' + n,
+            '-' + n,
+            action="store_true",
+            help="cmd line option for '{}'".format(n)
+        )
+
 
 def file_option(parser, def_file=None, help_msg="what is the file name?", required=False):
     parser.add_argument(
@@ -97,6 +107,15 @@ def print_option(parser, help_msg="print: to screen or otherwise..."):
         help=help_msg
     )
 
+
+def misc_option(parser, help_msg="clear things before loading/exporting"):
+    parser.add_argument(
+        '--clear',
+        '-clear',
+        '-cl',
+        action="store_true",
+        help=help_msg
+    )
 
 def limit_option(parser, required=False, def_val=None):
     parser.add_argument(
