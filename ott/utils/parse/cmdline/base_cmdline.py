@@ -30,6 +30,23 @@ def file_cmdline(prog_name='bin/app-file', def_file='blah.txt', help_msg="what i
     create a generic file commandline arg PARSER
     """
     parser = empty_parser(prog_name)
+    file_option(parser, def_file, help_msg, required)
+    return parser.parse_args() if do_parse else parser
+
+
+def basic_cmdline(prog_name, print=True, file=True, clear=False, do_parse=True):
+    """
+    create a basic cmdline arg PARSER with options for file, printing and clear options
+    """
+    parser = empty_parser(prog_name)
+    if print: print_option(parser)
+    if file: file_option(parser)
+    if clear: clear_option(parser)
+    return parser.parse_args() if do_parse else parser
+
+
+
+def file_option(parser, def_file=None, help_msg="what is the file name?", required=False):
     parser.add_argument(
         '--file',
         '-file',
@@ -38,8 +55,6 @@ def file_cmdline(prog_name='bin/app-file', def_file='blah.txt', help_msg="what i
         default=def_file,
         help=help_msg
     )
-
-    return parser.parse_args() if do_parse else parser
 
 
 def server_option(parser, required=False, def_val='all', help_msg="which server (maps7, svrX, etc...) should I send this to? "):
@@ -68,6 +83,16 @@ def clear_option(parser, help_msg="clear things before loading/exporting"):
         '--clear',
         '-clear',
         '-cl',
+        action="store_true",
+        help=help_msg
+    )
+
+
+def print_option(parser, help_msg="print: to screen or otherwise..."):
+    parser.add_argument(
+        '--print',
+        '--p',
+        '-p',
         action="store_true",
         help=help_msg
     )
