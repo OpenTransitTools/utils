@@ -42,7 +42,7 @@ def db_parser(prog_name='bin/loader', tables=['Could be (Decarative) Base.metada
         help="Limited list of TABLES to load, if blank, load all tables"
     )
     create_option(parser)
-    clear_option(parser)
+    misc_options(parser, "clear")
     is_spatial(parser)
 
     # return either parser or args

@@ -20,7 +20,9 @@ def blank_parser(prog_name, add_misc=False):
                         action="store_true"
     )
     if add_misc:
-        misc_option(parser)
+        limit_option(parser)
+        durr_option(parser)
+        freq_option(parser)
 
     return parser
 
@@ -34,14 +36,14 @@ def file_cmdline(prog_name='bin/app-file', def_file='blah.txt', help_msg="what i
     return parser.parse_args() if do_parse else parser
 
 
-def basic_cmdline(prog_name, print=True, file=True, clear=False, do_parse=True):
+def basic_cmdline(prog_name, file=True, print=True, clear=False, do_parse=True):
     """
     create a basic cmdline arg PARSER with options for file, printing and clear options
     """
     parser = empty_parser(prog_name)
-    if print: print_option(parser)
     if file: file_option(parser)
-    if clear: clear_option(parser)
+    if print: misc_options(parser, "print")
+    if clear: misc_options(parser, "clear")
     return parser.parse_args() if do_parse else parser
 
 
@@ -88,35 +90,6 @@ def create_option(parser, help_msg="drop / create database tables for "):
     )
 
 
-def clear_option(parser, help_msg="clear things before loading/exporting"):
-    parser.add_argument(
-        '--clear',
-        '-clear',
-        '-cl',
-        action="store_true",
-        help=help_msg
-    )
-
-
-def print_option(parser, help_msg="print: to screen or otherwise..."):
-    parser.add_argument(
-        '--print',
-        '--p',
-        '-p',
-        action="store_true",
-        help=help_msg
-    )
-
-
-def misc_option(parser, help_msg="clear things before loading/exporting"):
-    parser.add_argument(
-        '--clear',
-        '-clear',
-        '-cl',
-        action="store_true",
-        help=help_msg
-    )
-
 def limit_option(parser, required=False, def_val=None):
     parser.add_argument(
         '--limit',
@@ -126,6 +99,7 @@ def limit_option(parser, required=False, def_val=None):
         default=def_val,
         help="limit (number): --limit 5 could mean to trim a longer list of results to just 5"
     )
+
 
 def durr_option(parser, required=False, def_val=None):
     parser.add_argument(
@@ -147,9 +121,3 @@ def freq_option(parser, required=False, def_val=None):
         default=def_val,
         help="freq (number): --freq 5 could mean to run a process every 5 seconds"
     )
-
-
-def misc_option(parser, required=False, limit=111, durr=False, freq=False):
-    limit_option(parser, required, limit)
-    durr_option(parser, required, durr)
-    freq_option(parser, required, freq)
