@@ -36,17 +36,6 @@ def file_cmdline(prog_name='bin/app-file', def_file='blah.txt', help_msg="what i
     return parser.parse_args() if do_parse else parser
 
 
-def basic_cmdline(prog_name, file=True, print=True, clear=False, do_parse=True):
-    """
-    create a basic cmdline arg PARSER with options for file, printing and clear options
-    """
-    parser = empty_parser(prog_name)
-    if file: file_option(parser)
-    if print: misc_options(parser, "print")
-    if clear: misc_options(parser, "clear")
-    return parser.parse_args() if do_parse else parser
-
-
 def misc_options(parser, *names):
     """ add any number of named boolean cmdline options via abitrary args """
     for n in names:
