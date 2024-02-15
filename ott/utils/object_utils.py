@@ -1,7 +1,6 @@
 import sys
 import base64
 import hashlib
-from .compat_2_to_3 import *
 import logging
 log = logging.getLogger(__file__)
 
