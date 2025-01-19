@@ -33,8 +33,11 @@ def get_schema_name_from_feed(feed, def_name="OTT"):
     return name
 
 
-def get_realtime_feed_from_config(config=None):
-    """ return the GTFS feed info from config
+def get_realtime_feed_from_config(config=None, filter=None):
+    """
+    return the GTFS RT feed config structure from the from larger config
+    if filter is there, and matches something in the array of RT structure, 
+    return just that object rather than an array of objects
     """
     ret_val = []
     if config is None:
@@ -43,8 +46,21 @@ def get_realtime_feed_from_config(config=None):
     feeds = config.get_json('feeds')
     for f in feeds:
         if 'agency_id' in f and len(f['agency_id']) > 0:
-            ret_val.append(f)
+            if filter and filter in f['agency_id']:
+                ret_val = f
+                break
+            else:
+                ret_val.append(f)
 
+    return ret_val
+
+
+def get_agency_names_from_feeds_list(feeds):
+    ret_val = ""
+    for i, f in enumerate(feeds):
+        sep = "" if i == 0 else ", "
+        if 'agency_id' in f and len(f['agency_id']) > 0:
+            ret_val = "{}{}{}".format(ret_val, sep, f['agency_id'])
     return ret_val
 
 

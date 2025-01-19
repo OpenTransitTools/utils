@@ -129,13 +129,12 @@ def gtfs_download_parser(exe_name='bin/download_gtfs', do_parse=True):
     return ret_val
 
 
-def gtfs_rt_parser(exe_name='bin/load_gtfs_rt', api_key_required=False, api_key_msg=None, agency_required=False, do_parse=True, add_misc=False):
+def gtfs_rt_parser(exe_name='bin/load_gtfs_rt', agency_required=True, do_parse=True, add_misc=False):
     """ create a database and gtfs rt commandline arg PARSER """
     from . import db_cmdline
     parser = db_cmdline.db_parser(exe_name, add_misc=add_misc)
 
     agency_option(parser, agency_required)
-    api_key(parser, api_key_required, api_key_msg)
 
     parser.add_argument(
         '--alerts_url',
@@ -157,6 +156,13 @@ def gtfs_rt_parser(exe_name='bin/load_gtfs_rt', api_key_required=False, api_key_
         '-v',
         required=False,
         help="url to gtfs-realtime *vehicle positions* data feed"
+    )
+    parser.add_argument(
+        '--vehicles_only',
+        '-vo',
+        action="store_true",
+        required=False,
+        help="vehicles only"
     )
 
     ret_val = parser
