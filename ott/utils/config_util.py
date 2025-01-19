@@ -84,7 +84,10 @@ class ConfigUtil(object):
                 candidates = candidates + c
 
         # create the config parser and read the .ini files
-        scp = configparser.SafeConfigParser()
+        try:
+            scp = configparser.SafeConfigParser()
+        except:
+            scp = configparser.ConfigParser()
         paths = scp.read(candidates)
 
         # set variables
