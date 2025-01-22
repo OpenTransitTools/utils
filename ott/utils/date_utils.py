@@ -29,11 +29,19 @@ def get_local_date():
 
 
 def get_hour(tm=None):
-    """ return hour from input time as int
-    """
+    """ return hour from input time as int """
     if tm is None:
         tm = get_local_time()
     return tm.tm_hour
+
+
+def format_seconds(seconds):
+    """ return a string of HH:MM:SS from seconds """
+    seconds = round(seconds)
+    hours = seconds // 3600
+    minutes = (seconds % 3600) // 60
+    seconds = seconds % 60
+    return f"{hours:02}:{minutes:02}:{seconds:02}"
 
 
 def get_day_before(year=None, month=None, day=None, num_days=1):
