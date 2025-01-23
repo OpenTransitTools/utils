@@ -61,9 +61,15 @@ def to_int(val, def_val=None):
                 ret_val = int(def_val)
         except:
             log.debug("couldn't convert def_val {} to int".format(val))
-            ret_val = None
+            ret_val = def_val
     return ret_val
 
+def to_int_min(val, min_val=0):
+    ret_val = min_val
+    n = to_int(val)
+    if n and n > min_val:
+        ret_val = n
+    return ret_val
 
 def to_int_range(val, low, high, def_val=None):
     ret_val = def_val
