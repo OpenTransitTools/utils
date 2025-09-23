@@ -539,3 +539,17 @@ def english_to_24hr(time, fmt="{0:02d}:{1:02d}"):
         pass
 
     return ret_val
+
+
+def now_24_time(now=None, fmt="%H:%M"):
+    """ return 23:44 """
+    if now is None:
+        now = datetime.datetime.now()
+    return now.strftime(fmt)
+
+
+def now_iso_date(now=None, fmt="%Y-%m-%d"):
+    """ return 2025-09-15 """
+    if now is None:
+        now = datetime.datetime.now()
+    return now.strftime(fmt)
