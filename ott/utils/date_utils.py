@@ -529,8 +529,9 @@ def english_to_24hr(time, fmt="{0:02d}:{1:02d}"):
     ret_val = time
     try:
         h, m, pm = split_time_with_ampm(time)
-        if pm and h < 12:
-            h += 12
+        if pm:
+            if h < 12:
+                h += 12
         elif h == 12:
             h = 0
 
