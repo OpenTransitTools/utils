@@ -1,5 +1,4 @@
 import os
-from re import T
 import requests
 import socket
 import simplejson as json

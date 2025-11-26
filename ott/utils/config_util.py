@@ -15,7 +15,7 @@ except ImportError:
 
 
 SECTION = 'view'
-INI = ['app.ini', 'client.ini', 'services.ini', 'view.ini', 'base.ini', 'production.ini', 'staging.ini', 'development.ini']
+INI = ['app.ini', 'config.ini', 'configure.ini', 'client.ini', 'services.ini', 'view.ini', 'base.ini', 'production.ini', 'staging.ini', 'development.ini']
 
 
 # global vars
