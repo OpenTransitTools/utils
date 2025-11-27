@@ -306,6 +306,16 @@ def cp(src, dst):
         log.error('could not copy file {} to {}'.format(src, dst))
 
 
+def cp_files(src_path, dst_path, ext=".txt"):
+    """ find files that have a certain extension and copy them to the dst_path """
+    if os.path.exists(src_path):
+        for file in listdir(src_path):
+            if file.endswith(ext):
+                fm = os.path.join(src_path, file)
+                to = os.path.join(dst_path, file)
+                cp(fm, to)
+
+
 def rm(file_path):
     if file_path and os.path.exists(file_path):
         os.remove(file_path)
@@ -718,6 +728,53 @@ def make_csv_reader(file_path, validate_element=None):
                     continue
             ret_val.append(l)
     return ret_val
+
+
+def add_column_csv(file_path, column_name, column_val=""):
+    """ inserts a new column (with an optional value) into the .csv """
+    tmp_path = f"{file_path}.tmp"
+    with open(file_path,'r') as f:
+        with open(tmp_path, 'w') as o:
+            reader = csv.reader(f)
+            writer = csv.writer(o, lineterminator='\n')
+
+            all = []
+            row = next(reader)
+            row.append(column_name)
+            all.append(row)
+
+            for row in reader:
+                row.append(column_val)
+                all.append(row)
+
+            writer.writerows(all)
+    mv(tmp_path, file_path)
+
+
+def change_value_csv(file_path, column_name, new_val, tgt_column=None, tgt_val=None):
+    """
+    changes the value in each cell of all row's in a named column (e.g., needs a header column)
+    optional target column + value is used to search the csv, and only change those rows
+    """
+    tmp_path = f"{file_path}.tmp"
+    with open(file_path,'r') as f:
+        with open(tmp_path, 'w') as o:
+            reader = csv.DictReader(f)
+            writer = csv.writer(o, lineterminator='\n')
+
+            all = []
+            #import pdb; pdb.set_trace()
+            all.append(reader.fieldnames)
+            for row in reader:
+                if tgt_column and tgt_val:
+                    if row.get(tgt_column, "") == tgt_val:
+                        row[column_name] = new_val
+                else:
+                    row[column_name] = new_val
+                all.append(row.values())
+
+            writer.writerows(all)
+    mv(tmp_path, file_path)
 
 
 def listdir(dir_path):
