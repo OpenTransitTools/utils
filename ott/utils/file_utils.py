@@ -252,6 +252,15 @@ def dir_has_newer_files(cmp_file, dir_path, offset_minutes=0, include_filter=Non
     return ret_val
 
 
+def tmpdir(show=False):
+    import uuid
+    import tempfile
+    ret_val = os.path.join(tempfile.gettempdir(), str(uuid.uuid4()))
+    if show:
+        print(ret_val)
+    return ret_val
+
+
 def bkup(file_path, rm_orig=True):
     ret_val = False
     try:
@@ -590,6 +599,7 @@ def replace_file_in_zipfile(zip_path, file_path, file_name=None):
     remove_file_from_zip(zip_path, file_name)
     add_file_to_zip(zip_path, file_path, file_name)
 
+
 def replace_strings_in_zipfile(zip_path, file_name, regex_str, replace_str, zip_basename=None):
     """ collective of file utils functions to open a file from a .zip file, replace contents in that zip, and bundle
         the .zip file back up with the edited contents
@@ -597,6 +607,23 @@ def replace_strings_in_zipfile(zip_path, file_name, regex_str, replace_str, zip_
     file_path = unzip_file(zip_path, file_name)
     replace_strings_in_file(file_path, regex_str, replace_str)
     replace_file_in_zipfile(zip_path, file_path, zip_basename)
+
+
+def unzip(zip_path, extract_path):
+    """ unzip GTFS to a place """
+    with zipfile.ZipFile(zip_path, "r") as zip_ref:
+        zip_ref.extractall(extract_path)
+
+
+def zip(zip_name, dir_path):
+    """ zip contents of dir_path into a file named zip_name """
+    with zipfile.ZipFile(zip_name, "w", zipfile.ZIP_DEFLATED) as zf:
+        for root, dirs, files in os.walk(dir_path):
+            for file in files:
+                file_path = os.path.join(root, file)
+                arcname = os.path.relpath(file_path, dir_path)
+                zf.write(file_path, arcname)
+
 
 def replace_strings_in_file(file_path, regex_str, replace_str):
     """ replace a pattern in each line of a text file

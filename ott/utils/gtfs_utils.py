@@ -1,6 +1,3 @@
-import os
-import zipfile
-
 from ott.utils.config_util import ConfigUtil
 import logging
 log = logging.getLogger(__file__)
@@ -105,27 +102,3 @@ def get_realtime_alerts_url(feed, def_val=None):
 def get_realtime_vehicles_url(feed, def_val=None):
     return get_realtime_url('vehicles', feed, def_val)
 
-
-def tmpdir(show=False):
-    import uuid
-    import tempfile
-    ret_val = os.path.join(tempfile.gettempdir(), str(uuid.uuid4()))
-    if show:
-        print(ret_val)
-    return ret_val
-
-
-def unzip(zip_path, extract_path):
-    """ unzip GTFS to a place """
-    with zipfile.ZipFile(zip_path, "r") as zip_ref:
-        zip_ref.extractall(extract_path)
-
-
-def zip(zip_name, dir_path):
-    """ zip contents of dir_path into a file named zip_name """
-    with zipfile.ZipFile(zip_name, "w", zipfile.ZIP_DEFLATED) as zf:
-        for root, dirs, files in os.walk(dir_path):
-            for file in files:
-                file_path = os.path.join(root, file)
-                arcname = os.path.relpath(file_path, dir_path)
-                zf.write(file_path, arcname)
