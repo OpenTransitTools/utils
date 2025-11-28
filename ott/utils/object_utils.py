@@ -373,7 +373,7 @@ def dict_update(src, target, append=False):
             target[k] = v
 
 
-def is_force_update(argv=sys.argv, force=["force", "update", "reload"]):
+def is_force_update(argv=sys.argv, force=["-f", "force", "update", "reload"]):
     """ scan argv for words that indicate an update is necessary
     """
     ret_val = False

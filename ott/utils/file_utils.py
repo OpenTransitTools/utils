@@ -488,7 +488,8 @@ def make_old_dir(dir_path, old_name=OLD_DIR_NAME):
 
 
 def diff_files(old_name, new_name):
-    """ return True if the files are DIFFERENT ... False == files are THE SAME...
+    """
+    return True if the files are DIFFERENT ... False == files are THE SAME...
     """
     ret_val = True
 
@@ -615,7 +616,7 @@ def unzip(zip_path, extract_path):
         zip_ref.extractall(extract_path)
 
 
-def zip(zip_name, dir_path):
+def dozip(zip_name, dir_path):
     """ zip contents of dir_path into a file named zip_name """
     with zipfile.ZipFile(zip_name, "w", zipfile.ZIP_DEFLATED) as zf:
         for root, dirs, files in os.walk(dir_path):
