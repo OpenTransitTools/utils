@@ -31,6 +31,8 @@ def execute_query(query):
 
 def run_query():
     while not exit_flag.is_set():
+        with lock:
+            print(".", end="", flush=True)
         execute_query(custom_query_method)
 
 
@@ -60,17 +62,17 @@ def stress_main(query_method):
 
         end_time = time.perf_counter()
         elapsed_time = end_time - start_time
-
+        print()
         print(f"Successes: {success_counter:>12}")
         print(f"Failures:  {fail_counter:>12}")
-        print(f"Elapsed time: {elapsed_time:.4f} seconds") 
+        print(f"Elapsed time: {elapsed_time:.4f} seconds")
+        print()
 
 
 def main():
     def simple_example_query():
         import random
         return random.random() > 0.1
-
     stress_main(simple_example_query)
 
 
