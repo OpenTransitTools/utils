@@ -1,4 +1,5 @@
 import os
+import ast
 import string
 import logging
 log = logging.getLogger(__file__)
@@ -10,6 +11,15 @@ def get_val(val, def_val=None):
         ret_val = val
     if ret_val == 'None' or ret_val == 'null':
         ret_val = None
+    return ret_val
+
+
+def get_typed_val(val, def_val=None):
+    ret_val = def_val if def_val else val
+    try:
+        ret_val = ast.literal_eval(val)
+    except Exception as e:
+        pass
     return ret_val
 
 

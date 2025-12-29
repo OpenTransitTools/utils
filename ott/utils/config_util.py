@@ -3,6 +3,7 @@ import sys
 
 from .compat_2_to_3 import *
 from . import file_utils
+from . import string_utils
 from . import object_utils
 
 import logging
@@ -13,14 +14,12 @@ try:
 except ImportError:
     import ConfigParser as configparser
 
-
-SECTION = 'view'
-INI = ['app.ini', 'config.ini', 'configure.ini', 'client.ini', 'services.ini', 'view.ini', 'base.ini', 'production.ini', 'staging.ini', 'development.ini']
-
-
 # global vars
 CONFIG_SINGLETON = None  # only 1 instance of ConfigUtil is necessary ... save overhead by creating once
 RUN_DIR = None
+
+SECTION = 'view'
+INI = ['app.ini', 'config.ini', 'configure.ini', 'client.ini', 'services.ini', 'view.ini', 'base.ini', 'production.ini', 'staging.ini', 'development.ini']
 
 
 def set_run_dir(dir=None):
@@ -66,8 +65,7 @@ class ConfigUtil(object):
         return self._parser
 
     def _make_parser(self):
-        """ make the config parser (SafeConfigParser) ... file lookup relative to the directory you run your app from
-        """
+        """ make the config parser (SafeConfigParser) ... file lookup relative to the directory you run your app from """
         # import pdb; pdb.set_trace()
         # capture the execution directory in a global, as we're likely to cd out of here at some point
         global RUN_DIR
@@ -102,8 +100,7 @@ class ConfigUtil(object):
         return scp
 
     def get(self, id, section=None, def_val=None):
-        """ get config value
-        """
+        """ get config value """
         ret_val = def_val
         try:
             if section is None: section = self.section
@@ -115,8 +112,7 @@ class ConfigUtil(object):
         return ret_val
 
     def get_section(self, section=None):
-        """ get config value
-        """
+        """ get config value """
         ret_val = None
         try:
             if section is None: section = self.section
@@ -135,8 +131,7 @@ class ConfigUtil(object):
         return self.get_os_section(os, section)
 
     def get_int(self, id, section=None, def_val=None):
-        """ get config value as int (or go with def_val)
-        """
+        """ get config value as int (or go with def_val) """
         ret_val = self.get(id, section, def_val)
         try:
             if ret_val:
@@ -146,14 +141,12 @@ class ConfigUtil(object):
         return ret_val
 
     def get_bool(self, id, section=None, def_val=False):
-        """ get config value as boolean (string w/in .ini can be either True or true)
-        """
+        """ get config value as boolean (string w/in .ini can be either True or true) """
         ret_val = self.get(id, section, def_val)
         return ret_val == True or ret_val == "True" or ret_val == "true"
 
     def get_float(self, id, section=None, def_val=None):
-        """ get config value as float (or go with def_val)
-        """
+        """ get config value as float (or go with def_val) """
         ret_val = self.get(id, section, def_val)
         try:
             if ret_val:
@@ -163,8 +156,7 @@ class ConfigUtil(object):
         return ret_val
 
     def get_list(self, id, section=None, def_val=None):
-        """ get config value as list (comma separated)
-        """
+        """ get config value as list (comma separated) """
         ret_val = self.get(id, section, def_val)
         try:
             if ret_val:
@@ -174,8 +166,7 @@ class ConfigUtil(object):
         return ret_val
 
     def get_bbox(self, section=None):
-        """ get config value as float (or go with def_val)
-        """
+        """ get config value as float (or go with def_val) """
         top    = self.get_float('top',    section)
         bottom = self.get_float('bottom', section)
         left   = self.get_float('left',   section)
@@ -188,6 +179,11 @@ class ConfigUtil(object):
         str_val = self.get(id, section=section)
         if str_val:
             ret_val = json_utils.str_to_json(str_val, str_val)
+        return ret_val
+
+    def get_typed(self, id, section=None):
+        str_val = self.get(id, section=section)
+        ret_val = string_utils.get_typed_val(str_val)
         return ret_val
 
     @classmethod
@@ -232,8 +228,7 @@ class ConfigUtil(object):
 
     @classmethod
     def factory(cls, section=None, argv=sys.argv):
-        """ create a Config object ... uses argv to override default list of .ini files
-        """
+        """ create a Config object ... uses argv to override default list of .ini files """
         ini = INI
         if argv and '-ini' in argv:
             i = argv.index('-ini')
