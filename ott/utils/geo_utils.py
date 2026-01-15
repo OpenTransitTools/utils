@@ -9,8 +9,8 @@ log = logging.getLogger(__file__)
 OSM_ATTRIB = '&copy; <a target="#" href="http://openstreetmap.org/copyright">OpenStreetMap</a>'
 METRO_ATTRIB = '&copy; <a target="#" href="https://www.oregonmetro.gov/rlis-live">Metro</a> | ' + OSM_ATTRIB
 
-ZIP_CODE_RE = re.compile("[,\s]*\d{5}(?:[-\s]\d{4})?$")
-ADDRESS_RE  = re.compile("^[0-9]+[\s\w]+\s(north|south|east|west|n|s|e|w){1,2}(?=\s|$)", re.IGNORECASE)
+ZIP_CODE_RE = re.compile(r"[,\s]*\d{5}(?:[-\s]\d{4})?$")
+ADDRESS_RE  = re.compile(r"^[0-9]+[\s\w]+\s(north|south|east|west|n|s|e|w){1,2}(?=\s|$)", re.IGNORECASE)
 
 
 def BBox(t, b, l, r):
