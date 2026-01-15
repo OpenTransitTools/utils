@@ -92,8 +92,11 @@ def parse_geojson_point(geojson):
 def parse_geojson(geojson):
     ret_val = None
     try:
-        if geojson.get('type') == 'Point':
-            ret_val = parse_geojson_point(geojson)
+        coord = geojson
+        if geojson.get('geometry'):
+            coord = geojson.get('geometry')
+        if coord.get('type') == 'Point':
+            ret_val = parse_geojson_point(coord)
     except Exception as e:
         log.info(e)
     return ret_val
@@ -453,31 +456,39 @@ def get_name_city_from_string(c):
     return name, city
 
 
-def is_nearby(latA, lonA, latB, lonB, decimal_diff=0.0015):
+def is_nearby(alat, alon, blat, blon, decimal_diff=0.0015):
     """ compares lat/lon A vs lat/lon B to sees whether their values
         are within a certain decimal place of each other
-        NOTE: default is 0.0015 ... if the distant between latA and latB, and lonA and lonB is
+        NOTE: default is 0.0015 ... if the distant between alat and blat, and alon and blon is
               each 0.0015 absolute differnce  
     """
     ret_val = False
     try:
-        lat_diff = abs(latA - latB)
-        lon_diff = abs(lonA - lonB)
+        lat_diff = abs(alat - blat)
+        lon_diff = abs(alon - blon)
+        #print(lat_diff, lat_diff < decimal_diff); print(lon_diff, lon_diff < decimal_diff)
         if lat_diff < decimal_diff and lon_diff < decimal_diff:
             ret_val = True
-    except:
-        pass
+    except Exception as e:
+        log.info(e)
     return ret_val
 
 
-def distance(latA, lonA, latB, lonB, R=6371e3):
+def are_points_nearby(apoint, bpoint, decimal_diff=0.0015):
+    """ convenience to take in two points, and do the diff"""
+    alon, alat = parse_geojson(apoint)
+    blon, blat = parse_geojson(bpoint)
+    return is_nearby(alat, alon, blat, blon, decimal_diff)
+
+
+def distance(alat, alon, blat, blon, R=6371e3):
     """
     gives d in metres
     :see https://www.movable-type.co.uk/scripts/latlong.html:
     """
-    y1 = math.radians(float(latA))
-    y2 = math.radians(float(latB))
-    deltaX = math.radians(float(float(lonB) - float(lonA)))
+    y1 = math.radians(float(alat))
+    y2 = math.radians(float(blat))
+    deltaX = math.radians(float(float(blon) - float(alon)))
     d = math.acos(math.sin(y1)*math.sin(y2) + math.cos(y1)*math.cos(y2) * math.cos(deltaX) ) * R
     ret_val = round(d, 2)
     return ret_val
@@ -485,16 +496,16 @@ def distance(latA, lonA, latB, lonB, R=6371e3):
 # todo dist = num_utils.distance_mi(s.stop_lat, s.stop_lon, geo_params.lat, geo_params.lon)
 
 
-def bearing(latA, lonA, latB, lonB, normalize=True):
+def bearing(alat, alon, blat, blon, normalize=True):
     """
     find angle / compass bearing between 2 points
     :see answer 4: https://stackoverflow.com/questions/17624310/geopy-calculating-gps-heading-bearing
     :return: compass bearing (either normalized at 0-360, or -180 to 180)
     """
-    dist_lon = lonB - lonA
-    x = math.sin(math.radians(dist_lon)) * math.cos(math.radians(latB))
-    y = math.cos(math.radians(latA)) * math.sin(math.radians(latB)) - \
-        math.sin(math.radians(latA)) * math.cos(math.radians(latB)) * math.cos(math.radians(dist_lon))
+    dist_lon = blon - alon
+    x = math.sin(math.radians(dist_lon)) * math.cos(math.radians(blat))
+    y = math.cos(math.radians(alat)) * math.sin(math.radians(blat)) - \
+        math.sin(math.radians(alat)) * math.cos(math.radians(blat)) * math.cos(math.radians(dist_lon))
     b = math.degrees(math.atan2(x, y))
 
     # bearing is -180 to 180 ... normalize to 0 - 360 compass ?
