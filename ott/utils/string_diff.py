@@ -80,6 +80,8 @@ def compare(text1, text2, do_print=False):
 
 
 def main():
+    compare('16784 SW Roosevelt Ave', '16784 Roosevelt Ave', True)
+    compare('16784 SW Roosevelt Avenue', '16784 Roosevelt Ave', True)
     compare('834 SE Sandy Street', '834 SE Sandy St', True)
     compare('834 SE Sandy Boulevard', '834 SE Sandy Blvd', True)
     compare('834 SE Sandy Blvd', '834 SE Sandy Blvd Apt 2', True)
