@@ -10,7 +10,8 @@ log = logging.getLogger(__file__)
 
 
 def run_python(cmd_line, fork=False, py_cmd="python", shell=None, pid_file=None, log_file=None, echo=False):
-    """ run a python command
+    """
+    run a python command
     """
     cmd_line = "{} {}".format(py_cmd, cmd_line)
     if shell is None:
@@ -20,10 +21,12 @@ def run_python(cmd_line, fork=False, py_cmd="python", shell=None, pid_file=None,
 
 
 def run_java(cmd_line, fork=False, big_xmx="-Xmx4096m", small_xmx="-Xmx1536m", java_cmd="java", shell=None, pid_file=None, log_file=None, echo=False):
-    """ run java ... if we get an exception, try to run again with lower heap size
-        @pid_file: send this variable with the name of a file (e.g., "pid.txt") in to get the process pid written out
-        NOTE: shell is None NONE None, since we want to test if java can run first w/out an environment
     """
+    run java ... if we get an exception, try to run again with lower heap size
+    @pid_file: send this variable with the name of a file (e.g., "pid.txt") in to get the process pid written out
+    NOTE: shell is None NONE None, since we want to test if java can run first w/out an environment
+    """
+    #import pdb; pdb.set_trace()
     ret_val = None
     if shell is None:
         shell = does_cmd_need_a_shell(java_cmd, "-version", fork)

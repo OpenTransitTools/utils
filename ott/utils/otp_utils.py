@@ -189,6 +189,7 @@ def run_graph_builder(graph_dir, otp_version, otp_name=OTP_NAME, java_mem=None):
     log.info("building the graph")
     otp_path = get_otp_path(graph_dir, otp_name)
     file_utils.cd(graph_dir)
+
     if otp_version == OTP_2:
         cmd = '-jar {} --build --save --cache {} {}'.format(otp_path, graph_dir, graph_dir)
     else:

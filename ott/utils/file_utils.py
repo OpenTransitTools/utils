@@ -330,6 +330,15 @@ def rm(file_path):
         os.remove(file_path)
 
 
+def rm_files(src_path, ext=".txt"):
+    """ find files that have a certain extension and remove them """
+    if os.path.exists(src_path):
+        for file in listdir(src_path):
+            if file.endswith(ext):
+                f = os.path.join(src_path, file)
+                rm(f)
+
+
 def purge(dir_path, pattern):
     """ remove multiple files
         borrowed from http://stackoverflow.com/questions/1548704/delete-multiple-files-matching-a-pattern
