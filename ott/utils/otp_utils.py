@@ -23,6 +23,7 @@ OTP_VERSION = OTP_1
 OTP_NAME = "otp.jar"
 VLOG_NAME = "otp.v"
 PID_FILE = "pid.txt"
+LOG_FILE = "otp.out"
 DEF_GRAPH_NAME="Graph.obj" 
 
 DEF_NAME = "prod"
@@ -61,7 +62,6 @@ def make_otp_id(id, agency_id=None):
     if agency_id:
         ret_val = "{}:{}".format(agency_id, id)
     return ret_val
-
 
 def restart_call(call_db_path="call_center/db/call_db.tar.gz", call_runner="call_center/run.sh"):
     """ retstart call-center app
@@ -191,9 +191,9 @@ def run_graph_builder(graph_dir, otp_version, otp_name=OTP_NAME, java_mem=None):
     file_utils.cd(graph_dir)
 
     if otp_version == OTP_2:
-        cmd = '-jar {} --build --save --cache {} {}'.format(otp_path, graph_dir, graph_dir)
+        cmd = f"-jar {otp_path} --build --save --cache {graph_dir} {graph_dir}"
     else:
-        cmd = '-jar {} --build {} --cache {}'.format(otp_path, graph_dir, graph_dir)
+        cmd = f"-jar {otp_path} --build {graph_dir} --cache {graph_dir}"
     ret_val = exe_utils.run_java(cmd, big_xmx=java_mem)
     return ret_val
 
@@ -209,7 +209,7 @@ def vizualize_graph(graph_dir, otp_version, otp_name=OTP_NAME, java_mem=None):
     return ret_val
 
 
-def run_otp_server(graph_dir, otp_version=OTP_VERSION, port=DEF_PORT, ssl=DEF_SSL_PORT, otp_name=OTP_NAME, java_mem=None, **kwargs):
+def run_otp_server(graph_dir, otp_version=OTP_VERSION, port=DEF_PORT, ssl=DEF_SSL_PORT, otp_name=OTP_NAME, java_mem=None, log_file=LOG_FILE, **kwargs):
     """ launch the server in a separate process """
     file_utils.cd(graph_dir)
     otp_path = get_otp_path(graph_dir, otp_name)
@@ -217,7 +217,7 @@ def run_otp_server(graph_dir, otp_version=OTP_VERSION, port=DEF_PORT, ssl=DEF_SS
         cmd = '-server -jar {} --port {} --load --serve {}'.format(otp_path, port, graph_dir, graph_dir)
     else:
         cmd = '-server -jar {} --port {} --securePort {} --router "" --graphs {}'.format(otp_path, port, ssl, graph_dir)
-    ret_val = exe_utils.run_java(cmd, fork=True, big_xmx=java_mem, pid_file=PID_FILE, echo=True)
+    ret_val = exe_utils.run_java(cmd, fork=True, big_xmx=java_mem, pid_file=PID_FILE, log_file=log_file, echo=True, do_kill_all=True)
     return ret_val
 
 
@@ -257,14 +257,14 @@ def wait_for_otp(otp_url, delay=10, max_tries=10, otp_version="1.x"):
         response = call_planner_svc(otp_url)
 
         # step 2: check result ... if valid break out of loop
-        matches = ["TripViewerWidget", "requestParameters", "elevationMetadata"]
+        matches = ["otpSerializationVersionId", "TripViewerWidget", "requestParameters", "elevationMetadata"]
         otp_is_up = response and any(m in response for m in matches)
 
         # step 3: either break out of loop or warn an continue checking OTP
         if otp_is_up or try_count > max_tries:
             break
         else:
-            log.warn("OTP is not ready yet.\nURL: {}\nWill try again ({} of {} tries) in {} seconds...".format(otp_url, try_count, max_tries, delay))
+            log.warning("OTP is not ready yet.\nURL: {}\nWill try again ({} of {} tries) in {} seconds...".format(otp_url, try_count, max_tries, delay))
 
         time.sleep(delay)
 
@@ -381,16 +381,45 @@ def check_otp_jar(graph_dir, jar=OTP_NAME, expected_size=50000000, download_url=
     return jar_path
 
 
-def append_vlog_file(graph_dir, feed_msg=None, vlog_name=VLOG_NAME):
-    """ print out gtfs feed(s) version numbers and dates to the otp.v log file
+def check_graph_size(graph_dir, version, expected_size=500000000):
+    graph = get_graph_path(graph_dir, version)
+    ret_val = file_utils.exists_and_sized(graph, expected_size)
+    return ret_val
+
+
+def get_vlog_header(graph_dir):
+    """
+    get string with otp version numbers and dates (for use in the otp.v log file)
     """
     now = datetime.datetime.now().strftime("%B %d, %Y @ %I:%M %p")
     version, commit = get_otp_version(graph_dir)
-    msg = "Updated graph ({}, {}) on {} with GTFS feed(s):\n".format(version, commit, now)
+    head = f"Updated graph ({version}, {commit}) on {now} with GTFS feed(s):"
+    return head
+
+
+def append_vlog_new(graph_dir, osm_v, gtfs_v):
+    # build message
+    head = get_vlog_header(graph_dir)
+    osm_msg = file_utils.read_file_into_string(osm_v, sep="  ", ending="\n")
+    gtfs_msg = file_utils.read_file_into_string(gtfs_v, sep="  ", ending="\n")
+    msg = f"{head}\n{gtfs_msg}{osm_msg}\n"
+
+    # write message to vlog file
+    vlog_path = get_vlog_file_path(graph_dir)
+    file_utils.prepend_file(vlog_path, msg)
+
+    return vlog_path
+
+
+def append_vlog_file(graph_dir, feed_msg=None, vlog_name=VLOG_NAME):
+    """
+    print out gtfs feed(s) version numbers and dates to the otp.v log file
+    """
+    msg = get_vlog_header(graph_dir)
 
     # add any specific feeds messages
     if feed_msg and len(feed_msg) > 0:
-        msg = "{}{}\n".format(msg, feed_msg)
+        msg = f"{msg}{feed_msg}\n"
 
     # write message to vlog file
     vlog_path = get_vlog_file_path(graph_dir, vlog_name)

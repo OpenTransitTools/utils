@@ -50,10 +50,15 @@ def read_file_into_string_list(file_path):
     return ret_val
 
 
-def read_file_into_string(file_path, sep=""):
-    """read file into a string"""
-    l = read_file_into_string_list(file_path)
-    ret_val = sep.join(l)
+def read_file_into_string(file_path, sep="", ending=""):
+    """ read file into a string """
+    ret_val = ""
+    try:
+        l = read_file_into_string_list(file_path)
+        ret_val = sep.join(l)
+        ret_val = f"{ret_val}{ending}"
+    except Exception as e:
+        log.warning(e)
     return ret_val
 
 

@@ -20,7 +20,7 @@ def run_python(cmd_line, fork=False, py_cmd="python", shell=None, pid_file=None,
     return ret_val
 
 
-def run_java(cmd_line, fork=False, big_xmx="-Xmx4096m", small_xmx="-Xmx1536m", java_cmd="java", shell=None, pid_file=None, log_file=None, echo=False):
+def run_java(cmd_line, fork=False, big_xmx="-Xmx4096m", small_xmx="-Xmx1536m", java_cmd="java", shell=None, pid_file=None, log_file=None, echo=False, do_kill_all=False):
     """
     run java ... if we get an exception, try to run again with lower heap size
     @pid_file: send this variable with the name of a file (e.g., "pid.txt") in to get the process pid written out
@@ -30,6 +30,8 @@ def run_java(cmd_line, fork=False, big_xmx="-Xmx4096m", small_xmx="-Xmx1536m", j
     ret_val = None
     if shell is None:
         shell = does_cmd_need_a_shell(java_cmd, "-version", fork)
+    if do_kill_all:
+        kill_all("java")
     try:
         if big_xmx is None:
             big_xmx = "-Xmx4096m"
@@ -142,17 +144,22 @@ def kill(pid):
         log.debug("trying to kill pid {}".format(pid))
         os.kill(int(pid), signal.SIGKILL)
     except Exception as e:
-        log.debug(e)
+        log.warning(e)
         try:
-            win_kill = "taskkill /pid {} /f".format(pid)
-            log.debug("WINDOWS? will try to kill via: {}".format(win_kill))
+            os.system(f"kill -9 {pid}")
+        except Exception as e:
+            log.warning(e)
+        try:
+            win_kill = f"taskkill /pid {pid} /f"
+            log.debug(f"WINDOWS? will try to kill via: {win_kill}")
             os.system(win_kill)
         except Exception as e:
             log.debug(e)
 
 
 def kill_all(cmd):
-    os.system("pkill -9 " + cmd)
+    log.warning(f"****-->  pkill -9 {cmd} <--****")
+    os.system(f"pkill -9 {cmd}")
 
 
 def find_executable(name):
