@@ -37,7 +37,7 @@ def get_api_url(version=OTP_2, port=DEF_PORT):
     if version == OTP_2:
         url = f"http://localhost:{port}/otp/gtfs/v1"
     else:
-        url = f"http://localhost:{port}/otp/gtfs/v1"
+        url = f"http://localhost:{port}/otp/???"
     return url
 
 
@@ -226,7 +226,7 @@ def run_otp_server(graph_dir, otp_version=OTP_VERSION, port=DEF_PORT, ssl=DEF_SS
         cmd = '-server -jar {} --port {} --load --serve {}'.format(otp_path, port, graph_dir, graph_dir)
     else:
         cmd = '-server -jar {} --port {} --securePort {} --router "" --graphs {}'.format(otp_path, port, ssl, graph_dir)
-    ret_val = exe_utils.run_java(cmd, fork=True, big_xmx=java_mem, pid_file=PID_FILE, log_file=log_file, echo=True, do_kill_all=True)
+    ret_val = exe_utils.run_java(cmd, fork=True, shell=False, big_xmx=java_mem, pid_file=PID_FILE, log_file=log_file, echo=True)
     return ret_val
 
 
@@ -498,15 +498,12 @@ def package_new(graph_dir, vlog_name=VLOG_NAME, otp_name=OTP_NAME, otp_version=O
 def rm_new(graph_dir, vlog_name=VLOG_NAME, otp_name=OTP_NAME, otp_version=OTP_VERSION):
     """ remove -new files """
     graph_name = get_graph_name(otp_version)
-    graph_path = os.path.join(graph_dir, graph_name)
     new_graph_path = file_utils.make_new_path(graph_dir, graph_name)
     file_utils.rm(new_graph_path)
 
-    vlog_path = os.path.join(graph_dir, vlog_name)
     new_vlog_path = file_utils.make_new_path(graph_dir, vlog_name)
     file_utils.rm(new_vlog_path)
 
-    otp_path = os.path.join(graph_dir, otp_name)
     new_otp_path = file_utils.make_new_path(graph_dir, otp_name)
     file_utils.rm(new_otp_path)
 
@@ -544,6 +541,7 @@ def mv_new_files_into_place(graph_dir, vlog_name=VLOG_NAME, otp_name=OTP_NAME, o
         if file_utils.is_min_sized(curr_graph, quiet=True) or (new_otp_exists and file_utils.is_min_sized(curr_otp, quiet=True)):
             # @todo this should be an email in addtion to a log message
             log.error("in trying to deploy new graph, I wasn't able to mv old {} (or {}) out of the way".format(curr_graph, curr_otp))
+            ret_val = False
         else:
             # step 6: ok, we could move the graph (and maybe otp) to OLD dir ... now let's back those files up (rename with date stamp)
             file_utils.mv(curr_vlog, old_vlog)
@@ -564,4 +562,5 @@ def mv_new_files_into_place(graph_dir, vlog_name=VLOG_NAME, otp_name=OTP_NAME, o
             else:
                 # @todo this should be an email in addtion to a log message
                 log.error("ruh roh: after trying to deploy a new graph, I don't see either {} or {}".format(curr_graph, curr_otp))
+                ret_val = False
     return ret_val

@@ -1,9 +1,11 @@
 import os
 import signal
 import subprocess
+import shlex
 import time
 
 from . import object_utils
+from . import file_utils
 
 import logging
 log = logging.getLogger(__file__)
@@ -30,19 +32,21 @@ def run_java(cmd_line, fork=False, big_xmx="-Xmx4096m", small_xmx="-Xmx1536m", j
     ret_val = None
     if shell is None:
         shell = does_cmd_need_a_shell(java_cmd, "-version", fork)
+
     if do_kill_all:
         kill_all("java")
+
     try:
         if big_xmx is None:
             big_xmx = "-Xmx4096m"
-        cmd_line = "{} {} {}".format(java_cmd, big_xmx, cmd_line)
-        ret_val = run_cmd(cmd_line, fork, shell, pid_file, log_file, echo=echo)
+        cl = "{} {} {}".format(java_cmd, big_xmx, cmd_line)
+        ret_val = run_cmd(cl, fork, shell, pid_file, log_file, echo=echo)
     except Exception as e:
         # try again with smaller java heap memory request
         # NOTE: 'fork' won't get you to see an exception here (because you fork the exception into another process)
-        log.info(e)
-        cmd_line = "{} {} {}".format(java_cmd, small_xmx, cmd_line)
-        ret_val = run_cmd(cmd_line, fork, shell, pid_file, log_file)
+        log.warning(e)
+        cl = "{} {} {}".format(java_cmd, small_xmx, cmd_line)
+        ret_val = run_cmd(cl, fork, shell, pid_file, log_file)
     return ret_val
 
 
@@ -95,14 +99,11 @@ def run_cmd(cmd_line, fork=False, shell=False, pid_file=None, log_file=None, she
           devnull = open(os.devnull, 'wb')
           subprocess.Popen(['nohup', 'sleep', '100'], stdout=devnull, stderr=devnull)
     """
-    if echo:
-        log.warning(cmd_line)
-    else:
-        log.info(cmd_line)
+    log.warning(cmd_line) if echo else log.info(cmd_line)
     kill_old_pid(pid_file)
 
     # append log file cmd to pipe output to that file (should work on both linux and dos)
-    if log_file:
+    if shell and log_file:
         log.debug("changing cmd line {} by appending log file {}".format(cmd_line, log_file))
         cmd_line = "{} > {} 2>&1".format(cmd_line, log_file)
         log.debug("new cmd line: {}".format(cmd_line))
@@ -111,7 +112,8 @@ def run_cmd(cmd_line, fork=False, shell=False, pid_file=None, log_file=None, she
         process = None
         os.system(cmd_line)
     elif fork:
-        process = subprocess.Popen(cmd_line, shell=shell)
+        cl = cmd_line if shell else shlex.split(cmd_line)
+        process = subprocess.Popen(cl, shell=shell)
     else:
         process = subprocess.call(cmd_line, shell=shell)
 
@@ -127,11 +129,11 @@ def kill_old_pid(pid_file):
     """ read pid file and then kill process
     """
     try:
-        pf = open(pid_file, 'r')
-        pid = pf.read().strip()
-        if pid and len(pid) > 0:
+        with open(pid_file, 'r') as pf:
+            pid = pf.read().strip()
             kill(pid)
-            time.sleep(5)
+            time.sleep(2)
+        file_utils.rm(pid_file)
     except Exception as e:
         log.debug(e)
 
