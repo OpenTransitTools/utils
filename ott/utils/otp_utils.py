@@ -19,17 +19,26 @@ log = logging.getLogger(__file__)
 # constants
 OTP_1 = "1.x"
 OTP_2 = "2.x"
-OTP_VERSION = OTP_1
+OTP_VERSION = OTP_2
 OTP_NAME = "otp.jar"
 VLOG_NAME = "otp.v"
 PID_FILE = "pid.txt"
 LOG_FILE = "otp.out"
-DEF_GRAPH_NAME="Graph.obj" 
+DEF_GRAPH_NAME="graph.obj"
 
-DEF_NAME = "prod"
-DEF_PORT = "55555"
+DEF_NAME = "rtp"
+DEF_PORT = "52425"
 DEF_SSL_PORT = "55551"
-OTP_DOWNLOAD_URL = "https://repo1.maven.org/maven2/org/opentripplanner/otp/1.3.0/otp-1.3.0-shaded.jar"
+OTP_DOWNLOAD_URL = "DONT AUTO PULL DOWN"
+
+
+def get_api_url(version=OTP_2, port=DEF_PORT):
+    """ return the main api entry point """
+    if version == OTP_2:
+        url = f"http://localhost:{port}/otp/gtfs/v1"
+    else:
+        url = f"http://localhost:{port}/otp/gtfs/v1"
+    return url
 
 
 def breakout_agency_id(otp_stop_id, agency_id=None):
