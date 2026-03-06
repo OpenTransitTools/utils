@@ -772,6 +772,19 @@ def make_csv_reader(file_path, validate_element=None):
     return ret_val
 
 
+def read_csv(csv_path, comment="#"):
+    """
+    read a .csv file, save each row in a list
+    skip over commented rows (that start with the comment param value)
+    """
+    ret_val = []
+    with open(csv_path, 'r') as fp:
+        reader = csv.DictReader(filter(lambda row: row[0]!=comment, fp))
+        for r in reader:
+            ret_val.append(r)
+    return ret_val
+
+
 def add_column_csv(file_path, column_name, column_val=""):
     """ inserts a new column (with an optional value) into the .csv """
     tmp_path = f"{file_path}.tmp"
