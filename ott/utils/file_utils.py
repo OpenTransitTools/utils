@@ -19,16 +19,22 @@ NEW_SUFFIX = "-new"
 OLD_DIR_NAME = "OLD"
 
 
-def find_files(dir_path, ext=".txt", contains=False, sub_dirs=[""]):
+def find_files(dir_path, ext=".txt", contains=False, sub_dirs=["*"]):
     """ find files that have a certain ending extension """
+    # import pdb; pdb.set_trace()
     ret_val = []
+
+    if sub_dirs and sub_dirs[0] == "*":
+        sub_dirs = listdir(dir_path, just_dirs=True)
+
     for sd in sub_dirs:
         path = os.path.join(dir_path, sd)
         if os.path.exists(path):
-            for file in listdir(path):
+            for file in listdir(path, just_files=True):
                 if (contains and ext in file) or file.endswith(ext):
                     f = os.path.join(path, file)
                     ret_val.append(f)
+    #import pdb; pdb.set_trace()
     return ret_val
 
 
@@ -832,11 +838,20 @@ def change_value_csv(file_path, column_name, new_val, tgt_column=None, tgt_val=N
     mv(tmp_path, file_path)
 
 
-def listdir(dir_path):
+def listdir(dir_path, just_dirs=False, just_files=False):
     try:
         ret_val = os.listdir(dir_path)
     except OSError:
         ret_val = os.listdir(os.path.join(os.getcwd(), dir_path))
+
+    # filter to just files or directories on this path
+    if ret_val:
+        if just_dirs:
+            directories_only = [d for d in ret_val if os.path.isdir(os.path.join(dir_path, d))]
+            ret_val = directories_only
+        elif just_files:
+            files_only = [f for f in ret_val if os.path.isfile(os.path.join(dir_path, f))]
+            ret_val = files_only
     return ret_val
 
 
