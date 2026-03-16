@@ -842,7 +842,10 @@ def listdir(dir_path, just_dirs=False, just_files=False):
     try:
         ret_val = os.listdir(dir_path)
     except OSError:
-        ret_val = os.listdir(os.path.join(os.getcwd(), dir_path))
+        try:
+            ret_val = os.listdir(os.path.join(os.getcwd(), dir_path))
+        except:
+            ret_val = []
 
     # filter to just files or directories on this path
     if ret_val:
