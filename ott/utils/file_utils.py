@@ -21,18 +21,23 @@ OLD_DIR_NAME = "OLD"
 
 def find_files(dir_path, ext=".txt", contains=False, sub_dirs=["*"]):
     """ find files that have a certain ending extension """
-    # import pdb; pdb.set_trace()
     ret_val = []
 
-    if sub_dirs and sub_dirs[0] == "*":
-        sub_dirs = listdir(dir_path, just_dirs=True)
+    # step 1: search the current dir
+    dirs = [dir_path]
 
-    for sd in sub_dirs:
-        path = os.path.join(dir_path, sd)
-        if os.path.exists(path):
-            for file in listdir(path, just_files=True):
+    # step 2: search (specified) sub dirs
+    if sub_dirs and sub_dirs[0] == "*":
+        for sd in listdir(dir_path, just_dirs=True):
+            p = os.path.join(dir_path, sd)
+            dirs.append(p)
+
+    # step 3: check all these dirs for files
+    for d in dirs:
+        if os.path.exists(d):
+            for file in listdir(d, just_files=True):
                 if (contains and ext in file) or file.endswith(ext):
-                    f = os.path.join(path, file)
+                    f = os.path.join(d, file)
                     ret_val.append(f)
     #import pdb; pdb.set_trace()
     return ret_val
