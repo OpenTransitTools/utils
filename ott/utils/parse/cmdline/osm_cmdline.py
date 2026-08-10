@@ -80,7 +80,7 @@ def geoserver_parser(default_params, prog_name='bin/generate_geoserver_config', 
         '-url',
         required=False,
         default=default_params.get('db_url', 'localhost'),
-        help="db url (localhost or docker url, ala 'db')"
+        help="db url (docker url ala 'db' or 'host.docker.internal')"
     )
     parser.add_argument(
         '--db_port',
